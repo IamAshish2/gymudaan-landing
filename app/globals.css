@@ -139,7 +139,7 @@
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
-  --animate-marquee: marquee 70s linear infinite;
+  --animate-marquee: marquee 120s linear infinite;
 
   @keyframes marquee {
     to {
