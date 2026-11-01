@@ -4,6 +4,12 @@ import type { UserRole } from "@/lib/auth/types"
 export const ROUTES = {
   home: "/",
   features: "/#features",
+  pricing: "/pricing",
+  blogs: "/blogs",
+  legal: {
+    terms: "/terms",
+    privacy: "/privacy-policy",
+  },
   // Landing page section anchors (ids set in components/landing/sections).
   landing: {
     services: "/#services",
@@ -16,11 +22,6 @@ export const ROUTES = {
     getStarted: "/#get-started",
     faq: "/#faq",
     contact: "/#contact",
-  },
-  auth: {
-    login: "/login",
-    register: "/register",
-    loginWithNext: (next: string) => `/login?next=${encodeURIComponent(next)}`,
   },
   account: {
     root: "/account",
@@ -45,18 +46,4 @@ export const roleHome = (role: UserRole): string => {
     default:
       return ROUTES.dashboard.root
   }
-}
-
-// Sanitize an untrusted `next` param — only single-leading-slash paths pass
-// (rejects `//` and absolute URLs), preventing open-redirect attempts.
-export const sanitizeNextPath = (
-  next: string | null | undefined
-): string | null => {
-  if (!next) return null
-
-  if (!next.startsWith("/")) return null
-
-  if (next.startsWith("//")) return null
-
-  return next
 }

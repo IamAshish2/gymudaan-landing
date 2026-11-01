@@ -3,7 +3,7 @@
 A Next.js 16 starter for apps backed by an external REST API. It comes with:
 
 - **Server-side API access**: one client (`lib/api-client.ts`) that forwards auth cookies, unwraps the API envelope, and refreshes expired tokens.
-- **Cookie-based auth**: login, logout, change password, `/auth/me` session lookup, and a `?next=` redirect after login.
+- **Cookie-based auth**: logout, change password and `/auth/me` session lookup. There are no login or registration pages.
 - **Role-guarded surfaces**: public site, user dashboard (`/dashboard`), admin dashboard (`/admin`), and account settings (`/account`).
 - **A working example domain**: admin **Users** management (paginated table, search, sort, filters, create/edit dialog, row actions, detail sheet, skeletons).
 - **Design system**: shadcn/ui on Tailwind v4, Typography, spacing constants, light/dark/system theme, route progress bar, ⌘K command palette.
@@ -40,7 +40,6 @@ Open http://localhost:3000. Sign-in needs a backend that implements the contract
 ```
 app/
   (site)/            public pages + /account settings
-  (auth)/            /login, /register
   (dashboard)/       /dashboard (USER)
   (admin)/           /admin (ADMIN)
   actions/           server actions, one file per entity

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import Image from "next/image"
 
 import ActionLinks from "@/components/landing/primitives/ActionLinks"
@@ -8,12 +9,24 @@ import { hero } from "@/lib/landing/content"
 import heroBg from "@/public/landing/hero/hero-bg.webp"
 import heroDashboard from "@/public/landing/hero/dashboard.webp"
 
-// Hero + client logos share the checkered, orange-lit backdrop (node 1:7),
-// which runs on under the rounded top of the services band.
-const Hero = () => (
-  <div className="relative isolate pb-22 lg:pb-34">
-    <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
-      <Image src={heroBg} alt="" fill sizes="100vw" className="object-cover" />
+type HeroProps = {
+  /** Sections that continue on the same backdrop below the client logos. */
+  children?: ReactNode
+}
+
+// The checkered, orange-lit backdrop (node 1:12) sits behind the hero, the
+// client logos and whatever follows them, and runs on under the rounded top
+// of the services band.
+const Hero = ({ children }: HeroProps) => (
+  <div className="relative isolate">
+    <div aria-hidden className="absolute inset-x-0 top-0 -bottom-52 -z-10">
+      <Image
+        src={heroBg}
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover object-bottom"
+      />
       <div className="absolute inset-0 bg-surface-dark/30" />
     </div>
 
@@ -49,6 +62,7 @@ const Hero = () => (
     </section>
 
     <ClientLogos />
+    {children}
   </div>
 )
 

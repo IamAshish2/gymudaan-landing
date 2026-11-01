@@ -7,15 +7,15 @@ import Container from "@/components/landing/primitives/Container"
 import LandingButton from "@/components/landing/primitives/LandingButton"
 import { navActions, navLinks } from "@/lib/landing/content"
 import { ROUTES } from "@/lib/routes"
-import { SITE } from "@/lib/site"
+import { linkTarget, SITE } from "@/lib/site"
 
 const LandingHeader = () => (
   <ScrollAwareHeader>
-    <Container className="flex items-center gap-6">
+    <Container className="flex items-center gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
       <Link
         href={ROUTES.home}
         aria-label={`${SITE.name} home`}
-        className="rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60"
+        className="rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60 lg:-ml-9 lg:justify-self-start"
       >
         <LandingLogo />
       </Link>
@@ -32,15 +32,14 @@ const LandingHeader = () => (
         ))}
       </nav>
 
-      <div className="ml-auto hidden items-center gap-5 lg:flex">
-        <Link
-          href={navActions.login.href}
-          className="rounded-badge text-title-sm font-medium text-nav-muted transition-colors duration-300 ease-standard outline-none hover:text-white focus-visible:ring-[3px] focus-visible:ring-brand/60"
-        >
-          {navActions.login.label}
-        </Link>
+      <div className="ml-auto hidden items-center gap-5 lg:flex lg:justify-self-end">
         <LandingButton variant="brand" asChild>
-          <Link href={navActions.signUp.href}>{navActions.signUp.label}</Link>
+          <Link
+            href={navActions.contact.href}
+            {...linkTarget(navActions.contact.href)}
+          >
+            {navActions.contact.label}
+          </Link>
         </LandingButton>
       </div>
 

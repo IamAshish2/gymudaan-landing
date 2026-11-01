@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/sheet"
 import { navActions, navLinks } from "@/lib/landing/content"
 import { IMenu } from "@/lib/icons"
+import { linkTarget } from "@/lib/site"
 
-// Below lg the nav links and auth actions move into a right-hand sheet.
+// Below lg the nav links and the contact button move into a right-hand sheet.
 const LandingMobileNav = () => {
   const [open, setOpen] = useState(false)
   const close = () => setOpen(false)
@@ -60,14 +61,13 @@ const LandingMobileNav = () => {
         </nav>
 
         <div className="mt-auto flex flex-col gap-3 border-t border-line-dark p-4">
-          <LandingButton variant="dark" size="sm" asChild>
-            <Link href={navActions.login.href} onClick={close}>
-              {navActions.login.label}
-            </Link>
-          </LandingButton>
           <LandingButton variant="brand" size="sm" asChild>
-            <Link href={navActions.signUp.href} onClick={close}>
-              {navActions.signUp.label}
+            <Link
+              href={navActions.contact.href}
+              onClick={close}
+              {...linkTarget(navActions.contact.href)}
+            >
+              {navActions.contact.label}
             </Link>
           </LandingButton>
         </div>

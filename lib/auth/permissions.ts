@@ -6,7 +6,7 @@ import { getSessionUser } from "@/lib/auth/get-session-user"
 import { ROUTES, roleHome } from "@/lib/routes"
 import type { SessionUser, UserRole } from "@/lib/auth/types"
 
-// Call at the top of every guarded layout/page/action: no session → login,
+// Call at the top of every guarded layout/page/action: no session → home,
 // wrong role → own home. redirect() throws NEXT_REDIRECT — never try/catch this.
 export const requireRole = async (
   ...roles: UserRole[]
@@ -14,7 +14,7 @@ export const requireRole = async (
   const user = await getSessionUser()
 
   if (!user) {
-    redirect(ROUTES.auth.login)
+    redirect(ROUTES.home)
   }
 
   if (!roles.includes(user.role)) {

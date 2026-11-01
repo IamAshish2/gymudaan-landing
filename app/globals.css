@@ -53,7 +53,7 @@
 }
 
 /*
- * Gym Udaan marketing tokens (Figma "Gym udaan Redesign", frame 1:6 @ 1728px).
+ * Gym Udaan marketing tokens (Figma "gym-udaan-copy", frames @ 1728px).
  * The landing page has a fixed palette (dark bands + one light band) that does
  * not follow the app's light/dark theme, so these live outside :root/.dark.
  * Fluid sizes hit the Figma value at 1728px and scale down from there.
@@ -63,6 +63,8 @@
   --color-brand: #ff6a00;
   --color-brand-soft: rgb(255 106 0 / 0.1);
   --color-brand-tint: rgb(255 106 0 / 0.2);
+  /* 12% brand on black, opaque so a sticky table header hides what scrolls under it. */
+  --color-brand-wash: #1f0d00;
   --color-ink: #1a1a1a;
   --color-ink-muted: #7f848d;
   --color-ink-subtle: #5f646c;
@@ -74,13 +76,18 @@
   --color-surface-hover: #262626;
   --color-surface-light: #ffffff;
   --color-surface-tile: #f8f8f8;
+  --color-surface-plan: #fafafa;
   --color-line-dark: #262626;
+  --color-line-strong: #3a3a3a;
   --color-line-light: #f0f0f0;
+  --color-line-faint: rgb(255 255 255 / 0.04);
   --color-line-frame: rgb(163 169 168 / 0.5);
+  --color-switch-track: #d9d9d9;
   --color-badge-dark: rgb(255 255 255 / 0.08);
   --color-badge-light: rgb(0 0 0 / 0.08);
   --color-ghost: #161616;
   --color-status-ok: #22c55e;
+  --color-status-alert: #ff383c;
 
   /* Typography — Poppins throughout; line-height "normal" in Figma = 1.5 */
   --text-display: clamp(1.75rem, 1.2rem + 1.33vw, 2.625rem);
@@ -105,7 +112,7 @@
   --text-body--line-height: 1.5;
   --text-badge: clamp(0.875rem, 0.8rem + 0.2vw, 1rem);
   --text-badge--line-height: 1.5;
-  --text-watermark: clamp(5.5rem, 22vw, 23.75rem);
+  --text-watermark: clamp(3rem, 15.8vw, 17.05rem);
   --text-watermark--line-height: 1;
 
   /* Layout — 1728 frame, 100px gutters, 1528px content */
@@ -115,19 +122,30 @@
   --spacing-section-content: clamp(2rem, 1.25rem + 2.31vw, 3.75rem);
   --spacing-hero-top: clamp(8rem, 5rem + 9.4vw, 15.1875rem);
   --spacing-band: clamp(5rem, 2rem + 7.4vw, 10rem);
+  --spacing-page-top: clamp(8rem, 6.4rem + 9.4vw, 16.5rem);
+  --spacing-header: 5.3125rem; /* fixed header height once scrolled, from lg */
 
   /* Radius */
+  --radius-chip: 4px;
   --radius-badge: 6px;
   --radius-photo: 8px;
   --radius-button: 10px;
   --radius-card: 12px;
   --radius-panel: 16px;
+  --radius-plan: 18px;
   --radius-tile: 24px;
   --radius-band: clamp(1.5rem, 0.5rem + 2.5vw, 3.125rem);
 
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --animate-marquee: marquee 70s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 :root {

@@ -5,9 +5,13 @@ export const SITE = {
   tagline: "Smarter gym management. Stronger fitness businesses.",
   description:
     "Gym Udaan is the gym management platform for modern fitness businesses in Nepal: members, memberships, attendance, payments and reports in one place.",
-  // TODO(content): template values from the Figma footer — replace with the
-  // real office address and social profiles before launch.
-  address: ["2261 Market Street #5039", "San Francisco, CA 94114"],
+  contact: {
+    whatsappUrl: "https://wa.me/9779705001112",
+    email: "sales@gymudaan.com",
+    location: "Itahari, Nepal",
+  },
+  // TODO(content): template links from the Figma footer — replace with the
+  // real social profiles before launch.
   socials: {
     x: "https://x.com",
     github: "https://github.com",
@@ -15,3 +19,9 @@ export const SITE = {
     youtube: "https://www.youtube.com",
   },
 } as const
+
+// Off-site links open in a new tab; in-app links pass nothing extra.
+export const linkTarget = (href: string) =>
+  href.startsWith("http")
+    ? ({ target: "_blank", rel: "noopener noreferrer" } as const)
+    : {}

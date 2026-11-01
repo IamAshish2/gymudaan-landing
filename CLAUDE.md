@@ -1,6 +1,6 @@
 # Next Starter — CLAUDE.md
 
-Next.js 16 frontend starter. The backend is an **external REST API** (`API_BASE_URL`) following the contract in `docs/API.md`; this repo has no database. Surfaces: public site, auth, user dashboard (`/dashboard`), admin dashboard (`/admin`), account settings (`/account`).
+Next.js 16 frontend starter. The backend is an **external REST API** (`API_BASE_URL`) following the contract in `docs/API.md`; this repo has no database. Surfaces: public site (`/`, `/pricing`, `/blogs`, `/terms`, `/privacy-policy`), user dashboard (`/dashboard`), admin dashboard (`/admin`), account settings (`/account`).
 
 ## Read before working
 

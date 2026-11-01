@@ -11,13 +11,7 @@ export const proxy = (request: NextRequest) => {
   const hasToken = request.cookies.has(ACCESS_TOKEN_COOKIE)
   if (hasToken) return NextResponse.next()
 
-  const { pathname, search } = request.nextUrl
-  const loginUrl = new URL(
-    ROUTES.auth.loginWithNext(pathname + search),
-    request.url
-  )
-
-  return NextResponse.redirect(loginUrl)
+  return NextResponse.redirect(new URL(ROUTES.home, request.url))
 }
 
 export const config = {

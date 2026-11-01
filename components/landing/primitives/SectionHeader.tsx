@@ -52,12 +52,12 @@ const SectionHeader = ({
     {intro.description || actions ? (
       <div
         className={cn(
-          "flex flex-col gap-6 lg:max-w-[32.2em] lg:items-end lg:text-right",
+          "flex flex-col gap-6 lg:max-w-168 lg:items-end lg:text-right",
           actions ? "lg:justify-between lg:pt-4" : "lg:justify-end"
         )}
       >
         {intro.description ? (
-          <Typography variant="bodyLg" className="opacity-80">
+          <Typography variant="bodyLg" className="text-pretty opacity-80">
             {intro.description}
           </Typography>
         ) : null}

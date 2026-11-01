@@ -3,89 +3,16 @@
 import { redirect } from "next/navigation"
 
 import { apiFetch, apiFetchResponse, ApiError } from "@/lib/api-client"
-import {
-  relayAuthCookies,
-  clearAuthCookies,
-  parseAuthSetCookies,
-} from "@/lib/auth/cookies"
+import { clearAuthCookies } from "@/lib/auth/cookies"
 import { requireRole } from "@/lib/auth/permissions"
-import { ALL_ROLES, normalizeRole } from "@/lib/auth/roles"
-import { ROUTES, roleHome, sanitizeNextPath } from "@/lib/routes"
+import { ALL_ROLES } from "@/lib/auth/roles"
+import { ROUTES } from "@/lib/routes"
 import type { ActionState } from "@/lib/types"
-import type { AuthUserPayload } from "@/lib/auth/types"
 import {
   changePasswordSchema,
-  loginSchema,
-  registerSchema,
   type ChangePasswordValues,
-  type LoginValues,
-  type RegisterValues,
 } from "@/lib/auth/validations"
 import { toFieldErrors } from "@/lib/zod-utils"
-
-export const loginAction = async (
-  input: LoginValues,
-  next?: string | null
-): Promise<ActionState> => {
-  // 1. Validate the form
-  const parsed = loginSchema.safeParse(input)
-
-  if (!parsed.success) {
-    return { errors: toFieldErrors(parsed.error) }
-  }
-
-  let redirectTo: string | undefined
-
-  try {
-    // 2. API Call via our wrapper around fetch.
-    const { data: payload, setCookies } =
-      await apiFetchResponse<AuthUserPayload>("/auth/login", {
-        method: "POST",
-        json: { email: parsed.data.email, password: parsed.data.password },
-        skipRefresh: true,
-      })
-
-    // 3. An account whose role the app doesn't know can't use any surface.
-    const role = normalizeRole(payload.role.role)
-
-    if (!role) {
-      return { message: "This account doesn't have access to this app." }
-    }
-
-    // 4. Parse out the auth cookies and re-set them as our first-party cookies.
-    const parsedCookies = parseAuthSetCookies(setCookies)
-    await relayAuthCookies(parsedCookies)
-
-    // 5. Land on ?next= if it's a safe same-site path, otherwise the role's home.
-    redirectTo = sanitizeNextPath(next) ?? roleHome(role)
-  } catch (err) {
-    // 6. Wrong credentials get a friendly message; anything else is generic.
-    if (err instanceof ApiError && (err.status === 401 || err.status === 400)) {
-      return { message: "Invalid email or password." }
-    }
-
-    return { message: "Something went wrong. Please try again." }
-  }
-
-  // 7. redirect() throws NEXT_REDIRECT — must be outside try/catch.
-  redirect(redirectTo)
-}
-
-// The backend contract has no registration endpoint yet (docs/API.md → Gaps).
-// Swap the stub body for the real API call once it exists.
-export const registerAction = async (
-  input: RegisterValues
-): Promise<ActionState> => {
-  const parsed = registerSchema.safeParse(input)
-
-  if (!parsed.success) {
-    return { errors: toFieldErrors(parsed.error) }
-  }
-
-  return {
-    message: "Registration opens soon! We'll let you know when it's available.",
-  }
-}
 
 // Only invalidates OTHER sessions; the current session stays logged in.
 export const changePasswordAction = async (

@@ -6,13 +6,12 @@ One app, four route groups. Groups don't change URLs; the folder inside each gro
 
 | Group | URL | Who | Guard | Shell |
 | --- | --- | --- | --- | --- |
-| `(site)` | `/` | everyone | — | `SiteShell` (navbar + footer) |
+| `(marketing)` | `/`, `/pricing`, `/blogs`, `/terms`, `/privacy-policy` | everyone | — | `LandingHeader` + `LandingFooter`, fixed palette |
 | `(site)/account` | `/account/*` | any signed-in user | `requireRole(...ALL_ROLES)` in the layout | `SiteShell` + `SettingsNav` |
-| `(auth)` | `/login`, `/register` | everyone | — | `AuthShell` |
 | `(dashboard)` | `/dashboard/*` | `USER` | `requireRole("USER")` in the layout | `DashboardShell surface="dashboard"` |
 | `(admin)` | `/admin/*` | `ADMIN` | `requireRole("ADMIN")` in the layout | `DashboardShell surface="admin"` |
 
-`proxy.ts` only checks that the access-token cookie exists and redirects to `/login?next=…` if it doesn't. It is **not** a security boundary. Real checks are `requireRole()` in layouts, pages and server actions, and then the API's own JWT check.
+`proxy.ts` only checks that the access-token cookie exists and redirects to the home page if it doesn't. There is no login page, so `/dashboard`, `/admin` and `/account` need a session created some other way. It is **not** a security boundary. Real checks are `requireRole()` in layouts, pages and server actions, and then the API's own JWT check.
 
 ## Data flow
 

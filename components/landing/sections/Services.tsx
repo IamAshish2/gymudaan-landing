@@ -6,6 +6,7 @@ import SnapCarousel from "@/components/landing/primitives/SnapCarousel"
 import Typography from "@/components/ui/Typography"
 import { services } from "@/lib/landing/content"
 import type { Service } from "@/lib/landing/types"
+import { linkTarget } from "@/lib/site"
 import arrowContact from "@/public/landing/services/arrow-contact.svg"
 
 const ServiceCard = ({ service }: { service: Service }) => (
@@ -25,7 +26,7 @@ const ServiceCard = ({ service }: { service: Service }) => (
     </div>
 
     <div className="flex flex-1 flex-col gap-6 px-1 pt-6 pb-2 sm:px-2 lg:flex-row lg:items-end lg:justify-between lg:px-3 lg:pt-14 lg:pb-6">
-      <div className="flex max-w-[34.6em] flex-col gap-3 lg:gap-4">
+      <div className="flex max-w-173 flex-col gap-3 lg:gap-4">
         <Typography variant="titleLg">{service.title}</Typography>
         <Typography variant="bodyLg" className="opacity-80">
           {service.description}
@@ -34,6 +35,7 @@ const ServiceCard = ({ service }: { service: Service }) => (
 
       <Link
         href={service.cta.href}
+        {...linkTarget(service.cta.href)}
         className="group/cta flex shrink-0 items-center gap-3 self-start rounded-badge text-title-sm font-medium transition-opacity outline-none hover:opacity-80 focus-visible:ring-[3px] focus-visible:ring-brand/60 lg:self-auto"
       >
         {service.cta.label}

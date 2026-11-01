@@ -13,6 +13,7 @@ const landingButtonVariants = cva(
       variant: {
         brand: "bg-brand text-white hover:bg-brand/85",
         dark: "bg-surface-card text-white hover:bg-surface-hover",
+        light: "bg-white text-ink hover:bg-white/85",
         link: "text-white hover:text-brand",
       },
       size: {

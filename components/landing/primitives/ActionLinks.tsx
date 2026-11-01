@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import LandingButton from "@/components/landing/primitives/LandingButton"
 import type { LinkAction } from "@/lib/landing/types"
+import { linkTarget } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 type ActionLinksProps = {
@@ -19,7 +20,9 @@ const ActionLinks = ({ actions, className }: ActionLinksProps) => (
   >
     {actions.map((action) => (
       <LandingButton key={action.label} variant={action.variant} asChild>
-        <Link href={action.href}>{action.label}</Link>
+        <Link href={action.href} {...linkTarget(action.href)}>
+          {action.label}
+        </Link>
       </LandingButton>
     ))}
   </div>

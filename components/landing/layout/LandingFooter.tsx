@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import CopyrightYear from "@/components/landing/layout/CopyrightYear"
+import LandingLogo from "@/components/landing/layout/LandingLogo"
 import SocialIcon, {
   type SocialNetwork,
 } from "@/components/landing/layout/SocialIcon"
@@ -8,7 +9,7 @@ import Container from "@/components/landing/primitives/Container"
 import Typography from "@/components/ui/Typography"
 import { footer, footerColumns } from "@/lib/landing/content"
 import { ROUTES } from "@/lib/routes"
-import { SITE } from "@/lib/site"
+import { linkTarget, SITE } from "@/lib/site"
 
 const SOCIAL_LABELS: Record<SocialNetwork, string> = {
   x: "X",
@@ -20,9 +21,8 @@ const SOCIAL_LABELS: Record<SocialNetwork, string> = {
 const linkClass =
   "rounded-badge text-body text-white/70 transition-colors duration-300 ease-standard outline-none hover:text-white focus-visible:ring-[3px] focus-visible:ring-brand/60"
 
-// Rebuilt from the flat Figma footer image (node 1:257). `id="contact"` is
-// the target for every "Contact Us" / "Request a demo" link until a contact
-// page exists.
+// Rebuilt from the flat Figma footer image. `id="contact"` is the target for
+// footer links without a page of their own.
 const LandingFooter = () => (
   <footer id="contact" className="relative bg-surface-dark text-white">
     {/* Watermark, cut off by the footer rule like the Figma reference. */}
@@ -30,40 +30,37 @@ const LandingFooter = () => (
       aria-hidden
       className="flex h-[clamp(5rem,18.8vw,20.3rem)] items-end justify-center overflow-hidden select-none"
     >
-      <span className="translate-y-[29%] text-watermark font-semibold tracking-tighter text-ghost">
+      <span className="translate-y-[17%] text-watermark font-semibold tracking-tighter text-ghost">
         {footer.watermark}
       </span>
     </div>
 
     <div className="relative border-t border-white/10 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-40 before:bg-[radial-gradient(ellipse_45%_100%_at_50%_0%,rgb(255_255_255/0.07),transparent)]">
-      <Container className="relative pt-16 pb-10 lg:pt-24">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-4 lg:grid-cols-[2fr_repeat(4,1fr)] lg:gap-8">
+      <Container className="relative pt-16 pb-10 lg:px-[calc(var(--spacing-gutter)+3.3rem)] lg:pt-24">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-4 lg:grid-cols-[469fr_255fr_254fr_244fr_201fr] lg:gap-0">
           <div className="col-span-2 flex flex-col gap-6 md:col-span-4 lg:col-span-1">
             <Link
               href={ROUTES.home}
               aria-label={`${SITE.name} home`}
               className="w-fit rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60"
             >
-              <Typography as="span" variant="title" className="font-semibold">
-                GYM <span className="text-brand">UDAAN.</span>
-              </Typography>
+              <LandingLogo />
             </Link>
             <Typography
               variant="body"
-              className="-mt-4 max-w-[17em] text-white/80"
+              className="-mt-2 max-w-[21em] text-white/80"
             >
-              {SITE.tagline}
+              {footer.description}
             </Typography>
             <Typography
               as="address"
               variant="body"
-              className="text-white/80 not-italic"
+              className="flex flex-col items-start gap-1 text-white/80 not-italic"
             >
-              {SITE.address.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <span>{SITE.contact.location}</span>
+              <a href={`mailto:${SITE.contact.email}`} className={linkClass}>
+                {SITE.contact.email}
+              </a>
             </Typography>
 
             <ul className="flex items-center gap-3" aria-label="Social media">
@@ -99,7 +96,11 @@ const LandingFooter = () => (
               <ul className="mt-6 flex flex-col gap-4 lg:mt-8">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className={linkClass}>
+                    <Link
+                      href={link.href}
+                      {...linkTarget(link.href)}
+                      className={linkClass}
+                    >
                       {link.label}
                     </Link>
                   </li>

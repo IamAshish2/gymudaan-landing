@@ -1,5 +1,7 @@
 import Image from "next/image"
 
+import AvailableEverywhere from "@/components/landing/sections/AvailableEverywhere"
+import Comparison from "@/components/landing/sections/Comparison"
 import Control from "@/components/landing/sections/Control"
 import FaqSection from "@/components/landing/sections/FaqSection"
 import FinalCta from "@/components/landing/sections/FinalCta"
@@ -23,7 +25,7 @@ const softwareJsonLd = {
   operatingSystem: "Web, Android, iOS",
 }
 
-// Section order and band layering follow Figma frame 1:6. Each band after
+// Section order and band layering follow Figma frame 1:11. Each band after
 // the hero starts with rounded top corners laid over the band before it.
 const HomePage = () => (
   <>
@@ -34,17 +36,20 @@ const HomePage = () => (
       }}
     />
 
-    <Hero />
+    <Hero>
+      <Testimonials />
+    </Hero>
 
     <div className="relative -mt-6 rounded-t-tile bg-surface-dark">
       <Services />
       <hr className="border-line-dark" />
       <MainFeatures />
       <hr className="border-line-dark" />
+      <Comparison />
     </div>
 
     <div className="relative isolate mt-9 overflow-hidden rounded-t-band bg-surface-light pb-[var(--radius-band)]">
-      {/* Faint orange line art at 14% (node 1:44), offset exactly as in Figma. */}
+      {/* Faint orange line art at 14%, offset exactly as in Figma. */}
       <div
         aria-hidden
         className="absolute -top-[33.33%] -left-[19.44%] -z-10 size-[138.89%] opacity-14"
@@ -64,8 +69,8 @@ const HomePage = () => (
 
     <div className="relative -mt-[var(--radius-band)] rounded-t-band bg-surface-dark">
       <HowItWorks />
-      <Testimonials />
       <hr className="border-line-dark" />
+      <AvailableEverywhere />
       <Insights />
       <FinalCta />
       <FaqSection />

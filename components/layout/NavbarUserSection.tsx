@@ -1,4 +1,3 @@
-import NavbarAuthLinks from "@/components/layout/NavbarAuthLinks"
 import NavbarUserMenu from "@/components/layout/NavbarUserMenu"
 import { getSessionUser } from "@/lib/auth/get-session-user"
 
@@ -6,11 +5,7 @@ import { getSessionUser } from "@/lib/auth/get-session-user"
 const NavbarUserSection = async () => {
   const user = await getSessionUser()
 
-  if (user) {
-    return <NavbarUserMenu user={user} />
-  }
-
-  return <NavbarAuthLinks />
+  return user ? <NavbarUserMenu user={user} /> : null
 }
 
 export default NavbarUserSection

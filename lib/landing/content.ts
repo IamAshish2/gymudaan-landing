@@ -1,25 +1,52 @@
 // Every piece of landing page copy, list and link. Sections only map over this
 // data, so wiring it to a CMS later means replacing this module.
 //
-// Copy is taken from Figma ("Gym udaan Redesign", frame 1:6). Lines marked
+// Copy is taken from Figma ("gym-udaan-copy", frame 1:11). Lines marked
 // TODO(content) are placeholders — either template text in the design or
 // copy the design does not contain yet — and need sign-off before launch.
 
-import arnoldFitness from "@/public/landing/clients/arnold-fitness.png"
-import basicGym from "@/public/landing/clients/basic-gym.png"
-import fitnessPark from "@/public/landing/clients/fitness-park.png"
-import midTownFitness from "@/public/landing/clients/mid-town-fitness.png"
-import mountainFitness from "@/public/landing/clients/mountain-fitness.png"
-import ramailoFitness from "@/public/landing/clients/ramailo-fitness.png"
+import arnoldFitness from "@/public/landing/clients/arnold-fitness.webp"
+import basicGym from "@/public/landing/clients/basic-gym.webp"
+import divineGym from "@/public/landing/clients/divine-gym.webp"
+import fitnessPark from "@/public/landing/clients/fitness-park.webp"
+import freestyleFitness from "@/public/landing/clients/freestyle-fitness.webp"
+import jnlFitness from "@/public/landing/clients/jnl-fitness.webp"
+import matadorFitness from "@/public/landing/clients/matador-fitness.webp"
+import midTownFitness from "@/public/landing/clients/mid-town-fitness.webp"
+import mountainFitness from "@/public/landing/clients/mountain-fitness.webp"
+import nutrihub from "@/public/landing/clients/nutrihub.webp"
+import oasisFitness from "@/public/landing/clients/oasis-fitness.webp"
+import ramailoFitness from "@/public/landing/clients/ramailo-fitness.webp"
+import richardsFitness from "@/public/landing/clients/richards-fitness.webp"
+import sajiloFitness from "@/public/landing/clients/sajilo-fitness.webp"
+import universeFitness from "@/public/landing/clients/universe-fitness.webp"
+import compareAttendance from "@/public/landing/comparison/icon-attendance.svg"
+import compareBranches from "@/public/landing/comparison/icon-branches.svg"
+import compareCommunication from "@/public/landing/comparison/icon-communication.svg"
+import compareDashboard from "@/public/landing/comparison/icon-dashboard.svg"
+import compareInventory from "@/public/landing/comparison/icon-inventory.svg"
+import compareMemberApp from "@/public/landing/comparison/icon-member-app.svg"
+import compareMembers from "@/public/landing/comparison/icon-members.svg"
+import compareMobileAccess from "@/public/landing/comparison/icon-mobile-access.svg"
+import comparePayments from "@/public/landing/comparison/icon-payments.svg"
+import comparePayroll from "@/public/landing/comparison/icon-payroll.svg"
+import compareRenewals from "@/public/landing/comparison/icon-renewals.svg"
+import compareReports from "@/public/landing/comparison/icon-reports.svg"
+import compareSecurity from "@/public/landing/comparison/icon-security.svg"
+import compareSms from "@/public/landing/comparison/icon-sms.svg"
+import compareTrainer from "@/public/landing/comparison/icon-trainer.svg"
 import controlDashboard from "@/public/landing/control/dashboard.webp"
 import iconAttendance from "@/public/landing/control/icon-attendance.svg"
 import iconDashboard from "@/public/landing/control/icon-dashboard.svg"
 import iconMembers from "@/public/landing/control/icon-members.svg"
 import iconPayments from "@/public/landing/control/icon-payments.svg"
-import cardioCorner from "@/public/landing/insights/cardio-corner.webp"
-import dumbbells from "@/public/landing/insights/dumbbells.webp"
+import iconDesktop from "@/public/landing/everywhere/icon-desktop.svg"
+import iconMobile from "@/public/landing/everywhere/icon-mobile.svg"
+import iconTablet from "@/public/landing/everywhere/icon-tablet.svg"
+import battleRopes from "@/public/landing/insights/battle-ropes.webp"
+import coach from "@/public/landing/insights/coach.webp"
 import profitableGym from "@/public/landing/insights/profitable-gym.webp"
-import studioCalm from "@/public/landing/insights/studio-calm.webp"
+import trainingFloor from "@/public/landing/insights/training-floor.webp"
 import serveGyms from "@/public/landing/serve/gyms.webp"
 import serveMultiBranch from "@/public/landing/serve/multi-branch.webp"
 import servePersonalTraining from "@/public/landing/serve/personal-training.webp"
@@ -31,7 +58,9 @@ import testimonialPortrait from "@/public/landing/testimonials/portrait.webp"
 import type {
   Audience,
   ClientLogo,
+  ComparisonRow,
   ControlTab,
+  DeviceTier,
   Faq,
   Feature,
   FooterColumn,
@@ -45,34 +74,36 @@ import type {
   TestimonialTile,
 } from "@/lib/landing/types"
 import { ROUTES } from "@/lib/routes"
+import { SITE } from "@/lib/site"
 
 // ── Navigation ─────────────────────────────────────────────────────────────
 
-// Figma lists both "Solutions" and "Solution"; the duplicate is dropped.
-// TODO(content): there is no pricing page or section yet.
 export const navLinks = [
-  { label: "Product", href: ROUTES.landing.features },
-  { label: "Solutions", href: ROUTES.landing.audiences },
-  { label: "Pricing", href: ROUTES.landing.getStarted },
-  { label: "Resources", href: ROUTES.landing.insights },
+  { label: "Home", href: ROUTES.home },
+  { label: "Testimonial", href: ROUTES.landing.testimonials },
+  { label: "Pricing", href: ROUTES.pricing },
+  { label: "Blogs", href: ROUTES.blogs },
 ]
 
 export const navActions = {
-  login: { label: "Login", href: ROUTES.auth.login },
-  signUp: { label: "Sign up", href: ROUTES.auth.register },
+  contact: { label: "Contact Us", href: SITE.contact.whatsappUrl },
 }
 
 // ── Hero ───────────────────────────────────────────────────────────────────
 
 export const hero = {
-  eyebrow: "#1 Gym Management System in Nepal",
+  eyebrow: "GymUdaan Nepal's #1 Gym Software",
   title: "The gym management platform for modern fitness businesses",
   // TODO(content): reads like a design placeholder.
   description:
     "Clear, professional, and suitable for most gym management platforms.",
   actions: [
-    { label: "Get Started", href: ROUTES.auth.register, variant: "brand" },
-    { label: "Sign up", href: ROUTES.auth.register, variant: "dark" },
+    { label: "Get Started", href: SITE.contact.whatsappUrl, variant: "brand" },
+    {
+      label: "Request a demo",
+      href: SITE.contact.whatsappUrl,
+      variant: "dark",
+    },
   ] satisfies LinkAction[],
   imageAlt:
     "Gym Udaan dashboard showing total, active and inactive members, today's check-ins, a weekly revenue chart and memberships expiring soon",
@@ -89,24 +120,32 @@ export const clients: { title: RichText; logos: ClientLogo[] } = {
     { em: "yours" },
     { muted: "." },
   ],
+  // From GymFrontend/src/assets/client-logos, with the names that site uses.
   logos: [
+    { name: "Universe Fitness Studio", image: universeFitness },
+    { name: "NutriHub", image: nutrihub },
+    { name: "Oasis Gym", image: oasisFitness },
+    { name: "Sajilo Gym", image: sajiloFitness },
+    { name: "Matador Gym", image: matadorFitness },
+    { name: "Freestyle Gym", image: freestyleFitness },
+    { name: "Richard Fitness", image: richardsFitness },
+    { name: "Divine Fitness", image: divineGym },
+    { name: "JNL Gym", image: jnlFitness },
     { name: "Basic Gym", image: basicGym },
     { name: "Ramailo Fitness", image: ramailoFitness },
     { name: "Mid Town Fitness", image: midTownFitness },
     { name: "Mountain Fitness", image: mountainFitness },
-    { name: "Arnold Fitness Center", image: arnoldFitness },
+    { name: "Arnold Fitness", image: arnoldFitness },
     { name: "Fitness Park", image: fitnessPark },
-    // TODO(content): plain text in Figma, not a logo — confirm the client.
-    { name: "clientMtrack" },
   ],
 }
 
 // ── Services ───────────────────────────────────────────────────────────────
 
-const contactCta = { label: "Contact Us", href: ROUTES.landing.contact }
+const contactCta = { label: "Contact Us", href: SITE.contact.whatsappUrl }
 
 export const services: SectionIntro & { items: Service[] } = {
-  badge: "Our Services",
+  badge: "Our Features",
   title: [
     "Services that ",
     { em: "work" },
@@ -169,30 +208,159 @@ export const features: SectionIntro & {
       description:
         "Manage your fitness business on the go with a dedicated mobile experience that keeps everything connected.",
     },
-    // TODO(content): Figma only has a description for the first item.
+    // TODO(content): Figma only has a description for the first item. The
+    // others are proposed. "Reporting's" in Figma is corrected to "Reporting".
     {
-      title: "Multi-Social Platform",
+      title: "Social Media Automation",
       description:
-        "Share updates, offers and classes with your members across the channels they already use.",
+        "Schedule and publish posts to your connected Facebook, Instagram and TikTok accounts, and reply to comments and messages in one place.",
     },
     {
-      title: "Smart Notifications",
+      title: "Reporting",
       description:
-        "Automatic reminders for renewals, dues and check-ins, so members hear from you at the right time.",
+        "See revenue, renewals and attendance trends at a glance and make decisions with real numbers.",
     },
     {
-      title: "Member Engagement",
+      title: "Daily Daybook",
       description:
-        "Workouts, nutrition plans and articles that keep members coming back between visits.",
+        "Keep a clear record of each day's activity, so your books are ready when you close for the day.",
     },
     {
-      title: "Personalized Gym Website",
+      title: "Marketing Tools",
       description:
-        "A website for your gym with your brand, plans and contact details, ready for new members.",
+        "Share offers and updates with your members through bulk messages and automated reminders.",
     },
   ],
   imageAlt:
     "Gym Udaan mobile app showing popular workouts, nutrition plans and fitness articles, with cards for training schedules, active members and membership renewals",
+}
+
+// ── Comparison ─────────────────────────────────────────────────────────────
+
+// Spelling fixed from Figma: "Comparision", "gyms chooses".
+export const comparison: SectionIntro & {
+  featureLabel: string
+  columns: { key: "manual" | "generic" | "udaan"; label: string }[]
+  rows: ComparisonRow[]
+} = {
+  badge: "Comparison",
+  title: ["Why modern gyms choose Gym Udaan"],
+  // TODO(content): identical to the services description in Figma.
+  description:
+    "Things that will make your work easy as well as your customers daily life easy with us",
+  featureLabel: "Features",
+  columns: [
+    { key: "manual", label: "Manual Management" },
+    { key: "generic", label: "Generic Software" },
+    { key: "udaan", label: "Gym Udaan" },
+  ],
+  rows: [
+    {
+      label: "Member Management",
+      icon: compareMembers,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Membership Plan Renewals",
+      icon: compareRenewals,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Attendance tracking",
+      icon: compareAttendance,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Payment Tracking",
+      icon: comparePayments,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+    {
+      label: "Revenue & Expense Reports",
+      icon: compareReports,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Inventory Management",
+      icon: compareInventory,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Trainer & Class Management",
+      icon: compareTrainer,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Multi Branch Management",
+      icon: compareBranches,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Member Communication",
+      icon: compareCommunication,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Mobile Access",
+      icon: compareMobileAccess,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+    {
+      label: "Gym Specific Dashboard",
+      icon: compareDashboard,
+      manual: "no",
+      generic: "partial",
+      udaan: "yes",
+    },
+    {
+      label: "Data Security & Backup",
+      icon: compareSecurity,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+    {
+      label: "Member App",
+      icon: compareMemberApp,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+    {
+      label: "SMS",
+      icon: compareSms,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+    {
+      label: "Payroll",
+      icon: comparePayroll,
+      manual: "no",
+      generic: "yes",
+      udaan: "yes",
+    },
+  ],
 }
 
 // ── Who we serve ───────────────────────────────────────────────────────────
@@ -319,6 +487,25 @@ export const howItWorks: SectionIntro & { steps: Step[] } = {
   ],
 }
 
+// ── Available everywhere ───────────────────────────────────────────────────
+
+export const everywhere: SectionIntro & {
+  imageAlt: string
+  tiers: DeviceTier[]
+} = {
+  badge: "Available Everywhere",
+  title: ["One Platform. Available On Every Screen."],
+  description:
+    "Manage your gym seamlessly across desktop, tablet, and mobile. Stay connected to your business, wherever you are.",
+  imageAlt:
+    "The Gym Udaan dashboard shown on a laptop, a tablet and a phone, each with member totals and a financial overview",
+  tiers: [
+    { title: "Desktop", caption: "Complete Control", icon: iconDesktop },
+    { title: "Tablet", caption: "Flexible Management", icon: iconTablet },
+    { title: "Mobile", caption: "Management on the Go", icon: iconMobile },
+  ],
+}
+
 // ── Testimonials ───────────────────────────────────────────────────────────
 
 // Spelling fixed from Figma: "every thing", "stay organize", "Udaan Fintess".
@@ -363,7 +550,7 @@ export const testimonials: SectionIntro & { tiles: TestimonialTile[] } = {
 // ── Insights ───────────────────────────────────────────────────────────────
 
 // TODO(content): only the first article exists in Figma. The other titles
-// are proposed and every href points at the section until a blog exists.
+// are proposed, and every href opens the blog until article pages exist.
 export const insights: SectionIntro & { items: Insight[] } = {
   badge: "Insights",
   title: ["Insights to Grow Your Fitness Business."],
@@ -374,29 +561,29 @@ export const insights: SectionIntro & { items: Insight[] } = {
       title: "How to Run a More Profitable Gym in 2026",
       excerpt:
         "Explore practical ways to improve operations, manage costs, and build a stronger fitness business.",
-      href: ROUTES.landing.insights,
+      href: ROUTES.blogs,
       image: profitableGym,
     },
     {
       title: "Keeping Members Through Their First 90 Days",
       excerpt:
         "Simple check-ins and reminders that turn new sign-ups into regulars.",
-      href: ROUTES.landing.insights,
-      image: dumbbells,
+      href: ROUTES.blogs,
+      image: trainingFloor,
     },
     {
       title: "Designing a Gym Floor Members Love",
       excerpt:
         "Layout, lighting and small details that make a space feel premium.",
-      href: ROUTES.landing.insights,
-      image: studioCalm,
+      href: ROUTES.blogs,
+      image: battleRopes,
     },
     {
       title: "Pricing Memberships for a Growing Gym",
       excerpt:
         "How to structure plans, add-ons and renewals without leaving money on the table.",
-      href: ROUTES.landing.insights,
-      image: cardioCorner,
+      href: ROUTES.blogs,
+      image: coach,
     },
   ],
 }
@@ -408,8 +595,8 @@ export const finalCta = {
   description:
     "Simplify daily operations, manage your members effortlessly, and focus on building a stronger fitness business with Gym Udaan",
   actions: [
-    { label: "Get Started", href: ROUTES.auth.register, variant: "brand" },
-    { label: "Request a demo", href: ROUTES.landing.contact, variant: "dark" },
+    { label: "Get Started", href: SITE.contact.whatsappUrl, variant: "brand" },
+    { label: "Contact Us", href: SITE.contact.whatsappUrl, variant: "dark" },
   ] satisfies LinkAction[],
 }
 
@@ -447,7 +634,7 @@ export const faq: SectionIntro & { items: Faq[]; defaultOpen: number } = {
     {
       question: "How do I get started?",
       answer:
-        "Sign up, set up your gym workspace and add your members. You can be running in a single afternoon.",
+        "Message us on WhatsApp and we'll set up your gym workspace. Then add your members and you can be running in a single afternoon.",
     },
   ],
 }
@@ -465,7 +652,7 @@ export const footerColumns: FooterColumn[] = [
       { label: "Audiences", href: ROUTES.landing.audiences },
       { label: "Broadcasts", href: ROUTES.landing.features },
       { label: "Inbound", href: ROUTES.landing.services },
-      { label: "Pricing", href: ROUTES.landing.getStarted },
+      { label: "Pricing", href: ROUTES.pricing },
     ],
   },
   {
@@ -480,7 +667,7 @@ export const footerColumns: FooterColumn[] = [
     title: "Company",
     links: [
       { label: "About", href: ROUTES.landing.howItWorks },
-      { label: "Blog", href: ROUTES.landing.insights },
+      { label: "Blog", href: ROUTES.blogs },
       { label: "Careers", href: ROUTES.landing.contact },
       { label: "Customers", href: ROUTES.landing.testimonials },
       { label: "Philosophy", href: ROUTES.landing.howItWorks },
@@ -489,17 +676,19 @@ export const footerColumns: FooterColumn[] = [
   {
     title: "Help",
     links: [
-      { label: "Support", href: ROUTES.landing.contact },
+      { label: "Support", href: SITE.contact.whatsappUrl },
       { label: "Status", href: ROUTES.landing.contact },
       { label: "Migrate", href: ROUTES.landing.getStarted },
       { label: "Knowledge base", href: ROUTES.landing.faq },
-      { label: "Legal policies", href: ROUTES.landing.contact },
+      { label: "Legal policies", href: ROUTES.legal.terms },
     ],
   },
 ]
 
 export const footer = {
+  description:
+    "Revolutionizing the fitness industry in Nepal with powerful, all-in-one management software tailored specifically for your gym's growth.",
   status: "All systems operational",
   closing: "Made for the fitness businesses of tomorrow.",
-  watermark: "Udaan",
+  watermark: "Gym Udaan",
 }

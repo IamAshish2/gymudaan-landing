@@ -10,6 +10,26 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency: "monthly",
     priority: 1,
   },
+  {
+    url: new URL(ROUTES.pricing, siteUrl).toString(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    url: new URL(ROUTES.blogs, siteUrl).toString(),
+    changeFrequency: "weekly",
+    priority: 0.7,
+  },
+  {
+    url: new URL(ROUTES.legal.terms, siteUrl).toString(),
+    changeFrequency: "yearly",
+    priority: 0.3,
+  },
+  {
+    url: new URL(ROUTES.legal.privacy, siteUrl).toString(),
+    changeFrequency: "yearly",
+    priority: 0.3,
+  },
 ]
 
 export default sitemap

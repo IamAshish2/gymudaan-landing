@@ -23,8 +23,7 @@ export type SectionIntro = {
 
 export type ClientLogo = {
   name: string
-  /** Omit for clients that only have a text wordmark. */
-  image?: StaticImageData
+  image: StaticImageData
 }
 
 export type Service = {
@@ -38,6 +37,22 @@ export type Service = {
 export type Feature = {
   title: string
   description: string
+}
+
+export type ComparisonStatus = "yes" | "partial" | "no"
+
+export type ComparisonRow = {
+  label: string
+  icon: StaticImageData
+  manual: ComparisonStatus
+  generic: ComparisonStatus
+  udaan: ComparisonStatus
+}
+
+export type DeviceTier = {
+  title: string
+  caption: string
+  icon: StaticImageData
 }
 
 export type Audience = {

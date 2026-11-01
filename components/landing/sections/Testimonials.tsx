@@ -1,3 +1,4 @@
+import { Inter } from "next/font/google"
 import Image from "next/image"
 
 import Section from "@/components/landing/primitives/Section"
@@ -6,6 +7,9 @@ import Typography from "@/components/ui/Typography"
 import { testimonials } from "@/lib/landing/content"
 import type { TestimonialTile } from "@/lib/landing/types"
 import { cn } from "@/lib/utils"
+
+// Figma sets the quotes in Inter; the rest of the site is Poppins.
+const quoteFont = Inter({ subsets: ["latin"], weight: "400" })
 
 // Tiles are 392×476 in Figma. Width comes from --tile-w (set on the list);
 // quote tiles keep that height as a minimum and grow if the quote needs it.
@@ -38,16 +42,18 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
             alt=""
             className="size-10 rounded-full object-cover lg:size-12.75"
           />
-          <blockquote className="text-quote">“{tile.quote}”</blockquote>
+          <blockquote className={cn("text-quote", quoteFont.className)}>
+            “{tile.quote}”
+          </blockquote>
         </div>
         <figcaption className="flex flex-col gap-2">
-          <Typography as="span" variant="titleSm">
+          <Typography as="span" variant="titleSm" className="leading-7">
             {tile.name}
           </Typography>
           <Typography
             as="span"
             variant="bodyLg"
-            className="font-medium opacity-80"
+            className="leading-7 font-medium opacity-80"
           >
             {tile.role}
           </Typography>
@@ -60,11 +66,7 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
 // Staggered tiles (even ones drop 40px on desktop) in a snap-scrolling row
 // that bleeds off the right edge like the Figma frame.
 const Testimonials = () => (
-  <Section
-    id="testimonials"
-    labelledBy="testimonials-title"
-    className="pt-[calc(var(--spacing-section)*0.7)]"
-  >
+  <Section id="testimonials" labelledBy="testimonials-title">
     <SectionHeader intro={testimonials} titleId="testimonials-title" />
 
     <ul

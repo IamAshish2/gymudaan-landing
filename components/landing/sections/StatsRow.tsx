@@ -45,7 +45,7 @@ const StatsRow = ({ stats }: StatsRowProps) => {
               setPaused(true)
               setActive(index)
             }}
-            className="relative flex flex-col-reverse items-center gap-2 px-2 py-6 text-center lg:min-w-[11em] lg:px-0 lg:py-7.5"
+            className="relative flex flex-col-reverse items-center justify-end gap-2 px-2 py-6 text-center lg:min-w-[11em] lg:px-0 lg:py-7.5"
           >
             {(
               ["top-0 -translate-y-px", "bottom-0 translate-y-px"] as const
