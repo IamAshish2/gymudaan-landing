@@ -9,6 +9,7 @@ export {
   BadgeCheck as IBadgeCheck,
   Bold as IBold,
   Calendar as ICalendar,
+  Check as ICheck,
   ChevronLeft as IChevronLeft,
   ChevronRight as IChevronRight,
   CircleAlert as ICircleAlert,

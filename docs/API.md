@@ -78,3 +78,4 @@ Things the frontend needs that the contract doesn't have yet. Don't invent endpo
 3. **Blog**: no endpoints for posts or categories. `/blogs` reads placeholder posts from `lib/blog/content.ts` and filters them on the client. There are no article pages yet.
 4. **Plans**: no endpoint for plans or prices. `/pricing` reads `lib/pricing/content.ts`.
 5. **Contact**: no enquiry or demo-request endpoint. Contact and Get Started links open WhatsApp (`SITE.contact.whatsappUrl`).
+6. **Onboarding**: no endpoint to save onboarding answers, take payment or validate discount codes. `submitOnboardingAction` validates and returns without saving (answers stay in `sessionStorage` until finish), and `/onboarding` reads its plans and prices from `lib/onboarding/content.ts`. Those prices (Rs. 14,999 / 19,999 / 24,999) don't match the placeholder plans in `lib/pricing/content.ts`.
