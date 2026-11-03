@@ -2,37 +2,36 @@ import type { MetadataRoute } from "next"
 
 import { articleSlugs } from "@/lib/blog/articles"
 import { ROUTES } from "@/lib/routes"
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+import { absoluteUrl } from "@/lib/seo/site-url"
 
 const sitemap = (): MetadataRoute.Sitemap => [
   {
-    url: new URL(ROUTES.home, siteUrl).toString(),
+    url: absoluteUrl(ROUTES.home),
     changeFrequency: "monthly",
     priority: 1,
   },
   {
-    url: new URL(ROUTES.pricing, siteUrl).toString(),
+    url: absoluteUrl(ROUTES.pricing),
     changeFrequency: "monthly",
     priority: 0.8,
   },
   {
-    url: new URL(ROUTES.blogs, siteUrl).toString(),
+    url: absoluteUrl(ROUTES.blogs),
     changeFrequency: "weekly",
     priority: 0.7,
   },
   ...articleSlugs.map((slug) => ({
-    url: new URL(ROUTES.blogPost(slug), siteUrl).toString(),
+    url: absoluteUrl(ROUTES.blogPost(slug)),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   })),
   {
-    url: new URL(ROUTES.legal.terms, siteUrl).toString(),
+    url: absoluteUrl(ROUTES.legal.terms),
     changeFrequency: "yearly",
     priority: 0.3,
   },
   {
-    url: new URL(ROUTES.legal.privacy, siteUrl).toString(),
+    url: absoluteUrl(ROUTES.legal.privacy),
     changeFrequency: "yearly",
     priority: 0.3,
   },

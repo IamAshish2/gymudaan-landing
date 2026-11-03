@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader"
 import "./globals.css"
 import ThemeProvider from "@/components/shared/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
+import { SITE_URL } from "@/lib/seo/site-url"
 import { SITE } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
@@ -16,9 +17,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: SITE_URL,
   title: {
     default: `${SITE.name}: ${SITE.tagline}`,
     template: `%s | ${SITE.name}`,

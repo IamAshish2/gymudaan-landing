@@ -3,6 +3,8 @@ import { notFound } from "next/navigation"
 
 import BlogArticlePage from "@/components/blog/BlogArticlePage"
 import { articleSlugs, getArticle } from "@/lib/blog/articles"
+import { ROUTES } from "@/lib/routes"
+import { pageMetadata } from "@/lib/seo/metadata"
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>
@@ -18,16 +20,13 @@ export const generateMetadata = async ({
   const article = getArticle(slug)
   if (!article) return {}
 
-  return {
+  return pageMetadata({
+    path: ROUTES.blogPost(slug),
     title: article.post.title,
     description: article.post.excerpt,
-    openGraph: {
-      type: "article",
-      title: article.post.title,
-      description: article.post.excerpt,
-      images: article.post.image ? [article.post.image.src.src] : undefined,
-    },
-  }
+    type: "article",
+    images: article.post.image ? [article.post.image.src.src] : undefined,
+  })
 }
 
 const BlogPostPage = async ({ params }: BlogPostPageProps) => {

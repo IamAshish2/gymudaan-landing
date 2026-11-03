@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next"
 
 import { ROUTES } from "@/lib/routes"
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+import { absoluteUrl } from "@/lib/seo/site-url"
 
 const robots = (): MetadataRoute.Robots => ({
   rules: {
@@ -10,7 +9,7 @@ const robots = (): MetadataRoute.Robots => ({
     allow: ROUTES.home,
     disallow: [ROUTES.dashboard.root, ROUTES.admin.root, ROUTES.account.root],
   },
-  sitemap: new URL("/sitemap.xml", siteUrl).toString(),
+  sitemap: absoluteUrl("/sitemap.xml"),
 })
 
 export default robots

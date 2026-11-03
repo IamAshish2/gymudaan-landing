@@ -13,11 +13,14 @@ import PlanMatrix from "@/components/pricing/PlanMatrix"
 import PricingCalculator from "@/components/pricing/PricingCalculator"
 import Typography from "@/components/ui/Typography"
 import { plans, pricingIntro, trustedTitle } from "@/lib/pricing/content"
+import { ROUTES } from "@/lib/routes"
+import { pageMetadata } from "@/lib/seo/metadata"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: ROUTES.pricing,
   title: "Pricing",
   description: pricingIntro.description,
-}
+})
 
 // Section order follows Figma frame 1:721.
 const PricingPage = () => (

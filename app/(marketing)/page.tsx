@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 
 import AvailableEverywhere from "@/components/landing/sections/AvailableEverywhere"
@@ -13,8 +14,17 @@ import Services from "@/components/landing/sections/Services"
 import Stats from "@/components/landing/sections/Stats"
 import Testimonials from "@/components/landing/sections/Testimonials"
 import WhoWeServe from "@/components/landing/sections/WhoWeServe"
+import { ROUTES } from "@/lib/routes"
+import { pageMetadata } from "@/lib/seo/metadata"
 import { SITE } from "@/lib/site"
 import lightPattern from "@/public/landing/bg/light-pattern.webp"
+
+export const metadata: Metadata = pageMetadata({
+  path: ROUTES.home,
+  title: `${SITE.name}: ${SITE.tagline}`,
+  description: SITE.description,
+  absoluteTitle: true,
+})
 
 const softwareJsonLd = {
   "@context": "https://schema.org",
