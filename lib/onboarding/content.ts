@@ -24,18 +24,18 @@ const fromSheet = (
   crop,
 })
 
-const BUSINESS_SHEET = "/onboarding/business-sheet.png"
-const MEMBERS_SHEET = "/onboarding/members-sheet.png"
-const GOALS_SHEET = "/onboarding/goals-sheet.png"
-const TOOLS_SHEET = "/onboarding/tools-sheet.png"
-const PLANS_SHEET = "/onboarding/plans-sheet.png"
+const BUSINESS_SHEET = "/onboarding/business-sheet.webp"
+const MEMBERS_SHEET = "/onboarding/members-sheet.webp"
+const GOALS_SHEET = "/onboarding/goals-sheet.webp"
+const TOOLS_SHEET = "/onboarding/tools-sheet.webp"
+const PLANS_SHEET = "/onboarding/plans-sheet.webp"
 
 export const businessTypes: OnboardingOption[] = [
   {
     id: "traditional-gym",
     label: "Traditional Gym",
     art: {
-      src: "/onboarding/business-gym.png",
+      src: "/onboarding/business-gym.webp",
       sheetWidth: 1448,
       sheetHeight: 1086,
       slotWidth: 216,

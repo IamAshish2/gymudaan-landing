@@ -37,6 +37,10 @@ export type Service = {
 export type Feature = {
   title: string
   description: string
+  image: StaticImageData
+  imageAlt: string
+  /** Crops the image to fill its slot, for art with spare margin to lose. */
+  imageCrop?: boolean
 }
 
 export type ComparisonStatus = "yes" | "partial" | "no"

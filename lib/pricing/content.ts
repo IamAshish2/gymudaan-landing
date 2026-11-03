@@ -1,6 +1,7 @@
 // Pricing page copy, plans and comparison matrix (Figma frame 1:721).
 
 import type { Plan, PlanFeature, PlanMatrixGroup } from "@/lib/pricing/types"
+import { ROUTES } from "@/lib/routes"
 import { SITE } from "@/lib/site"
 
 export const pricingIntro = {
@@ -52,8 +53,12 @@ export const plans: Plan[] = [
 
 export const planCta = {
   label: "Get Started Now",
-  href: SITE.contact.whatsappUrl,
+  href: ROUTES.onboarding,
 }
+
+// The comparison table's last column is too narrow for the full label at
+// laptop widths, so its buttons use the short form.
+export const matrixCtaLabel = "Get Started"
 
 export const customPlan = {
   title: "Need a custom plan?",

@@ -23,7 +23,7 @@ const LogoRow = ({ duplicate = false }: LogoRowProps) => (
           alt={duplicate ? "" : logo.name}
           sizes="320px"
           loading="eager"
-          className="h-auto max-h-20 w-auto max-w-40 rounded-card lg:max-h-30 lg:max-w-60"
+          className="h-auto max-h-20 w-auto max-w-40 rounded-card opacity-90 grayscale transition-[filter,opacity] duration-500 ease-standard hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none lg:max-h-30 lg:max-w-60"
         />
       </li>
     ))}
@@ -39,10 +39,12 @@ type ClientLogoListProps = {
 // seamless. It pauses on hover, and with reduced motion it stays still and
 // scrolls by hand instead. The gap is one sixth of the strip minus the average
 // rendered logo width, so about six logos show at once wherever they fit.
+// Logos rest in monochrome so mixed brand colours don't fight the page, and
+// come back to full colour on hover.
 const ClientLogoList = ({ className }: ClientLogoListProps) => (
   <div
     className={cn(
-      "group/logos -mx-gutter overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)] [--logo-gap:max(2rem,calc(min(100vw,var(--container-page))/6-var(--logo-width)))] [--logo-width:5.5rem] motion-reduce:overflow-x-auto lg:[--logo-width:8.125rem]",
+      "group/logos -mx-gutter overflow-hidden mask-[linear-gradient(90deg,transparent,black_6%,black_94%,transparent)] [--logo-gap:max(2rem,calc(min(100vw,var(--container-page))/6-var(--logo-width)))] [--logo-width:5.5rem] motion-reduce:overflow-x-auto lg:[--logo-width:8.125rem]",
       className
     )}
   >

@@ -40,7 +40,7 @@ const HomePage = () => (
       <Testimonials />
     </Hero>
 
-    <div className="relative -mt-6 rounded-t-tile bg-surface-dark">
+    <div className="band-arrive relative -mt-6 rounded-t-tile bg-surface-dark">
       <Services />
       <hr className="border-line-dark" />
       <MainFeatures />
@@ -48,7 +48,7 @@ const HomePage = () => (
       <Comparison />
     </div>
 
-    <div className="relative isolate mt-9 overflow-hidden rounded-t-band bg-surface-light pb-[var(--radius-band)]">
+    <div className="band-arrive relative isolate mt-9 overflow-hidden rounded-t-band bg-surface-light pb-[var(--radius-band)]">
       {/* Faint orange line art at 14%, offset exactly as in Figma. */}
       <div
         aria-hidden
@@ -67,7 +67,7 @@ const HomePage = () => (
       <Stats />
     </div>
 
-    <div className="relative -mt-[var(--radius-band)] rounded-t-band bg-surface-dark">
+    <div className="band-arrive relative -mt-[var(--radius-band)] rounded-t-band bg-surface-dark">
       <HowItWorks />
       <hr className="border-line-dark" />
       <AvailableEverywhere />

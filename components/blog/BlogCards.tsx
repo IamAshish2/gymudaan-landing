@@ -1,8 +1,37 @@
 import Image from "next/image"
+import Link from "next/link"
 
 import Typography from "@/components/ui/Typography"
 import type { BlogPost } from "@/lib/blog/types"
 import { cn } from "@/lib/utils"
+
+// Cards for posts with an article become one big link: the title's link
+// stretches over the card, and the card shows its hover and focus state.
+const linkedCardClass = (post: BlogPost) =>
+  post.href
+    ? "group/card relative transition-colors duration-300 ease-standard has-focus-visible:ring-[3px] has-focus-visible:ring-brand/60 motion-reduce:transition-none"
+    : undefined
+
+const PostTitle = ({
+  post,
+  className,
+}: {
+  post: BlogPost
+  className?: string
+}) => (
+  <Typography as="h2" variant="titleSm" className={className}>
+    {post.href ? (
+      <Link
+        href={post.href}
+        className="transition-colors duration-300 ease-standard outline-none group-hover/card:text-brand after:absolute after:inset-0 after:rounded-[inherit] motion-reduce:transition-none"
+      >
+        {post.title}
+      </Link>
+    ) : (
+      post.title
+    )}
+  </Typography>
+)
 
 const PostByline = ({ post }: { post: BlogPost }) => (
   <Typography variant="body" className="opacity-60">
@@ -22,7 +51,13 @@ type FeaturedCardProps = {
 
 // The large lead story (node 1:1315): 839×733 with a 497px image on top.
 export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
-  <article className="flex h-full flex-col overflow-hidden rounded-panel border border-line-dark">
+  <article
+    className={cn(
+      "flex h-full flex-col overflow-hidden rounded-panel border border-line-dark",
+      linkedCardClass(post),
+      post.href && "hover:border-line-strong"
+    )}
+  >
     {post.image ? (
       <div className="relative aspect-839/497 w-full border-b border-line-dark">
         <Image
@@ -37,9 +72,7 @@ export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
     ) : null}
     <div className="flex flex-1 flex-col px-5 py-5 lg:px-8.5 lg:pt-5.5 lg:pb-7.5">
       <PostCategory post={post} />
-      <Typography as="h2" variant="titleSm" className="mt-1">
-        {post.title}
-      </Typography>
+      <PostTitle post={post} className="mt-1" />
       <Typography variant="bodyLg" className="mt-3 max-w-172">
         {post.excerpt}
       </Typography>
@@ -53,18 +86,22 @@ export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
 // A text-only card (node 1:1291). Used beside the lead story, and in filtered
 // results for posts that have no image.
 export const BlogCompactCard = ({ post }: { post: BlogPost }) => (
-  <article className="flex h-full flex-col justify-center gap-1 rounded-panel border border-line-dark px-5 py-5 lg:gap-2 lg:px-7.75">
+  <article
+    className={cn(
+      "flex h-full flex-col justify-center gap-1 rounded-panel border border-line-dark px-5 py-5 lg:gap-2 lg:px-7.75",
+      linkedCardClass(post),
+      post.href && "hover:border-line-strong"
+    )}
+  >
     <PostCategory post={post} />
-    <Typography as="h2" variant="titleSm">
-      {post.title}
-    </Typography>
+    <PostTitle post={post} />
     <PostByline post={post} />
   </article>
 )
 
 // Image on top, text below (node 1:1328).
 export const BlogGridCard = ({ post }: { post: BlogPost }) => (
-  <article>
+  <article className={cn(linkedCardClass(post), post.href && "rounded-card")}>
     {post.image ? (
       <div className="relative aspect-496/369 w-full overflow-hidden rounded-card border border-line-dark">
         <Image
@@ -78,9 +115,7 @@ export const BlogGridCard = ({ post }: { post: BlogPost }) => (
     ) : null}
     <div className="flex flex-col gap-1 px-0.75 pt-5">
       <PostCategory post={post} />
-      <Typography as="h2" variant="titleSm">
-        {post.title}
-      </Typography>
+      <PostTitle post={post} />
       <PostByline post={post} />
     </div>
   </article>

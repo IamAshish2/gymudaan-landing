@@ -10,6 +10,10 @@ const MarketingLayout = ({
 }>) => {
   return (
     <div className="flex min-h-svh flex-col bg-surface-dark text-white">
+      {/* Reveals wait on JS, so show everything if it never runs. */}
+      <noscript>
+        <style>{`.reveal-group > *, .reveal-stagger > * { opacity: 1 !important; translate: none !important; }`}</style>
+      </noscript>
       <LandingHeader />
       <main className="flex-1">{children}</main>
       <LandingFooter />

@@ -62,7 +62,8 @@ const Comparison = () => (
                 className={cn(
                   headClass,
                   "border-l border-l-line-faint text-center text-title-sm",
-                  column.key === "udaan" && udaanClass
+                  column.key === "udaan" &&
+                    cn(udaanClass, "shadow-[inset_0_2px_0_var(--color-brand)]")
                 )}
               >
                 {column.label}
@@ -99,7 +100,11 @@ const Comparison = () => (
                     <Image
                       src={status.src}
                       alt={status.alt}
-                      className="mx-auto size-8 lg:size-9.5"
+                      className={cn(
+                        "mx-auto size-8 lg:size-9.5",
+                        // Competitors sit back so the Gym Udaan column leads.
+                        column.key !== "udaan" && "opacity-55"
+                      )}
                     />
                   </td>
                 )

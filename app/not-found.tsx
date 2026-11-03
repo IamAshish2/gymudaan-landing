@@ -1,51 +1,31 @@
-import Link from "next/link"
+import LandingFooter from "@/components/landing/layout/LandingFooter"
+import LandingHeader from "@/components/landing/layout/LandingHeader"
+import ActionLinks from "@/components/landing/primitives/ActionLinks"
+import PageIntro from "@/components/landing/primitives/PageIntro"
+import { notFoundPage } from "@/lib/landing/content"
+import { SITE } from "@/lib/site"
 
-import BrandMark from "@/components/shared/BrandMark"
-import { Button } from "@/components/ui/button"
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import Typography from "@/components/ui/Typography"
-import { ISearchX } from "@/lib/icons"
-import { ROUTES } from "@/lib/routes"
-
-const NotFound = () => {
-  return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-10 px-6 py-16">
-      <Link href={ROUTES.home} aria-label="Home">
-        <BrandMark />
-      </Link>
-
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <ISearchX />
-          </EmptyMedia>
-          <Typography
-            variant="h1"
-            className="text-6xl leading-none text-primary lg:text-7xl"
-          >
-            404
-          </Typography>
-          <EmptyTitle>Page not found</EmptyTitle>
-          <EmptyDescription>
-            We couldn&apos;t find the page you were looking for. It may have
-            been moved or renamed.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent className="flex-row justify-center gap-2">
-          <Button asChild>
-            <Link href={ROUTES.home}>Back to home</Link>
-          </Button>
-        </EmptyContent>
-      </Empty>
+// Every unknown URL lands here, so it wears the marketing shell: visitors keep
+// the header to find their way, and the page matches the rest of the site.
+// Only global-not-found may export `metadata`, so the title is set inline
+// (React hoists it into <head>).
+const NotFound = () => (
+  <div className="flex min-h-svh flex-col bg-surface-dark text-white">
+    <title>{`${notFoundPage.title} | ${SITE.name}`}</title>
+    <LandingHeader />
+    <main className="flex flex-1 flex-col pb-section">
+      <PageIntro
+        badge={notFoundPage.badge}
+        title={notFoundPage.heading}
+        description={notFoundPage.description}
+        titleClassName="text-balance"
+        descriptionClassName="max-w-[30em] text-pretty"
+      >
+        <ActionLinks actions={notFoundPage.actions} className="mt-8" />
+      </PageIntro>
     </main>
-  )
-}
+    <LandingFooter />
+  </div>
+)
 
 export default NotFound

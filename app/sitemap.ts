@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 
+import { articleSlugs } from "@/lib/blog/articles"
 import { ROUTES } from "@/lib/routes"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
@@ -20,6 +21,11 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency: "weekly",
     priority: 0.7,
   },
+  ...articleSlugs.map((slug) => ({
+    url: new URL(ROUTES.blogPost(slug), siteUrl).toString(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  })),
   {
     url: new URL(ROUTES.legal.terms, siteUrl).toString(),
     changeFrequency: "yearly",

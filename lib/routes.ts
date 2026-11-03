@@ -6,6 +6,7 @@ export const ROUTES = {
   features: "/#features",
   pricing: "/pricing",
   blogs: "/blogs",
+  blogPost: (slug: string) => `/blogs/${slug}`,
   onboarding: "/onboarding",
   legal: {
     terms: "/terms",

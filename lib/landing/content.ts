@@ -35,7 +35,10 @@ import compareReports from "@/public/landing/comparison/icon-reports.svg"
 import compareSecurity from "@/public/landing/comparison/icon-security.svg"
 import compareSms from "@/public/landing/comparison/icon-sms.svg"
 import compareTrainer from "@/public/landing/comparison/icon-trainer.svg"
+import controlAttendance from "@/public/landing/control/attendance.webp"
 import controlDashboard from "@/public/landing/control/dashboard.webp"
+import controlMembers from "@/public/landing/control/members.webp"
+import controlPayments from "@/public/landing/control/payments.webp"
 import iconAttendance from "@/public/landing/control/icon-attendance.svg"
 import iconDashboard from "@/public/landing/control/icon-dashboard.svg"
 import iconMembers from "@/public/landing/control/icon-members.svg"
@@ -43,14 +46,25 @@ import iconPayments from "@/public/landing/control/icon-payments.svg"
 import iconDesktop from "@/public/landing/everywhere/icon-desktop.svg"
 import iconMobile from "@/public/landing/everywhere/icon-mobile.svg"
 import iconTablet from "@/public/landing/everywhere/icon-tablet.svg"
+import featureAppMockup from "@/public/landing/features/app-mockup.webp"
+import featureDailyDaybook from "@/public/landing/features/daily-daybook.webp"
+import featureMarketingTools from "@/public/landing/features/marketing-tools.webp"
+import featureReporting from "@/public/landing/features/reporting.webp"
+import featureSocialMedia from "@/public/landing/features/social-media.webp"
 import battleRopes from "@/public/landing/insights/battle-ropes.webp"
 import coach from "@/public/landing/insights/coach.webp"
 import profitableGym from "@/public/landing/insights/profitable-gym.webp"
 import trainingFloor from "@/public/landing/insights/training-floor.webp"
+import serveBootcamp from "@/public/landing/serve/bootcamp.webp"
+import serveCalisthenics from "@/public/landing/serve/calisthenics.webp"
+import serveDance from "@/public/landing/serve/dance.webp"
+import serveGymnastics from "@/public/landing/serve/gymnastics.webp"
 import serveGyms from "@/public/landing/serve/gyms.webp"
 import serveMultiBranch from "@/public/landing/serve/multi-branch.webp"
 import servePersonalTraining from "@/public/landing/serve/personal-training.webp"
 import serveStudios from "@/public/landing/serve/studios.webp"
+import serveSumoWrestling from "@/public/landing/serve/sumo-wrestling.webp"
+import serveYogaPilates from "@/public/landing/serve/yoga-pilates.webp"
 import avatarAbhishek from "@/public/landing/testimonials/avatar-abhishek.webp"
 import avatarAmick from "@/public/landing/testimonials/avatar-amick.webp"
 import avatarAshish from "@/public/landing/testimonials/avatar-ashish.webp"
@@ -94,11 +108,9 @@ export const navActions = {
 export const hero = {
   eyebrow: "GymUdaan Nepal's #1 Gym Software",
   title: "The gym management platform for modern fitness businesses",
-  // TODO(content): reads like a design placeholder.
-  description:
-    "Clear, professional, and suitable for most gym management platforms.",
+  description: "Run memberships, attendance and payments from one platform.",
   actions: [
-    { label: "Get Started", href: SITE.contact.whatsappUrl, variant: "brand" },
+    { label: "Get Started", href: ROUTES.onboarding, variant: "brand" },
     {
       label: "Request a demo",
       href: SITE.contact.whatsappUrl,
@@ -189,7 +201,6 @@ export const services: SectionIntro & { items: Service[] } = {
 
 export const features: SectionIntro & {
   items: Feature[]
-  imageAlt: string
 } = {
   badge: "Main Features",
   title: [
@@ -207,6 +218,11 @@ export const features: SectionIntro & {
       title: "Gym Udaan App",
       description:
         "Manage your fitness business on the go with a dedicated mobile experience that keeps everything connected.",
+      image: featureAppMockup,
+      imageAlt:
+        "Gym Udaan mobile app showing popular workouts, nutrition plans and fitness articles, with cards for training schedules, active members and membership renewals",
+      // Figma crops the mockup from the left (node 1:167).
+      imageCrop: true,
     },
     // TODO(content): Figma only has a description for the first item. The
     // others are proposed. "Reporting's" in Figma is corrected to "Reporting".
@@ -214,25 +230,35 @@ export const features: SectionIntro & {
       title: "Social Media Automation",
       description:
         "Schedule and publish posts to your connected Facebook, Instagram and TikTok accounts, and reply to comments and messages in one place.",
+      image: featureSocialMedia,
+      imageAlt:
+        "Phone showing Instagram, Facebook, YouTube and TikTok toggles with a Schedule Post button, surrounded by cards for planning, content, auto publishing and performance",
     },
     {
       title: "Reporting",
       description:
         "See revenue, renewals and attendance trends at a glance and make decisions with real numbers.",
+      image: featureReporting,
+      imageAlt:
+        "Total revenue card connected to cards for renewals, attendance, attendance rate and a revenue trend chart",
     },
     {
       title: "Daily Daybook",
       description:
         "Keep a clear record of each day's activity, so your books are ready when you close for the day.",
+      image: featureDailyDaybook,
+      imageAlt:
+        "Daily Daybook listing total sales, expenses, memberships and other income, connected to a net total card and a bar chart",
     },
     {
       title: "Marketing Tools",
       description:
         "Share offers and updates with your members through bulk messages and automated reminders.",
+      image: featureMarketingTools,
+      imageAlt:
+        "Phone showing a member messaging list, connected to cards for bulk messages and automated reminders",
     },
   ],
-  imageAlt:
-    "Gym Udaan mobile app showing popular workouts, nutrition plans and fitness articles, with cards for training schedules, active members and membership renewals",
 }
 
 // ── Comparison ─────────────────────────────────────────────────────────────
@@ -395,46 +421,86 @@ export const audiences: SectionIntro & { items: Audience[] } = {
         "Bring structure and consistency to your growing fitness business.",
       image: serveMultiBranch,
     },
+    {
+      title: "Sumo & Wrestling",
+      description:
+        "Keep memberships, training sessions, and payments in one place.",
+      image: serveSumoWrestling,
+    },
+    {
+      title: "Calisthenics",
+      description:
+        "Stay organized as your training community and member base grow.",
+      image: serveCalisthenics,
+    },
+    {
+      title: "Gymnastics & Acrobatics",
+      description:
+        "Track attendance and memberships across every class and skill level.",
+      image: serveGymnastics,
+    },
+    {
+      title: "Bootcamp Fitness",
+      description:
+        "Run group sessions and renewals without the paperwork piling up.",
+      image: serveBootcamp,
+    },
+    {
+      title: "Dance & Zumba Studios",
+      description: "Keep classes, attendance, and payments moving in step.",
+      image: serveDance,
+    },
+    {
+      title: "Yoga & Pilates Studios",
+      description:
+        "Spend less time on admin and keep your studio calm and organized.",
+      image: serveYogaPilates,
+    },
   ],
 }
 
 // ── Everything under your control ──────────────────────────────────────────
 
-const dashboardShot = {
-  src: controlDashboard,
-  alt: "Gym Udaan dashboard overview with member totals, financial overview, attention items, expiring memberships, new members and recent payments",
-}
-
 export const control: SectionIntro & { tabs: ControlTab[] } = {
   title: ["Everything is kept under your ", { em: "control" }],
   description:
     "Manage memberships, track attendance, monitor payments, and stay on top of your gym's daily operations",
-  // TODO(content): Figma has one screenshot; the other three tabs reuse it
-  // until per-tab screenshots are supplied.
   tabs: [
     {
       id: "dashboard",
       label: "Dashboard Overview",
       icon: iconDashboard,
-      image: dashboardShot,
+      image: {
+        src: controlDashboard,
+        alt: "Gym Udaan dashboard overview with member totals, financial overview, attention items, expiring memberships, new members and recent payments",
+      },
     },
     {
       id: "members",
       label: "Manage Members",
       icon: iconMembers,
-      image: dashboardShot,
+      image: {
+        src: controlMembers,
+        alt: "Gym Udaan member management screen with member totals, a member growth chart, an active member overview, quick actions and a member list",
+      },
     },
     {
       id: "attendance",
       label: "Attendance Tracking",
       icon: iconAttendance,
-      image: dashboardShot,
+      image: {
+        src: controlAttendance,
+        alt: "Gym Udaan attendance tracking screen with today's present, leave, late and absent counts, a weekly attendance chart, quick actions and a staff attendance log",
+      },
     },
     {
       id: "payments",
       label: "Payments & Reports",
       icon: iconPayments,
-      image: dashboardShot,
+      image: {
+        src: controlPayments,
+        alt: "Gym Udaan payments and reports screen with revenue totals, a monthly revenue chart, payment methods, quick reports and recent payments",
+      },
     },
   ],
 }
@@ -445,7 +511,7 @@ export const control: SectionIntro & { tabs: ControlTab[] } = {
 export const stats: { title: RichText; items: Stat[] } = {
   title: ["The backbone for the ", { em: "Nepali Gym" }],
   items: [
-    { value: "50+", label: "Fitness businesses growing together" },
+    { value: "100+", label: "Fitness businesses growing together" },
     { value: "10K+", label: "Gym members managed effortlessly" },
     { value: "+40%", label: "Increase in your gym revenue" },
     { value: "24/7", label: "Access your gym anytime" },
@@ -595,7 +661,7 @@ export const finalCta = {
   description:
     "Simplify daily operations, manage your members effortlessly, and focus on building a stronger fitness business with Gym Udaan",
   actions: [
-    { label: "Get Started", href: SITE.contact.whatsappUrl, variant: "brand" },
+    { label: "Get Started", href: ROUTES.onboarding, variant: "brand" },
     { label: "Contact Us", href: SITE.contact.whatsappUrl, variant: "dark" },
   ] satisfies LinkAction[],
 }
@@ -691,4 +757,28 @@ export const footer = {
   status: "All systems operational",
   closing: "Made for the fitness businesses of tomorrow.",
   watermark: "Gym Udaan",
+}
+
+// 404 and error pages (app/not-found.tsx, app/error.tsx).
+export const notFoundPage = {
+  title: "Page not found",
+  badge: "404",
+  heading: "This page skipped leg day",
+  description:
+    "We couldn't find the page you were looking for. It may have been moved or renamed.",
+  actions: [
+    { label: "Back to home", href: ROUTES.home, variant: "brand" },
+    { label: "Read the blog", href: ROUTES.blogs, variant: "dark" },
+  ] satisfies LinkAction[],
+}
+
+export const errorPage = {
+  title: "Something went wrong",
+  badge: "Error",
+  heading: "Something went wrong",
+  description:
+    "An unexpected error stopped this page from loading. Try again, and if it keeps happening, head back home.",
+  retry: "Try again",
+  home: { label: "Back to home", href: ROUTES.home },
+  reference: "Error reference:",
 }
