@@ -3,7 +3,13 @@ import Link from "next/link"
 
 import LandingButton from "@/components/landing/primitives/LandingButton"
 import Section from "@/components/landing/primitives/Section"
-import { matrix, matrixLabel, planCta, plans } from "@/lib/pricing/content"
+import {
+  matrix,
+  matrixCtaLabel,
+  matrixLabel,
+  planCta,
+  plans,
+} from "@/lib/pricing/content"
 import type { PlanMatrixValue } from "@/lib/pricing/types"
 import { linkTarget } from "@/lib/site"
 import statusNo from "@/public/landing/pricing/status-no.svg"
@@ -105,10 +111,12 @@ const PlanMatrix = () => (
                   variant={plan.popular ? "light" : "dark"}
                   size="sm"
                   asChild
-                  className="lg:px-7 lg:py-2 lg:text-title-sm"
+                  // Full size only from xl: below that the Platinum column is
+                  // narrower than the button.
+                  className="xl:px-7 xl:py-2 xl:text-title-sm"
                 >
                   <Link href={planCta.href} {...linkTarget(planCta.href)}>
-                    {planCta.label}
+                    {matrixCtaLabel}
                     <span className="sr-only"> with the {plan.name} plan</span>
                   </Link>
                 </LandingButton>

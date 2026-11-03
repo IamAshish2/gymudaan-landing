@@ -2,7 +2,7 @@ import Image from "next/image"
 
 import Typography from "@/components/ui/Typography"
 import { cn } from "@/lib/utils"
-import emblem from "@/public/landing/brand/logo-emblem.png"
+import emblem from "@/public/landing/brand/logo-emblem.webp"
 
 type LandingLogoProps = {
   className?: string

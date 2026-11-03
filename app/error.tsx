@@ -2,59 +2,60 @@
 
 import Link from "next/link"
 
-import BrandMark from "@/components/shared/BrandMark"
-import { Button } from "@/components/ui/button"
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import { IRotateCcw, ITriangleAlert } from "@/lib/icons"
-import { ROUTES } from "@/lib/routes"
+import LandingLogo from "@/components/landing/layout/LandingLogo"
+import Container from "@/components/landing/primitives/Container"
+import LandingButton from "@/components/landing/primitives/LandingButton"
+import PageIntro from "@/components/landing/primitives/PageIntro"
+import Typography from "@/components/ui/Typography"
+import { errorPage } from "@/lib/landing/content"
+import { IRotateCcw } from "@/lib/icons"
+import { SITE } from "@/lib/site"
 
 type RootErrorProps = {
   error: Error & { digest?: string }
   reset: () => void
 }
 
-const RootError = ({ error, reset }: RootErrorProps) => {
-  return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-10 px-6 py-16">
-      <Link href={ROUTES.home} aria-label="Home">
-        <BrandMark />
+// Marketing look without the full header and footer, in case one of them is
+// what failed. The raw error message is never shown: the digest lets support
+// find the server log instead.
+const RootError = ({ error, reset }: RootErrorProps) => (
+  <div className="flex min-h-svh flex-col bg-surface-dark text-white">
+    <title>{`${errorPage.title} | ${SITE.name}`}</title>
+    <Container className="pt-6 lg:pt-8">
+      <Link
+        href={errorPage.home.href}
+        aria-label={`${SITE.name} home`}
+        className="inline-flex rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60"
+      >
+        <LandingLogo />
       </Link>
+    </Container>
 
-      <Empty className="max-w-lg">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <ITriangleAlert />
-          </EmptyMedia>
-          <EmptyTitle>Something went wrong</EmptyTitle>
-          <EmptyDescription>
-            {error?.message ||
-              "An unexpected error stopped us from loading this page. Try again, and if it keeps happening, head back home."}
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent className="flex-row justify-center gap-2">
-          <Button onClick={reset}>
-            <IRotateCcw data-icon="inline-start" />
-            Try again
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href={ROUTES.home}>Go to home</Link>
-          </Button>
-        </EmptyContent>
+    <main className="flex flex-1 flex-col pb-section">
+      <PageIntro
+        badge={errorPage.badge}
+        title={errorPage.heading}
+        description={errorPage.description}
+        descriptionClassName="max-w-[30em] text-pretty"
+      >
+        <div className="mt-8 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row sm:justify-center">
+          <LandingButton onClick={reset}>
+            <IRotateCcw aria-hidden className="size-[0.9em]" />
+            {errorPage.retry}
+          </LandingButton>
+          <LandingButton variant="dark" asChild>
+            <Link href={errorPage.home.href}>{errorPage.home.label}</Link>
+          </LandingButton>
+        </div>
         {error.digest ? (
-          <EmptyDescription className="font-mono text-xs">
-            Error reference: {error.digest}
-          </EmptyDescription>
+          <Typography variant="badge" className="mt-6 opacity-60">
+            {errorPage.reference} <code>{error.digest}</code>
+          </Typography>
         ) : null}
-      </Empty>
+      </PageIntro>
     </main>
-  )
-}
+  </div>
+)
 
 export default RootError

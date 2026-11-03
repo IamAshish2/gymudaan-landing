@@ -35,7 +35,7 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
 
   return (
     <li className={cn(tileClass, tileMinHeight)}>
-      <figure className="flex flex-1 flex-col justify-between gap-8 bg-surface-card p-6 lg:p-8">
+      <figure className="flex flex-1 flex-col justify-between gap-8 bg-surface-card p-6 shadow-edge lg:p-8">
         <div className="flex flex-col gap-6">
           <Image
             src={tile.avatar}

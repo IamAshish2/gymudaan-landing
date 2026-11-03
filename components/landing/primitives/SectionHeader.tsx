@@ -43,7 +43,7 @@ const SectionHeader = ({
       <Typography
         variant="display"
         id={titleId}
-        className={cn("max-w-[15em]", titleClassName)}
+        className={cn("max-w-[15em] text-balance", titleClassName)}
       >
         <RichTextLine text={intro.title} />
       </Typography>
@@ -52,7 +52,7 @@ const SectionHeader = ({
     {intro.description || actions ? (
       <div
         className={cn(
-          "flex flex-col gap-6 lg:max-w-168 lg:items-end lg:text-right",
+          "flex flex-col gap-6 lg:max-w-2xl lg:items-end lg:text-right",
           actions ? "lg:justify-between lg:pt-4" : "lg:justify-end"
         )}
       >

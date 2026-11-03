@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 
 import Container from "@/components/landing/primitives/Container"
+import Reveal from "@/components/landing/primitives/Reveal"
 import type { Tone } from "@/lib/landing/types"
 import { cn } from "@/lib/utils"
 
@@ -30,7 +31,9 @@ const Section = ({
       className
     )}
   >
-    <Container>{children}</Container>
+    <Container>
+      <Reveal>{children}</Reveal>
+    </Container>
   </section>
 )
 

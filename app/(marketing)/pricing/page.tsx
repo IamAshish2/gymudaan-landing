@@ -8,6 +8,7 @@ import BillingSwitch from "@/components/pricing/BillingSwitch"
 import CustomPlanBanner from "@/components/pricing/CustomPlanBanner"
 import PlanCard from "@/components/pricing/PlanCard"
 import PlanMatrix from "@/components/pricing/PlanMatrix"
+import PricingCalculator from "@/components/pricing/PricingCalculator"
 import Typography from "@/components/ui/Typography"
 import { plans, pricingIntro, trustedTitle } from "@/lib/pricing/content"
 
@@ -39,6 +40,8 @@ const PricingPage = () => (
         <CustomPlanBanner />
       </Container>
     </section>
+
+    <PricingCalculator />
 
     <section aria-labelledby="trusted-title" className="pt-section text-white">
       <Container>

@@ -23,14 +23,14 @@ const WhoWeServe = () => (
       slideClassName="basis-[82%] sm:basis-[46%] lg:basis-[27.6%]"
     >
       {audiences.items.map((audience) => (
-        <article key={audience.title} className="flex flex-col">
+        <article key={audience.title} className="group flex flex-col">
           <div className="relative aspect-[394/494] overflow-hidden rounded-photo">
             <Image
               src={audience.image}
               alt=""
               fill
               sizes="(min-width: 1728px) 394px, (min-width: 1024px) 26vw, (min-width: 640px) 45vw, 80vw"
-              className="object-cover"
+              className="object-cover transition-[scale] duration-700 ease-standard motion-safe:group-hover:scale-[1.04]"
             />
           </div>
           <Typography variant="cardTitle" className="mt-6 px-1">

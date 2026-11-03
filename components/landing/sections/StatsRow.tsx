@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import StatValue from "@/components/landing/sections/StatValue"
 import Typography from "@/components/ui/Typography"
 import type { Stat } from "@/lib/landing/types"
 import { cn } from "@/lib/utils"
@@ -32,7 +33,7 @@ const StatsRow = ({ stats }: StatsRowProps) => {
 
   return (
     <dl
-      className="mt-8 grid grid-cols-2 border-y border-ink-muted/20 lg:mt-10 lg:flex lg:justify-between lg:px-2"
+      className="reveal-stagger mt-8 grid grid-cols-2 border-y border-ink-muted/20 lg:mt-10 lg:flex lg:justify-between lg:px-2"
       onMouseLeave={() => setPaused(false)}
     >
       {stats.map((stat, index) => {
@@ -77,7 +78,7 @@ const StatsRow = ({ stats }: StatsRowProps) => {
                   isActive ? "text-ink" : "text-ink-muted"
                 )}
               >
-                {stat.value}
+                <StatValue value={stat.value} />
               </Typography>
             </dd>
           </div>

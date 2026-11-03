@@ -6,7 +6,7 @@ One app, five route groups. Groups don't change URLs; the folder inside each gro
 
 | Group | URL | Who | Guard | Shell |
 | --- | --- | --- | --- | --- |
-| `(marketing)` | `/`, `/pricing`, `/blogs`, `/terms`, `/privacy-policy` | everyone | — | `LandingHeader` + `LandingFooter`, fixed palette |
+| `(marketing)` | `/`, `/pricing`, `/blogs`, `/blogs/[slug]`, `/terms`, `/privacy-policy` | everyone | — | `LandingHeader` + `LandingFooter`, fixed palette |
 | `(onboarding)` | `/onboarding` | everyone | — (add `requireRole` once sign-up exists) | Full white page with centred content, fixed palette |
 | `(site)/account` | `/account/*` | any signed-in user | `requireRole(...ALL_ROLES)` in the layout | `SiteShell` + `SettingsNav` |
 | `(dashboard)` | `/dashboard/*` | `USER` | `requireRole("USER")` in the layout | `DashboardShell surface="dashboard"` |

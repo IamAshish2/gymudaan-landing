@@ -1,12 +1,13 @@
 // Blogs page copy and posts (Figma frame 1:1249). The contract has no blog
 // endpoints yet (docs/API.md, Gaps), so posts live here until it does.
 //
-// TODO(content): every post below is placeholder content from Figma, and
-// there are no article bodies or article pages yet, so cards do not link
-// anywhere. Three grid posts appear twice because Figma repeats them, and
+// TODO(content): every post below is placeholder content from Figma. Only
+// the featured post has an article (lib/blog/articles.ts), so only its cards
+// link anywhere. Three grid posts appear twice because Figma repeats them, and
 // some dates are in the future.
 
 import type { BlogPost } from "@/lib/blog/types"
+import { ROUTES } from "@/lib/routes"
 import checklist from "@/public/landing/blog/checklist.webp"
 import dashboardLaptop from "@/public/landing/blog/dashboard-laptop.webp"
 import featuredImage from "@/public/landing/blog/featured.webp"
@@ -49,6 +50,7 @@ const kushal = { author: "Kushal Jk", date: "Aug 26, 2026" }
 
 export const featuredPost: BlogPost & { excerpt: string } = {
   id: "manage-gym-efficiently",
+  href: ROUTES.blogPost("manage-gym-efficiently"),
   title: "7 Tips to Manage Your Gym More Efficiently",
   category: "Management",
   ...kushal,
@@ -60,6 +62,7 @@ export const featuredPost: BlogPost & { excerpt: string } = {
 export const sidePosts: BlogPost[] = [
   {
     id: featuredPost.id,
+    href: featuredPost.href,
     title: featuredPost.title,
     category: featuredPost.category,
     ...kushal,

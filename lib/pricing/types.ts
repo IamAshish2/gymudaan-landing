@@ -27,3 +27,27 @@ export type PlanMatrixGroup = {
   title?: string
   rows: PlanMatrixRow[]
 }
+
+export type CalculatorPlan = {
+  /** Matches a name in `plans`; the price comes from that card. */
+  name: string
+  description: string
+}
+
+export type RecommendedPlan = CalculatorPlan & {
+  /** Split from the card price, e.g. "Rs" and "14,999". */
+  currency: string
+  amount: string
+}
+
+export type CalculatorAddOn = {
+  id: string
+  label: string
+  description: string
+}
+
+export type CalculatorSelection = {
+  members: number
+  locations: number
+  addOns: string[]
+}

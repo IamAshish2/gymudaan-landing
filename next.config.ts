@@ -12,6 +12,8 @@ const apiOrigin = (() => {
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Allow testing the dev server from other devices on the LAN (phone, tablet).
+  allowedDevOrigins: ["192.168.1.9", "192.168.100.7"],
   experimental: {
     serverActions: {
       bodySizeLimit: "5mb",

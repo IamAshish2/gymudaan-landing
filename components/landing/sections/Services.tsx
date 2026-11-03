@@ -27,7 +27,9 @@ const ServiceCard = ({ service }: { service: Service }) => (
 
     <div className="flex flex-1 flex-col gap-6 px-1 pt-6 pb-2 sm:px-2 lg:flex-row lg:items-end lg:justify-between lg:px-3 lg:pt-14 lg:pb-6">
       <div className="flex max-w-173 flex-col gap-3 lg:gap-4">
-        <Typography variant="titleLg">{service.title}</Typography>
+        <Typography variant="titleLg" className="tracking-normal">
+          {service.title}
+        </Typography>
         <Typography variant="bodyLg" className="opacity-80">
           {service.description}
         </Typography>
@@ -55,6 +57,7 @@ const Services = () => (
     <SnapCarousel
       intro={services}
       titleId="services-title"
+      titleClassName="tracking-normal text-wrap"
       id="services-track"
       label="services"
       arrows="dark"

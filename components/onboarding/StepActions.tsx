@@ -2,7 +2,7 @@ import LandingButton from "@/components/landing/primitives/LandingButton"
 import { cn } from "@/lib/utils"
 
 const ACTION_CLASS =
-  "h-12.5 px-9 transition-[color,background-color,translate,scale] focus-visible:ring-offset-surface-light motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-95"
+  "h-12.5 px-9 transition-[color,background-color,box-shadow,translate,scale] focus-visible:ring-offset-surface-light motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-95"
 
 type StepActionsProps = {
   nextLabel?: string

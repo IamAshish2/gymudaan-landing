@@ -77,12 +77,14 @@
   --color-surface-light: #ffffff;
   --color-surface-tile: #f8f8f8;
   --color-surface-plan: #fafafa;
+  --color-surface-glass: rgb(0 0 0 / 0.68);
   --color-line-dark: #262626;
   --color-line-strong: #3a3a3a;
   --color-line-light: #f0f0f0;
   --color-line-faint: rgb(255 255 255 / 0.04);
   --color-line-frame: rgb(163 169 168 / 0.5);
   --color-line-option: #e0e0e0;
+  --color-line-glass: rgb(255 255 255 / 0.14);
   --color-switch-track: #d9d9d9;
   --color-badge-dark: rgb(255 255 255 / 0.08);
   --color-badge-light: rgb(0 0 0 / 0.08);
@@ -116,6 +118,13 @@
   --text-watermark: clamp(3rem, 15.8vw, 17.05rem);
   --text-watermark--line-height: 1;
 
+  /* Large type sits tighter, the way it would be set by hand. */
+  --text-display--letter-spacing: -0.015em;
+  --text-title-lg--letter-spacing: -0.013em;
+  --text-title--letter-spacing: -0.011em;
+  --text-stat--letter-spacing: -0.02em;
+  --text-step--letter-spacing: -0.03em;
+
   /* Layout — 1728 frame, 100px gutters, 1528px content */
   --container-page: 108rem;
   --spacing-gutter: clamp(1rem, -0.5rem + 6.6vw, 6.25rem);
@@ -124,7 +133,7 @@
   --spacing-hero-top: clamp(8rem, 5rem + 9.4vw, 15.1875rem);
   --spacing-band: clamp(5rem, 2rem + 7.4vw, 10rem);
   --spacing-page-top: clamp(8rem, 6.4rem + 9.4vw, 16.5rem);
-  --spacing-header: 5.3125rem; /* fixed header height once scrolled, from lg */
+  --spacing-header: 6.125rem; /* fixed header height once scrolled, from lg */
 
   /* Onboarding — 1728 frame: 1288px option row, 992px plans, 893px review, 638px form */
   --container-onboarding-options: 80.5rem;
@@ -151,12 +160,28 @@
 
   /* Elevation */
   --shadow-option: 0 0.875rem 1.75rem -0.875rem rgb(255 106 0 / 0.35);
+  --shadow-edge: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-button:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 0.5rem 1.5rem -0.875rem rgb(255 106 0 / 0.55);
+  --shadow-button-hover:
+    inset 0 1px 0 rgb(255 255 255 / 0.32),
+    0 0.75rem 2.25rem -0.75rem rgb(255 106 0 / 0.85);
+  --shadow-glass:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 0.75rem 2rem -0.75rem rgb(0 0 0 / 0.45);
 
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --animate-marquee: marquee 120s linear infinite;
+  /* Landing: slow and quiet on purpose. Use behind motion-safe:. */
+  --animate-hero-word: hero-word 900ms var(--ease-emphasized) backwards;
+  --animate-hero-fade: hero-fade 900ms var(--ease-emphasized) backwards;
+  --animate-hero-dashboard: hero-fade 1200ms var(--ease-emphasized) backwards;
+  --animate-reveal: reveal 850ms var(--ease-emphasized) backwards;
+  --animate-tab-timer: tab-timer 7s linear both;
   /* Onboarding: backwards-only fill, so nothing outlives the animation and
      blocks hover states. Use behind motion-safe: to respect reduced motion. */
   --animate-step-forward: step-forward 360ms var(--ease-emphasized) backwards;
@@ -170,6 +195,32 @@
   @keyframes marquee {
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes hero-word {
+    from {
+      transform: translateY(110%);
+    }
+  }
+
+  @keyframes hero-fade {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+  }
+
+  @keyframes tab-timer {
+    from {
+      transform: scaleX(0);
     }
   }
 
@@ -296,6 +347,11 @@
     @apply bg-background text-foreground;
   }
 
+  ::selection {
+    background-color: var(--color-brand);
+    color: white;
+  }
+
   html {
     @apply font-sans;
 
@@ -338,5 +394,68 @@
   [data-disabled],
   [data-slot="slider-track"] {
     cursor: default;
+  }
+}
+
+/* Landing motion that utilities can't express. Everything here is opt-in via
+   prefers-reduced-motion, so the page simply sits still without it. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    /* See components/landing/primitives/Reveal.tsx. */
+    .reveal-group > :not([data-revealed]),
+    .reveal-stagger > :not([data-revealed]) {
+      opacity: 0;
+    }
+
+    .reveal-group > [data-revealed],
+    .reveal-stagger > [data-revealed] {
+      animation: var(--animate-reveal);
+      animation-delay: var(--reveal-delay, 0ms);
+    }
+
+    /* Scroll-linked. Browsers without it show the finished state. */
+    @supports (animation-timeline: scroll()) {
+      .hero-tilt {
+        transform-origin: 50% 0;
+        animation: hero-tilt linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 34rem;
+      }
+
+      .step-progress {
+        transform-origin: 50% 0;
+        animation: step-progress linear both;
+        animation-timeline: view();
+        animation-range: cover 15% cover 70%;
+      }
+
+      /* Desktop only: scaling a band this tall is heavy work for a phone. */
+      @media (min-width: 64rem) {
+        .band-arrive {
+          transform-origin: 50% 0;
+          animation: band-arrive linear both;
+          animation-timeline: view();
+          animation-range: entry 0 entry 28rem;
+        }
+      }
+    }
+  }
+
+  @keyframes hero-tilt {
+    from {
+      transform: rotateX(10deg) scale(0.95);
+    }
+  }
+
+  @keyframes step-progress {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes band-arrive {
+    from {
+      scale: 0.96;
+    }
   }
 }
