@@ -12,7 +12,14 @@ type PageMetadataInput = {
   absoluteTitle?: boolean
   type?: "website" | "article"
   /** Share images. Omitted, the site-wide default share images are used. */
-  images?: string[]
+  images?: ShareImage[]
+}
+
+type ShareImage = {
+  url: string
+  width?: number
+  height?: number
+  alt?: string
 }
 
 // The root app/opengraph-image.jpg and app/twitter-image.jpg (1200×630).

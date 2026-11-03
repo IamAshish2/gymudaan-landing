@@ -7,11 +7,11 @@ import Testimonials from "@/components/landing/sections/Testimonials"
 import { blogIntro } from "@/lib/blog/content"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
 
 export const metadata: Metadata = pageMetadata({
   path: ROUTES.blogs,
-  title: "Blogs",
-  description: blogIntro.description,
+  ...PAGE_SEO.blogs,
 })
 
 // Section order follows Figma frame 1:1249.

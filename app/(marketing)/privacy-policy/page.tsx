@@ -4,11 +4,11 @@ import LegalPage from "@/components/legal/LegalPage"
 import { privacy } from "@/lib/legal/privacy"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
 
 export const metadata: Metadata = pageMetadata({
   path: ROUTES.legal.privacy,
-  title: privacy.title,
-  description: privacy.description,
+  ...PAGE_SEO.privacy,
 })
 
 const PrivacyPolicyPage = () => <LegalPage document={privacy} />

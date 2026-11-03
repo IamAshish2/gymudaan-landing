@@ -16,14 +16,13 @@ import Testimonials from "@/components/landing/sections/Testimonials"
 import WhoWeServe from "@/components/landing/sections/WhoWeServe"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
 import { SITE } from "@/lib/site"
 import lightPattern from "@/public/landing/bg/light-pattern.webp"
 
 export const metadata: Metadata = pageMetadata({
   path: ROUTES.home,
-  title: `${SITE.name}: ${SITE.tagline}`,
-  description: SITE.description,
-  absoluteTitle: true,
+  ...PAGE_SEO.home,
 })
 
 const softwareJsonLd = {

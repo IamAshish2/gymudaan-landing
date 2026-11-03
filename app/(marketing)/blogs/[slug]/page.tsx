@@ -25,7 +25,16 @@ export const generateMetadata = async ({
     title: article.post.title,
     description: article.post.excerpt,
     type: "article",
-    images: article.post.image ? [article.post.image.src.src] : undefined,
+    images: article.post.image
+      ? [
+          {
+            url: article.post.image.src.src,
+            width: article.post.image.src.width,
+            height: article.post.image.src.height,
+            alt: article.post.title,
+          },
+        ]
+      : undefined,
   })
 }
 

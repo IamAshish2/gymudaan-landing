@@ -15,11 +15,11 @@ import Typography from "@/components/ui/Typography"
 import { plans, pricingIntro, trustedTitle } from "@/lib/pricing/content"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
 
 export const metadata: Metadata = pageMetadata({
   path: ROUTES.pricing,
-  title: "Pricing",
-  description: pricingIntro.description,
+  ...PAGE_SEO.pricing,
 })
 
 // Section order follows Figma frame 1:721.
