@@ -53,6 +53,21 @@ Sources: live sitemap, live route table (bundle), rendered internal links. No GS
 | `/checkins/:businessName`, `/workout/:businessName` | Existing SPA origin | **Verify** with GSC whether these are indexed; recommend `noindex` on the app side |
 | `/assets/*` (SPA bundles), `/real-gymudaanlogo.jpeg`, `/favicon-*.png`, `/apple-touch-icon.png` | Existing origin (the SPA and old OG shares need them) | — |
 
+**Indexing state of the live app routes (verified 2026-11-03, headless render, read-only):**
+
+| Route | HTTP | Renders | robots meta | In live robots.txt |
+|---|---|---|---|---|
+| `/auth` | 200 | Login form | none | `Disallow: /auth/` (exact `/auth` itself is **not** matched) |
+| `/tenant/home` | 200 | Login form | none | **not blocked** |
+| `/super/` | 200 | Login form | none | blocked |
+| `/affiliate/` | 200 | Login form | none | **not blocked** |
+| `/checkins/<any-name>` | 200 | Working check-in form for any name, including non-existent ones | none | **not blocked** |
+| `/workout/<any-name>` | 200 | "No public workout plans available." | none | **not blocked** |
+| `/getting-started` | 200 | The homepage, `index, follow`, canonical `/` | index, follow | blocked |
+| `/unauthorized`, `/oauth2/redirect` | 200 | Status / loading screen | none | not blocked |
+
+robots.txt only stops crawling. A blocked URL can still be indexed URL-only from links, and a `noindex` on a blocked page is never seen. **Recommendation for the app team (outside this repo, not implemented):** send `X-Robots-Tag: noindex` on every app route (a header works for a client-rendered SPA without HTML changes), and return 404 for unknown `/checkins/*` and `/workout/*` names. This repo's `robots.ts` carries the live disallow list over verbatim (`lib/seo/crawl.ts`). `/tenant/`, `/affiliate/`, `/checkins/` and `/workout/` are deliberately **not** added until the routing and indexing audit is reviewed.
+
 ### 3c. Paths that currently return 200 only because of the SPA's soft-404
 
 `/pricing`, `/blogs`, `/blog` and any random path return the homepage shell with 200 today. On the new site, `/pricing` and `/blogs` become real pages; everything else becomes a **real 404**. This is correct, and it is **not** a regression. We won't redirect unknown paths to `/`.
@@ -129,3 +144,16 @@ Each step is a separate, reviewable change with build + tests. UI and design sta
 | 10 | QA suite (Playwright + Lighthouse CI) | `tests/seo/*`, `playwright.config.ts` (new dev dependency) | Remove |
 
 Docs 04–07 (keyword/content architecture, performance plan, QA, launch checklist) will be written after these decisions, because their content depends on Q1–Q7.
+
+## 11. Pre-launch requirements (open launch gates)
+
+These are open. Each one blocks a production launch until it is resolved.
+
+| # | Requirement | Current state (repo) | Resolves in |
+|---|---|---|---|
+| L1 | **Unpublished blog articles return a real HTTP 404 in production**, ideally with drafts served only from a protected preview route | Drafts return **200** with `noindex, follow` so the design can be reviewed. They are excluded from the sitemap and absent from all JSON-LD. A real 404 also needs the PPR soft-404 fix | Phase 6 (blog 404) |
+| L2 | **Unpublished articles must not appear in public blog listings** | The `/blogs` listing (itself `noindex` and out of the sitemap) still shows the placeholder featured post linking to the draft. Its related section links to it too. Removing it changes the visible listing, so it belongs with the placeholder-content removal | Phase 8 (placeholder content) |
+| L3 | **The pricing URL follows the final migration plan.** If `/plans` is kept, `/pricing` must not ship as the production canonical or the sitemap URL | Canonical and sitemap currently use `/pricing` (`ROUTES.pricing`) | Routing matrix → pricing-URL phase |
+| L4 | `/blogs` becomes indexable automatically once an article has `published: true`. Confirm the article is real and approved first | `/blogs` is `noindex`; `hasPublishedArticles` is false | Content sign-off |
+| L5 | App routes get `X-Robots-Tag: noindex` / real 404s on the app side (see §3b) | Not in this repo | App team |
+| L6 | Search Console access and the pre-launch baseline (GSC + GA4 exports, crawl) | Not available | Business |

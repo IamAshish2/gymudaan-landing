@@ -23,6 +23,8 @@ const WORDS_PER_MINUTE = 220
 
 const articles: BlogArticle[] = [
   {
+    // Placeholder copy (see the TODO above): not published until replaced.
+    published: false,
     post: featuredPost,
     related: [
       "modern-gym-software",
@@ -171,6 +173,14 @@ const articles: BlogArticle[] = [
 ]
 
 export const articleSlugs = articles.map((article) => article.post.id)
+
+/** Slugs of published articles: the only ones listed in the sitemap. */
+export const publishedArticleSlugs = articles
+  .filter((article) => article.published)
+  .map((article) => article.post.id)
+
+/** True once at least one real article is live, so /blogs can be indexed. */
+export const hasPublishedArticles = publishedArticleSlugs.length > 0
 
 export const getArticle = (slug: string): BlogArticle | undefined =>
   articles.find((article) => article.post.id === slug)

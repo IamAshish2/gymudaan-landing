@@ -4,14 +4,17 @@ import BlogExplorer from "@/components/blog/BlogExplorer"
 import PageIntro from "@/components/landing/primitives/PageIntro"
 import ThreadsGreeting from "@/components/landing/primitives/ThreadsGreeting"
 import Testimonials from "@/components/landing/sections/Testimonials"
+import { hasPublishedArticles } from "@/lib/blog/articles"
 import { blogIntro } from "@/lib/blog/content"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
 import { PAGE_SEO } from "@/lib/seo/pages"
 
+// Out of search results until a real article is published.
 export const metadata: Metadata = pageMetadata({
   path: ROUTES.blogs,
   ...PAGE_SEO.blogs,
+  noindex: !hasPublishedArticles,
 })
 
 // Section order follows Figma frame 1:1249.

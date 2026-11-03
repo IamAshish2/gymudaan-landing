@@ -13,6 +13,8 @@ type PageMetadataInput = {
   type?: "website" | "article"
   /** Share images. Omitted, the site-wide default share images are used. */
   images?: ShareImage[]
+  /** Keep the page out of search results (links on it are still followed). */
+  noindex?: boolean
 }
 
 type ShareImage = {
@@ -47,12 +49,14 @@ export const pageMetadata = ({
   absoluteTitle = false,
   type = "website",
   images,
+  noindex = false,
 }: PageMetadataInput): Metadata => {
   const fullTitle = absoluteTitle ? title : `${title} | ${SITE.name}`
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     alternates: { canonical: path },
     openGraph: {
       type,

@@ -25,6 +25,9 @@ export const generateMetadata = async ({
     title: article.post.title,
     description: article.post.excerpt,
     type: "article",
+    // Drafts stay reachable for design review but out of search results.
+    // TODO(pre-launch): drafts must 404 in production (docs/seo/03 §11).
+    noindex: !article.published,
     images: article.post.image
       ? [
           {

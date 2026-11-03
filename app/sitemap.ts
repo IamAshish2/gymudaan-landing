@@ -1,9 +1,15 @@
 import type { MetadataRoute } from "next"
 
-import { articleSlugs } from "@/lib/blog/articles"
+import {
+  hasPublishedArticles,
+  publishedArticleSlugs,
+} from "@/lib/blog/articles"
 import { ROUTES } from "@/lib/routes"
 import { absoluteUrl } from "@/lib/seo/site-url"
 
+// Indexable pages only. /blogs and articles appear once an article is
+// published. No lastmod: there are no tracked content dates to report.
+// TODO(pre-launch): the pricing URL follows the /plans decision (docs/seo/03 §3).
 const sitemap = (): MetadataRoute.Sitemap => [
   {
     url: absoluteUrl(ROUTES.home),
@@ -15,12 +21,16 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency: "monthly",
     priority: 0.8,
   },
-  {
-    url: absoluteUrl(ROUTES.blogs),
-    changeFrequency: "weekly",
-    priority: 0.7,
-  },
-  ...articleSlugs.map((slug) => ({
+  ...(hasPublishedArticles
+    ? [
+        {
+          url: absoluteUrl(ROUTES.blogs),
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        },
+      ]
+    : []),
+  ...publishedArticleSlugs.map((slug) => ({
     url: absoluteUrl(ROUTES.blogPost(slug)),
     changeFrequency: "monthly" as const,
     priority: 0.6,
