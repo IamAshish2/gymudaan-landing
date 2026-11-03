@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 
 import Container from "@/components/landing/primitives/Container"
 import PageIntro from "@/components/landing/primitives/PageIntro"
+import Reveal from "@/components/landing/primitives/Reveal"
+import ThreadsGreeting from "@/components/landing/primitives/ThreadsGreeting"
 import ClientLogoList from "@/components/landing/sections/ClientLogoList"
 import FaqSection from "@/components/landing/sections/FaqSection"
 import BillingSwitch from "@/components/pricing/BillingSwitch"
@@ -20,7 +22,9 @@ export const metadata: Metadata = {
 // Section order follows Figma frame 1:721.
 const PricingPage = () => (
   <>
+    {/* TRIAL: ThreadsGreeting is the five-second WebThreads weave. */}
     <PageIntro
+      backdrop={<ThreadsGreeting />}
       badge={pricingIntro.badge}
       title={pricingIntro.title}
       description={pricingIntro.description}
@@ -30,14 +34,17 @@ const PricingPage = () => (
       <BillingSwitch />
     </PageIntro>
 
-    <section aria-label="Plans" className="pt-15 text-white">
+    <section aria-label="Plans" className="relative pt-15 text-white">
       <Container>
-        <div className="grid gap-6 lg:grid-cols-[492fr_507fr_492fr] lg:gap-5">
-          {plans.map((plan) => (
-            <PlanCard key={plan.name} plan={plan} />
-          ))}
-        </div>
-        <CustomPlanBanner />
+        {/* The cards rise in one after another, then the banner. */}
+        <Reveal>
+          <div className="reveal-stagger grid gap-6 lg:grid-cols-[492fr_507fr_492fr] lg:gap-5">
+            {plans.map((plan) => (
+              <PlanCard key={plan.name} plan={plan} />
+            ))}
+          </div>
+          <CustomPlanBanner />
+        </Reveal>
       </Container>
     </section>
 
@@ -45,15 +52,17 @@ const PricingPage = () => (
 
     <section aria-labelledby="trusted-title" className="pt-section text-white">
       <Container>
-        <Typography
-          variant="bodyLg"
-          as="h2"
-          id="trusted-title"
-          className="text-center font-medium"
-        >
-          {trustedTitle}
-        </Typography>
-        <ClientLogoList className="mt-8 lg:mt-15" />
+        <Reveal>
+          <Typography
+            variant="bodyLg"
+            as="h2"
+            id="trusted-title"
+            className="text-center font-medium"
+          >
+            {trustedTitle}
+          </Typography>
+          <ClientLogoList className="mt-8 lg:mt-15" />
+        </Reveal>
       </Container>
     </section>
 

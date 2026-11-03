@@ -14,10 +14,19 @@ type PageIntroProps = {
   descriptionClassName?: string
   /** Controls under the description, e.g. the billing switch. */
   children?: ReactNode
+  /** Decoration drawn behind the intro, e.g. <ThreadsGreeting />. */
+  backdrop?: ReactNode
 }
 
 // Centred badge, h1 and description that open every page besides the home
-// page, starting clear of the fixed header.
+// page, starting clear of the fixed header. They rise in one after another on
+// first paint with the hero's CSS-only fade, so nothing waits for JS.
+const ENTRANCE_STAGGER_MS = 90
+
+const entrance = (step: number) => ({
+  animationDelay: `${step * ENTRANCE_STAGGER_MS}ms`,
+})
+
 const PageIntro = ({
   badge,
   title,
@@ -25,24 +34,43 @@ const PageIntro = ({
   titleClassName,
   descriptionClassName,
   children,
+  backdrop,
 }: PageIntroProps) => (
-  <div className="pt-page-top text-white">
+  <div className={cn("pt-page-top text-white", backdrop && "relative isolate")}>
+    {backdrop}
     <Container className="flex flex-col items-center text-center">
-      <SectionBadge>{badge}</SectionBadge>
+      <SectionBadge className="motion-safe:animate-hero-fade">
+        {badge}
+      </SectionBadge>
       <Typography
         variant="display"
         as="h1"
-        className={cn("mt-2 text-hero-fg", titleClassName)}
+        className={cn(
+          "mt-2 text-hero-fg motion-safe:animate-hero-fade",
+          titleClassName
+        )}
+        style={entrance(1)}
       >
         {title}
       </Typography>
       <Typography
         variant="bodyLg"
-        className={cn("mt-4 opacity-80", descriptionClassName)}
+        className={cn(
+          "mt-4 opacity-80 motion-safe:animate-hero-fade",
+          descriptionClassName
+        )}
+        style={entrance(2)}
       >
         {description}
       </Typography>
-      {children}
+      {children ? (
+        <div
+          className="flex w-full flex-col items-center motion-safe:animate-hero-fade"
+          style={entrance(3)}
+        >
+          {children}
+        </div>
+      ) : null}
     </Container>
   </div>
 )

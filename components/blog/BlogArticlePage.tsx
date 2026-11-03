@@ -6,6 +6,7 @@ import { BlogGridCard } from "@/components/blog/BlogCards"
 import Container from "@/components/landing/primitives/Container"
 import LandingButton from "@/components/landing/primitives/LandingButton"
 import PageIntro from "@/components/landing/primitives/PageIntro"
+import ThreadsGreeting from "@/components/landing/primitives/ThreadsGreeting"
 import SectionHeader from "@/components/landing/primitives/SectionHeader"
 import FinalCta from "@/components/landing/sections/FinalCta"
 import LegalToc from "@/components/legal/LegalToc"
@@ -39,6 +40,7 @@ const BlogArticlePage = ({ article }: BlogArticlePageProps) => {
   return (
     <>
       <PageIntro
+        backdrop={<ThreadsGreeting />}
         badge={post.category}
         title={post.title}
         description={post.excerpt}
@@ -59,7 +61,7 @@ const BlogArticlePage = ({ article }: BlogArticlePageProps) => {
       </PageIntro>
 
       {post.image ? (
-        <Container className="mt-section-content">
+        <Container className="relative mt-section-content">
           <div className="relative aspect-4/3 overflow-hidden rounded-panel border border-line-dark sm:aspect-1528/640">
             <Image
               src={post.image.src}
@@ -73,7 +75,7 @@ const BlogArticlePage = ({ article }: BlogArticlePageProps) => {
         </Container>
       ) : null}
 
-      <article className="pt-section-content pb-section text-white lg:pt-21">
+      <article className="relative pt-section-content pb-section text-white lg:pt-21">
         <Container className="grid gap-10 lg:grid-cols-[30.3%_minmax(0,1034px)]">
           <LegalToc
             entries={sections.map((section, index) => ({

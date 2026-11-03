@@ -27,6 +27,13 @@ const POSTS_PER_LOAD = 6
 
 const gridClass = "grid gap-x-5 gap-y-12 md:grid-cols-2 lg:grid-cols-3"
 
+// Cards fade up as they mount: on first paint, when the category changes (the
+// list is keyed by it, so every card re-enters) and when Load More adds a
+// batch. Typing a search only animates cards that newly match.
+const enterClass =
+  "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:fill-mode-backwards"
+const ENTER_STAGGER_MS = 70
+
 // Filtering runs on the client because posts are static content, with no API
 // to page through. Once a blog endpoint exists, move category, query and page
 // into the URL as the other paginated lists do.
@@ -57,7 +64,10 @@ const BlogExplorer = () => {
   }
 
   return (
-    <section aria-label="Articles" className="pt-15 text-white lg:pt-29">
+    <section
+      aria-label="Articles"
+      className="relative pt-15 text-white lg:pt-29"
+    >
       <Container>
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div
@@ -105,7 +115,12 @@ const BlogExplorer = () => {
         </p>
 
         {isFiltering ? null : (
-          <div className="mt-7.5 grid gap-6 lg:mt-15 lg:grid-cols-[839fr_647fr] lg:gap-11">
+          <div
+            className={cn(
+              "mt-7.5 grid gap-6 lg:mt-15 lg:grid-cols-[839fr_647fr] lg:gap-11",
+              enterClass
+            )}
+          >
             <BlogFeaturedCard post={featuredPost} />
             <ul className="grid gap-5 lg:grid-rows-4 lg:gap-6.75">
               {sidePosts.map((post) => (
@@ -119,13 +134,20 @@ const BlogExplorer = () => {
 
         {posts.length > 0 ? (
           <ul
+            key={category}
             className={cn(
               gridClass,
               isFiltering ? "mt-7.5 lg:mt-15" : "mt-section"
             )}
           >
-            {posts.slice(0, visible).map((post) => (
-              <li key={post.id}>
+            {posts.slice(0, visible).map((post, index) => (
+              <li
+                key={post.id}
+                className={enterClass}
+                style={{
+                  animationDelay: `${(index % POSTS_PER_LOAD) * ENTER_STAGGER_MS}ms`,
+                }}
+              >
                 {post.image ? (
                   <BlogGridCard post={post} />
                 ) : (

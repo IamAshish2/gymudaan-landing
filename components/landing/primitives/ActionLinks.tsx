@@ -19,7 +19,12 @@ const ActionLinks = ({ actions, className }: ActionLinksProps) => (
     )}
   >
     {actions.map((action) => (
-      <LandingButton key={action.label} variant={action.variant} asChild>
+      <LandingButton
+        key={action.label}
+        variant={action.variant}
+        asChild
+        className={cn(action.desktopOnly && "max-lg:hidden")}
+      >
         <Link href={action.href} {...linkTarget(action.href)}>
           {action.label}
         </Link>

@@ -71,18 +71,31 @@ const PlanBody = ({ plan }: { plan: Plan }) => {
 }
 
 // The popular plan sits in a gradient frame that rises 76px above the other
-// two cards and carries the "Most Popular" label (node 1:863).
+// two cards and carries the "Most Popular" label (node 1:863). Cards lift a
+// little on hover.
+const liftClass =
+  "transition-[translate] duration-500 ease-emphasized motion-safe:hover:-translate-y-1.5"
+
 const PlanCard = ({ plan }: { plan: Plan }) => {
   if (!plan.popular) {
     return (
-      <article className="lg:mt-19">
+      // Solid base under the translucent tint, so anything drawn behind the
+      // cards (the pricing page's background effect) cannot show through.
+      <article
+        className={cn("rounded-plan bg-surface-dark lg:mt-19", liftClass)}
+      >
         <PlanBody plan={plan} />
       </article>
     )
   }
 
   return (
-    <article className="relative isolate flex flex-col overflow-hidden rounded-tile px-1.75 pb-2.25">
+    <article
+      className={cn(
+        "relative isolate flex flex-col overflow-hidden rounded-tile px-1.75 pb-2.25",
+        liftClass
+      )}
+    >
       <Image
         src={popularFrame}
         alt=""

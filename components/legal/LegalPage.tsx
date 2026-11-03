@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import Container from "@/components/landing/primitives/Container"
 import PageIntro from "@/components/landing/primitives/PageIntro"
+import ThreadsGreeting from "@/components/landing/primitives/ThreadsGreeting"
 import FinalCta from "@/components/landing/sections/FinalCta"
 import LegalToc from "@/components/legal/LegalToc"
 import Typography from "@/components/ui/Typography"
@@ -82,12 +83,13 @@ type LegalPageProps = {
 const LegalPage = ({ document }: LegalPageProps) => (
   <>
     <PageIntro
+      backdrop={<ThreadsGreeting />}
       badge={document.badge}
       title={document.title}
       description={document.description}
     />
 
-    <div className="pt-section-content pb-section text-white lg:pt-21">
+    <div className="relative pt-section-content pb-section text-white lg:pt-21">
       <Container className="grid gap-10 lg:grid-cols-[30.3%_minmax(0,1034px)]">
         <LegalToc entries={document.toc} />
 

@@ -12,6 +12,8 @@ export type LinkAction = {
   label: string
   href: string
   variant: "brand" | "dark"
+  /** Hidden below lg, where one clear action reads better. */
+  desktopOnly?: boolean
 }
 
 export type SectionIntro = {
@@ -88,9 +90,11 @@ export type TestimonialTile =
       quote: string
       name: string
       role: string
-      avatar: StaticImageData
+      /** Without a photo the card shows the name's initials. */
+      avatar?: StaticImageData
     }
   | { kind: "photo"; image: StaticImageData; alt: string }
+  | { kind: "video"; src: string; poster: StaticImageData; label: string }
 
 export type Insight = {
   title: string

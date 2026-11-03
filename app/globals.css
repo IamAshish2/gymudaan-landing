@@ -134,6 +134,7 @@
   --spacing-band: clamp(5rem, 2rem + 7.4vw, 10rem);
   --spacing-page-top: clamp(8rem, 6.4rem + 9.4vw, 16.5rem);
   --spacing-header: 6.125rem; /* fixed header height once scrolled, from lg */
+  --spacing-header-sm: 3.875rem; /* bottom of the header bar once scrolled, below lg */
 
   /* Onboarding — 1728 frame: 1288px option row, 992px plans, 893px review, 638px form */
   --container-onboarding-options: 80.5rem;

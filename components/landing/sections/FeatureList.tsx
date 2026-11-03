@@ -31,7 +31,7 @@ const FeatureList = ({ features, value, onValueChange }: FeatureListProps) => (
       >
         <AccordionPrimitive.Header asChild>
           <h3>
-            <AccordionPrimitive.Trigger className="w-full px-3 py-5 text-left text-title font-medium transition-colors duration-300 ease-standard outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60 data-[state=closed]:hover:text-brand data-[state=open]:pb-3 motion-reduce:transition-none lg:px-5 lg:py-6 lg:data-[state=open]:pb-4">
+            <AccordionPrimitive.Trigger className="w-full px-3 py-5 text-left text-title font-medium transition-colors duration-300 ease-standard outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60 data-[state=closed]:hover:text-brand data-[state=open]:pb-3 data-[state=open]:text-brand motion-reduce:transition-none lg:px-5 lg:py-6 lg:data-[state=open]:pb-4">
               {feature.title}
             </AccordionPrimitive.Trigger>
           </h3>

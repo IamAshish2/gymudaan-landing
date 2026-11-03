@@ -16,15 +16,15 @@ const STATUS = {
 } satisfies Record<ComparisonStatus, { src: typeof statusYes; alt: string }>
 
 const headClass =
-  "sticky top-0 z-10 h-16 border-b border-line-dark bg-surface-dark px-4 font-medium lg:top-header lg:h-24 lg:px-6"
-const cellClass = "border-l border-line-faint px-4 py-2.5 text-center"
+  "sticky top-header-sm z-10 h-16 border-b border-line-dark bg-surface-dark px-0 font-medium sm:px-1 lg:top-header lg:h-24 lg:px-6"
+const cellClass = "border-l border-line-faint px-1 py-2.5 text-center lg:px-4"
 // A 6px gap, then the tinted Gym Udaan column (nodes 1:383, 1:385).
 const udaanClass = "border-l-6 border-l-surface-dark bg-brand-wash"
 
-// A real table so screen readers announce the column for each mark. The
-// header row pins while the rows scroll. From lg it pins under the page
-// header, which needs the wrapper not to scroll. Below lg the wrapper scrolls
-// sideways, so it is capped to the viewport and the header pins inside it.
+// A real table so screen readers announce the column for each mark. It always
+// fits the screen: below lg the feature column takes about half the width, the
+// three mark columns share the rest under short headers, and nothing scrolls
+// inside the page. The header row pins under the fixed page header.
 const Comparison = () => (
   <Section id="comparison" labelledBy="comparison-title">
     <SectionHeader
@@ -33,25 +33,26 @@ const Comparison = () => (
       titleClassName="max-w-[14.3em]"
     />
 
-    <div
-      tabIndex={0}
-      role="region"
-      aria-labelledby="comparison-title"
-      className="mt-section-content -mr-gutter max-h-[calc(100svh-6rem)] overflow-auto overscroll-x-contain pr-gutter outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60 lg:mr-0 lg:max-h-none lg:overflow-visible lg:pr-0"
-    >
-      <table className="w-full min-w-3xl table-fixed border-separate border-spacing-0 border border-line-faint">
+    <div className="mt-section-content">
+      <table className="w-full table-fixed border-separate border-spacing-0 border border-line-faint">
+        <caption className="sr-only">
+          Gym Udaan compared with manual management and generic software
+        </caption>
         <colgroup>
-          <col className="w-[33%]" />
-          <col className="w-[22%]" />
-          <col className="w-[22.5%]" />
-          <col className="w-[22.5%]" />
+          <col className="w-[48%] lg:w-[33%]" />
+          <col className="w-[17.33%] lg:w-[22%]" />
+          <col className="w-[17.33%] lg:w-[22.5%]" />
+          <col className="w-[17.33%] lg:w-[22.5%]" />
         </colgroup>
 
         <thead>
           <tr>
             <th
               scope="col"
-              className={cn(headClass, "text-left text-title lg:px-10.5")}
+              className={cn(
+                headClass,
+                "px-2 text-left text-title-sm sm:px-3 lg:px-10.5 lg:text-title"
+              )}
             >
               {comparison.featureLabel}
             </th>
@@ -61,12 +62,13 @@ const Comparison = () => (
                 scope="col"
                 className={cn(
                   headClass,
-                  "border-l border-l-line-faint text-center text-title-sm",
+                  "border-l border-l-line-faint text-center text-badge leading-tight lg:text-title-sm lg:leading-normal",
                   column.key === "udaan" &&
                     cn(udaanClass, "shadow-[inset_0_2px_0_var(--color-brand)]")
                 )}
               >
-                {column.label}
+                <span className="lg:hidden">{column.shortLabel}</span>
+                <span className="max-lg:hidden">{column.label}</span>
               </th>
             ))}
           </tr>
@@ -77,10 +79,10 @@ const Comparison = () => (
             <tr key={row.label}>
               <th
                 scope="row"
-                className="px-4 py-2.5 text-left text-body-lg font-medium lg:px-10.5"
+                className="py-2.5 pr-1 pl-2 text-left text-badge font-medium sm:px-3 sm:text-body lg:px-10.5 lg:text-body-lg"
               >
-                <span className="flex items-center gap-3 lg:gap-3.5">
-                  <span className="flex w-7 shrink-0 justify-center">
+                <span className="flex items-center gap-2 hyphens-auto sm:gap-2.5 lg:gap-3.5">
+                  <span className="flex w-5 shrink-0 justify-center sm:w-6 lg:w-7">
                     <Image src={row.icon} alt="" className="h-auto w-auto" />
                   </span>
                   {row.label}
@@ -101,7 +103,7 @@ const Comparison = () => (
                       src={status.src}
                       alt={status.alt}
                       className={cn(
-                        "mx-auto size-8 lg:size-9.5",
+                        "mx-auto size-7 sm:size-8 lg:size-9.5",
                         // Competitors sit back so the Gym Udaan column leads.
                         column.key !== "udaan" && "opacity-55"
                       )}

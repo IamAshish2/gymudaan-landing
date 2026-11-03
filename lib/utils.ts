@@ -38,6 +38,8 @@ const twMerge = extendTailwindMerge({
         "section-content",
         "hero-top",
         "band",
+        "header",
+        "header-sm",
         "onboarding-panel-x",
         "onboarding-panel-y",
         "onboarding-grid",

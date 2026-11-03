@@ -32,7 +32,9 @@ export {
   Monitor as IMonitor,
   Moon as IMoon,
   MoreHorizontal as IMoreHorizontal,
+  Pause as IPause,
   Pencil as IPencil,
+  Play as IPlay,
   Plus as IPlus,
   Puzzle as IPuzzle,
   RotateCcw as IRotateCcw,
@@ -46,6 +48,8 @@ export {
   TriangleAlert as ITriangleAlert,
   UserRound as IUserRound,
   Users as IUsers,
+  Volume2 as IVolume2,
+  VolumeX as IVolumeX,
   X as IX,
   Zap as IZap,
 } from "lucide-react"

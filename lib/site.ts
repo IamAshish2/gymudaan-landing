@@ -1,10 +1,15 @@
 // Brand + SEO copy in one place — the root layout, shells, auth and error
 // pages all read from here. Rename the app by editing this file.
+import { ROUTES } from "@/lib/routes"
+
 export const SITE = {
   name: "Gym Udaan",
   tagline: "Smarter gym management. Stronger fitness businesses.",
   description:
     "Gym Udaan is the gym management platform for modern fitness businesses in Nepal: members, memberships, attendance, payments and reports in one place.",
+  // TODO(content): there is no login page yet, so this points to onboarding.
+  // Change it to the dashboard login URL once it exists.
+  loginUrl: ROUTES.onboarding,
   contact: {
     whatsappUrl: "https://wa.me/9779705001112",
     email: "sales@gymudaan.com",

@@ -68,7 +68,7 @@ import serveYogaPilates from "@/public/landing/serve/yoga-pilates.webp"
 import avatarAbhishek from "@/public/landing/testimonials/avatar-abhishek.webp"
 import avatarAmick from "@/public/landing/testimonials/avatar-amick.webp"
 import avatarAshish from "@/public/landing/testimonials/avatar-ashish.webp"
-import testimonialPortrait from "@/public/landing/testimonials/portrait.webp"
+import testimonialVideoPoster from "@/public/landing/testimonials/video-1-poster.webp"
 import type {
   Audience,
   ClientLogo,
@@ -101,6 +101,7 @@ export const navLinks = [
 
 export const navActions = {
   contact: { label: "Contact Us", href: SITE.contact.whatsappUrl },
+  login: { label: "Login", href: SITE.loginUrl },
 }
 
 // ── Hero ───────────────────────────────────────────────────────────────────
@@ -108,6 +109,9 @@ export const navActions = {
 export const hero = {
   eyebrow: "GymUdaan Nepal's #1 Gym Software",
   title: "The gym management platform for modern fitness businesses",
+  // Below sm the full title runs to three lines at the display size; this
+  // one fits on two.
+  titleShort: "The all-in-one gym management platform",
   description: "Run memberships, attendance and payments from one platform.",
   actions: [
     { label: "Get Started", href: ROUTES.onboarding, variant: "brand" },
@@ -115,10 +119,14 @@ export const hero = {
       label: "Request a demo",
       href: SITE.contact.whatsappUrl,
       variant: "dark",
+      desktopOnly: true,
     },
   ] satisfies LinkAction[],
-  imageAlt:
-    "Gym Udaan dashboard showing total, active and inactive members, today's check-ins, a weekly revenue chart and memberships expiring soon",
+  video: {
+    src: "/video/gym-udaan-final.mp4",
+    // TODO(content): describe what the video shows once it is final.
+    label: "Gym Udaan product video",
+  },
 }
 
 // ── Social proof ───────────────────────────────────────────────────────────
@@ -266,7 +274,12 @@ export const features: SectionIntro & {
 // Spelling fixed from Figma: "Comparision", "gyms chooses".
 export const comparison: SectionIntro & {
   featureLabel: string
-  columns: { key: "manual" | "generic" | "udaan"; label: string }[]
+  columns: {
+    key: "manual" | "generic" | "udaan"
+    label: string
+    /** Header below lg, where each mark column is about 64px wide. */
+    shortLabel: string
+  }[]
   rows: ComparisonRow[]
 } = {
   badge: "Comparison",
@@ -276,9 +289,9 @@ export const comparison: SectionIntro & {
     "Things that will make your work easy as well as your customers daily life easy with us",
   featureLabel: "Features",
   columns: [
-    { key: "manual", label: "Manual Management" },
-    { key: "generic", label: "Generic Software" },
-    { key: "udaan", label: "Gym Udaan" },
+    { key: "manual", label: "Manual Management", shortLabel: "Manual" },
+    { key: "generic", label: "Generic Software", shortLabel: "Generic" },
+    { key: "udaan", label: "Gym Udaan", shortLabel: "Gym Udaan" },
   ],
   rows: [
     {
@@ -590,9 +603,11 @@ export const testimonials: SectionIntro & { tiles: TestimonialTile[] } = {
       avatar: avatarAmick,
     },
     {
-      kind: "photo",
-      image: testimonialPortrait,
-      alt: "Portrait of a Gym Udaan customer",
+      kind: "video",
+      src: "/video/testimonial-1.mp4",
+      poster: testimonialVideoPoster,
+      // TODO(content): name the customer once the testimonial is final.
+      label: "Video testimonial from a Gym Udaan customer",
     },
     {
       kind: "quote",
@@ -609,6 +624,15 @@ export const testimonials: SectionIntro & { tiles: TestimonialTile[] } = {
       name: "Abhishek Koirala",
       role: "Udaan Fitness",
       avatar: avatarAbhishek,
+    },
+    // TODO(content): PLACEHOLDER. Replace with a real customer's quote, name,
+    // gym and photo before launch; do not publish an invented testimonial.
+    {
+      kind: "quote",
+      quote:
+        "Renewal reminders go out on their own now, so far fewer memberships slip through the cracks. Our front desk spends its time with members instead of paperwork.",
+      name: "Customer Name",
+      role: "Gym Name",
     },
   ],
 }
