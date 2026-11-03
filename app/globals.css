@@ -82,6 +82,7 @@
   --color-line-light: #f0f0f0;
   --color-line-faint: rgb(255 255 255 / 0.04);
   --color-line-frame: rgb(163 169 168 / 0.5);
+  --color-line-option: #e0e0e0;
   --color-switch-track: #d9d9d9;
   --color-badge-dark: rgb(255 255 255 / 0.08);
   --color-badge-light: rgb(0 0 0 / 0.08);
@@ -125,8 +126,20 @@
   --spacing-page-top: clamp(8rem, 6.4rem + 9.4vw, 16.5rem);
   --spacing-header: 5.3125rem; /* fixed header height once scrolled, from lg */
 
+  /* Onboarding — 1728 frame: 1288px option row, 992px plans, 893px review, 638px form */
+  --container-onboarding-options: 80.5rem;
+  --container-onboarding-review: 55.8125rem;
+  --container-onboarding-plans: 62rem;
+  --container-onboarding-form: 39.875rem;
+  --spacing-onboarding-panel-x: clamp(1rem, -0.77rem + 7.08vw, 6.875rem);
+  --spacing-onboarding-panel-y: clamp(2rem, 1.2rem + 2.3vw, 3.5rem);
+  --spacing-onboarding-grid: clamp(1rem, 0.5rem + 1.85vw, 2.5rem);
+  --spacing-onboarding-tight: 1.875rem;
+  --spacing-onboarding-tab: 1.8125rem; /* how far the "Popular" tab sits above its card */
+
   /* Radius */
   --radius-chip: 4px;
+  --radius-field: 5px;
   --radius-badge: 6px;
   --radius-photo: 8px;
   --radius-button: 10px;
@@ -136,14 +149,69 @@
   --radius-tile: 24px;
   --radius-band: clamp(1.5rem, 0.5rem + 2.5vw, 3.125rem);
 
+  /* Elevation */
+  --shadow-option: 0 0.875rem 1.75rem -0.875rem rgb(255 106 0 / 0.35);
+
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
-  --animate-marquee: marquee 70s linear infinite;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-marquee: marquee 120s linear infinite;
+  /* Onboarding: backwards-only fill, so nothing outlives the animation and
+     blocks hover states. Use behind motion-safe: to respect reduced motion. */
+  --animate-step-forward: step-forward 360ms var(--ease-emphasized) backwards;
+  --animate-step-back: step-back 360ms var(--ease-emphasized) backwards;
+  --animate-option-rise: option-rise 420ms var(--ease-emphasized) backwards;
+  --animate-option-pop: option-pop 420ms var(--ease-spring);
+  --animate-option-ring: option-ring 520ms var(--ease-standard);
+  --animate-draw-ring: draw-stroke 600ms var(--ease-emphasized) backwards;
+  --animate-draw-check: draw-stroke 400ms var(--ease-emphasized) 350ms backwards;
 
   @keyframes marquee {
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes step-forward {
+    from {
+      opacity: 0;
+      transform: translateX(2rem);
+    }
+  }
+
+  @keyframes step-back {
+    from {
+      opacity: 0;
+      transform: translateX(-2rem);
+    }
+  }
+
+  @keyframes option-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @keyframes option-pop {
+    50% {
+      transform: scale(1.07);
+    }
+  }
+
+  @keyframes draw-stroke {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes option-ring {
+    from {
+      box-shadow: 0 0 0 0 rgb(255 106 0 / 0.45);
+    }
+    to {
+      box-shadow: 0 0 0 0.75rem rgb(255 106 0 / 0);
     }
   }
 }

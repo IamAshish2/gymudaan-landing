@@ -2,11 +2,12 @@
 
 ## Surfaces
 
-One app, four route groups. Groups don't change URLs; the folder inside each group sets the prefix.
+One app, five route groups. Groups don't change URLs; the folder inside each group sets the prefix.
 
 | Group | URL | Who | Guard | Shell |
 | --- | --- | --- | --- | --- |
 | `(marketing)` | `/`, `/pricing`, `/blogs`, `/terms`, `/privacy-policy` | everyone | — | `LandingHeader` + `LandingFooter`, fixed palette |
+| `(onboarding)` | `/onboarding` | everyone | — (add `requireRole` once sign-up exists) | Full white page with centred content, fixed palette |
 | `(site)/account` | `/account/*` | any signed-in user | `requireRole(...ALL_ROLES)` in the layout | `SiteShell` + `SettingsNav` |
 | `(dashboard)` | `/dashboard/*` | `USER` | `requireRole("USER")` in the layout | `DashboardShell surface="dashboard"` |
 | `(admin)` | `/admin/*` | `ADMIN` | `requireRole("ADMIN")` in the layout | `DashboardShell surface="admin"` |

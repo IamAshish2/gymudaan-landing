@@ -6,6 +6,7 @@ export const ROUTES = {
   features: "/#features",
   pricing: "/pricing",
   blogs: "/blogs",
+  onboarding: "/onboarding",
   legal: {
     terms: "/terms",
     privacy: "/privacy-policy",
