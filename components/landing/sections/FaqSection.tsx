@@ -16,14 +16,24 @@ const faqJsonLd = {
   })),
 }
 
-const FaqSection = () => (
+type FaqSectionProps = {
+  /**
+   * Emit the FAQPage JSON-LD. The same FAQ appears on more than one page, so
+   * only one of them (the homepage) carries the markup.
+   */
+  structuredData?: boolean
+}
+
+const FaqSection = ({ structuredData = true }: FaqSectionProps) => (
   <Section id="faq" labelledBy="faq-title">
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
-      }}
-    />
+    {structuredData ? (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+    ) : null}
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-5">
       <div className="flex flex-col gap-3">
         {faq.badge ? <SectionBadge>{faq.badge}</SectionBadge> : null}

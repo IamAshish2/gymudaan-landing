@@ -4,10 +4,16 @@ import type { UserRole } from "@/lib/auth/types"
 export const ROUTES = {
   home: "/",
   features: "/#features",
-  pricing: "/pricing",
+  // The live site's indexed pricing URL, kept as canonical (docs/seo/03 §3).
+  // /pricing 308-redirects here (next.config.ts).
+  pricing: "/plans",
+  legacyPricing: "/pricing",
+  // Linked from the footer (Resources); not in the nav or sitemap yet.
+  about: "/about",
   blogs: "/blogs",
   blogPost: (slug: string) => `/blogs/${slug}`,
   onboarding: "/onboarding",
+  login: "/login",
   legal: {
     terms: "/terms",
     privacy: "/privacy-policy",

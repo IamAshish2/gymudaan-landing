@@ -1,6 +1,8 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 
 import AvailableEverywhere from "@/components/landing/sections/AvailableEverywhere"
+import BuiltForNepal from "@/components/landing/sections/BuiltForNepal"
 import Comparison from "@/components/landing/sections/Comparison"
 import Control from "@/components/landing/sections/Control"
 import FaqSection from "@/components/landing/sections/FaqSection"
@@ -13,28 +15,24 @@ import Services from "@/components/landing/sections/Services"
 import Stats from "@/components/landing/sections/Stats"
 import Testimonials from "@/components/landing/sections/Testimonials"
 import WhoWeServe from "@/components/landing/sections/WhoWeServe"
-import { SITE } from "@/lib/site"
+import JsonLd from "@/components/shared/JsonLd"
+import { ROUTES } from "@/lib/routes"
+import { homeJsonLd } from "@/lib/seo/json-ld"
+import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
 import lightPattern from "@/public/landing/bg/light-pattern.webp"
 
-const softwareJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: SITE.name,
-  description: SITE.description,
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web, Android, iOS",
-}
+export const metadata: Metadata = pageMetadata({
+  path: ROUTES.home,
+  ...PAGE_SEO.home,
+})
 
 // Section order and band layering follow Figma frame 1:11. Each band after
 // the hero starts with rounded top corners laid over the band before it.
 const HomePage = () => (
   <>
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(softwareJsonLd).replace(/</g, "\\u003c"),
-      }}
-    />
+    {/* Organization, WebSite and SoftwareApplication, linked by @id. */}
+    <JsonLd data={homeJsonLd()} />
 
     <Hero>
       <Testimonials />
@@ -46,6 +44,8 @@ const HomePage = () => (
       <MainFeatures />
       <hr className="border-line-dark" />
       <Comparison />
+      <hr className="border-line-dark" />
+      <BuiltForNepal />
     </div>
 
     <div className="band-arrive relative isolate mt-9 overflow-hidden rounded-t-band bg-surface-light pb-[var(--radius-band)]">

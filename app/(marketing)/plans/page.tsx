@@ -1,0 +1,85 @@
+import type { Metadata } from "next"
+
+import Container from "@/components/landing/primitives/Container"
+import PageIntro from "@/components/landing/primitives/PageIntro"
+import Reveal from "@/components/landing/primitives/Reveal"
+import ThreadsGreeting from "@/components/landing/primitives/ThreadsGreeting"
+import ClientLogoList from "@/components/landing/sections/ClientLogoList"
+import FaqSection from "@/components/landing/sections/FaqSection"
+import BillingSwitch from "@/components/pricing/BillingSwitch"
+import CustomPlanBanner from "@/components/pricing/CustomPlanBanner"
+import PlanCard from "@/components/pricing/PlanCard"
+import PlanMatrix from "@/components/pricing/PlanMatrix"
+import PricingCalculator from "@/components/pricing/PricingCalculator"
+import JsonLd from "@/components/shared/JsonLd"
+import Typography from "@/components/ui/Typography"
+import { plans, pricingIntro, trustedTitle } from "@/lib/pricing/content"
+import { ROUTES } from "@/lib/routes"
+import { breadcrumbJsonLd, pricingOffersJsonLd } from "@/lib/seo/json-ld"
+import { pageMetadata } from "@/lib/seo/metadata"
+import { PAGE_SEO } from "@/lib/seo/pages"
+
+export const metadata: Metadata = pageMetadata({
+  path: ROUTES.pricing,
+  ...PAGE_SEO.pricing,
+})
+
+// Section order follows Figma frame 1:721.
+const PricingPage = () => (
+  <>
+    <JsonLd
+      data={breadcrumbJsonLd([{ name: "Pricing", path: ROUTES.pricing }])}
+    />
+    {/* The visible plans as Offers (NPR, annual). */}
+    <JsonLd data={pricingOffersJsonLd(plans)} />
+    {/* TRIAL: ThreadsGreeting is the five-second WebThreads weave. */}
+    <PageIntro
+      backdrop={<ThreadsGreeting />}
+      badge={pricingIntro.badge}
+      title={pricingIntro.title}
+      description={pricingIntro.description}
+      titleClassName="max-w-[20em]"
+      descriptionClassName="max-w-[36em]"
+    >
+      <BillingSwitch />
+    </PageIntro>
+
+    <section aria-label="Plans" className="relative pt-15 text-white">
+      <Container>
+        {/* The cards rise in one after another, then the banner. */}
+        <Reveal>
+          <div className="reveal-stagger grid gap-6 lg:grid-cols-[492fr_507fr_492fr] lg:gap-5">
+            {plans.map((plan) => (
+              <PlanCard key={plan.name} plan={plan} />
+            ))}
+          </div>
+          <CustomPlanBanner />
+        </Reveal>
+      </Container>
+    </section>
+
+    <PricingCalculator />
+
+    <section aria-labelledby="trusted-title" className="pt-section text-white">
+      <Container>
+        <Reveal>
+          <Typography
+            variant="bodyLg"
+            as="h2"
+            id="trusted-title"
+            className="text-center font-medium"
+          >
+            {trustedTitle}
+          </Typography>
+          <ClientLogoList className="mt-8 lg:mt-15" />
+        </Reveal>
+      </Container>
+    </section>
+
+    <PlanMatrix />
+    {/* Same FAQ as the homepage, which carries the FAQPage markup. */}
+    <FaqSection structuredData={false} />
+  </>
+)
+
+export default PricingPage

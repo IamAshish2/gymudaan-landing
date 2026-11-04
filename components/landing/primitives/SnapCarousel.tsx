@@ -1,10 +1,13 @@
 "use client"
 
-import { Children, type ReactNode } from "react"
+import { Children, useEffect, type ReactNode } from "react"
 
 import CarouselArrows from "@/components/landing/primitives/CarouselArrows"
 import SectionHeader from "@/components/landing/primitives/SectionHeader"
-import { useSnapCarousel } from "@/hooks/use-snap-carousel"
+import {
+  CAROUSEL_ADVANCE_EVENT,
+  useSnapCarousel,
+} from "@/hooks/use-snap-carousel"
 import type { SectionIntro, Tone } from "@/lib/landing/types"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +25,11 @@ type SnapCarouselProps = {
   trackClassName?: string
   /** Classes for every slide wrapper; style the active one with data-active. */
   slideClassName?: string
+  /**
+   * Move on when a slide fires CAROUSEL_ADVANCE_EVENT (its video ended),
+   * wrapping from the last slide back to the first.
+   */
+  autoAdvance?: boolean
   /** Server-rendered slide contents, one child per slide. */
   children: ReactNode
 }
@@ -39,10 +47,32 @@ const SnapCarousel = ({
   titleClassName,
   trackClassName,
   slideClassName,
+  autoAdvance = false,
   children,
 }: SnapCarouselProps) => {
-  const { scrollerRef, index, canPrev, canNext, prev, next } = useSnapCarousel()
+  const {
+    scrollerRef,
+    index,
+    count,
+    canPrev,
+    canNext,
+    prev,
+    next,
+    scrollToIndex,
+  } = useSnapCarousel()
   const slides = Children.toArray(children)
+
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!autoAdvance || !scroller || count < 2) return undefined
+
+    const onAdvance = (event: Event) => {
+      event.preventDefault()
+      scrollToIndex(index >= count - 1 ? 0 : index + 1)
+    }
+    scroller.addEventListener(CAROUSEL_ADVANCE_EVENT, onAdvance)
+    return () => scroller.removeEventListener(CAROUSEL_ADVANCE_EVENT, onAdvance)
+  }, [autoAdvance, count, index, scrollToIndex, scrollerRef])
 
   return (
     <>

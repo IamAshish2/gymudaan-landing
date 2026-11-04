@@ -73,7 +73,7 @@ Uploaded media is served from `<API origin>/uploads/**`; `next.config.ts` allows
 
 Things the frontend needs that the contract doesn't have yet. Don't invent endpoints for these; stub the action and note it here.
 
-1. **Sign-in**: the app has no login or registration pages. `/auth/login` is unused, and `/dashboard`, `/admin` and `/account` redirect signed-out visitors to the home page.
+1. **Sign-in**: `/login` signs in with email + password via `/auth/login` (`loginAction`). There is no Google OAuth endpoint (authorization URL + callback), so "Continue with Google" calls the stub `googleSignInAction`, which only returns a notice. There is no registration page, and `/dashboard`, `/admin` and `/account` still redirect signed-out visitors to the home page.
 2. **Profile**: no endpoint to read/update the signed-in user's profile. `/account` shows session details read-only.
 3. **Blog**: no endpoints for posts or categories. `/blogs` reads placeholder posts from `lib/blog/content.ts` and filters them on the client. Article bodies live in `lib/blog/articles.ts` (one so far, served at `/blogs/[slug]`).
 4. **Plans**: no endpoint for plans or prices. `/pricing` reads `lib/pricing/content.ts`.

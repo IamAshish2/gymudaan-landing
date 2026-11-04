@@ -19,36 +19,102 @@ export const billing = {
   yearly: "Yearly",
 }
 
-// TODO(content): all three cards in Figma are identical placeholders: same
-// price, description and feature list, including "Up to 800 Members" and
-// "100 Message Credits", which contradict the matrix below for Gold and
-// Platinum. Replace with the real plans before launch.
-const placeholderFeatures: PlanFeature[] = [
-  { label: "Complete Member Management", included: true },
-  { label: "Financial Management & Reports", included: true },
-  { label: "Automated Membership Reminders", included: true },
-  { label: "Smart Gym Access Control", included: true },
-  { label: "Up to 800 Members", included: true },
-  { label: "100 Message Credits", included: true },
-  { label: "Smart Inventory Management", included: false },
-  { label: "Integrated POS Billing", included: false },
-  { label: "Dedicated Mobile App", included: false },
-  { label: "Bulk Message Broadcasting", included: false },
-  { label: "Integrated Café Management", included: false },
-]
+// The live plans at https://www.gymudaan.com/plans (checked 2026-11-04): the
+// same names, annual prices, limits and feature split, shown in NPR instead
+// of "Rs". The comparison matrix below agrees row for row. The pricing
+// calculator and the /plans Offer JSON-LD read these cards, so change prices
+// here only.
+const PERIOD = "/year, billed annually"
 
-const placeholderPlan = {
-  price: "Rs 14,999",
-  period: "/per year",
-  description:
-    "A perfect starting plan for your gyms for managing and beneficial for your members",
-  features: placeholderFeatures,
-}
+// Every plan's features in one order; each plan says which it includes.
+const feature = (label: string, included: boolean): PlanFeature => ({
+  label,
+  included,
+})
 
 export const plans: Plan[] = [
-  { name: "Starter", ...placeholderPlan },
-  { name: "Gold", popular: true, ...placeholderPlan },
-  { name: "Platinum", ...placeholderPlan },
+  {
+    name: "Standard",
+    price: "NPR 14,999",
+    period: PERIOD,
+    description: "For small gyms getting started",
+    features: [
+      feature("Member Management", true),
+      feature("Finance", true),
+      feature("Attendance", true),
+      feature("Auto Reminder", true),
+      feature("Access Control", true),
+      feature("Priority Support", true),
+      feature("Members: Up to 800", true),
+      feature("Message Credits: 100", true),
+      feature("Inventory Management", false),
+      feature("POS Billing", false),
+      feature("Advanced Analytics", false),
+      feature("Broadcast Messaging", false),
+      feature("Mobile App", false),
+      feature("Member Retention", false),
+      feature("Diet & Workout Plans", false),
+      feature("Credit Balance View", false),
+      feature("Chat Support", false),
+      feature("Multi Branch", false),
+      feature("Cafe Management", false),
+    ],
+  },
+  {
+    name: "Gold",
+    popular: true,
+    price: "NPR 19,999",
+    period: PERIOD,
+    description: "Ideal for growing gym branches",
+    features: [
+      feature("Member Management", true),
+      feature("Finance", true),
+      feature("Attendance", true),
+      feature("Auto Reminder", true),
+      feature("Inventory Management", true),
+      feature("POS Billing", true),
+      feature("Advanced Analytics", true),
+      feature("Broadcast Messaging", true),
+      feature("Access Control", true),
+      feature("Mobile App", true),
+      feature("Member Retention", true),
+      feature("Diet & Workout Plans", true),
+      feature("Credit Balance View", true),
+      feature("Chat Support", true),
+      feature("Priority Support", true),
+      feature("Members: Unlimited", true),
+      feature("Message Credits: 500", true),
+      feature("Multi Branch", false),
+      feature("Cafe Management", false),
+    ],
+  },
+  {
+    name: "Platinum",
+    price: "NPR 24,999",
+    period: PERIOD,
+    description: "Full-scale multi-branch management",
+    features: [
+      feature("Member Management", true),
+      feature("Finance", true),
+      feature("Attendance", true),
+      feature("Auto Reminder", true),
+      feature("Inventory Management", true),
+      feature("POS Billing", true),
+      feature("Advanced Analytics", true),
+      feature("Broadcast Messaging", true),
+      feature("Access Control", true),
+      feature("Mobile App", true),
+      feature("Member Retention", true),
+      feature("Diet & Workout Plans", true),
+      feature("Credit Balance View", true),
+      feature("Chat Support", true),
+      feature("Priority Support", true),
+      feature("Multi Branch", true),
+      feature("Cafe Management", true),
+      feature("Members: Unlimited", true),
+      feature("Message Credits: 800", true),
+    ],
+  },
 ]
 
 export const planCta = {
@@ -67,7 +133,9 @@ export const customPlan = {
   cta: { label: "Contact Our Team", href: SITE.contact.whatsappUrl },
 }
 
-export const trustedTitle = "Trusted by more than 100 companies"
+// No customer count until one is confirmed; this describes the logo row.
+// TODO(content): confirm every logo shown is a current, consenting customer.
+export const trustedTitle = "Gyms across Nepal that use Gym Udaan"
 
 export const matrixLabel = "Features"
 

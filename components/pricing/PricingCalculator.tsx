@@ -37,7 +37,7 @@ const controlBoxClass =
   "inline-flex shrink-0 items-center rounded-badge border border-line-strong"
 
 const stepButtonClass =
-  "flex size-9 items-center justify-center transition-colors duration-300 ease-standard outline-none hover:text-brand focus-visible:ring-[3px] focus-visible:ring-brand/60 disabled:pointer-events-none disabled:opacity-40 motion-reduce:transition-none [&_svg]:size-4"
+  "flex size-11 items-center justify-center lg:size-9 transition-colors duration-300 ease-standard outline-none hover:text-brand focus-visible:ring-[3px] focus-visible:ring-brand/60 disabled:pointer-events-none disabled:opacity-40 motion-reduce:transition-none [&_svg]:size-4"
 
 const IconTile = ({ icon: Icon }: { icon: LucideIcon }) => (
   <span
@@ -199,7 +199,7 @@ const PricingCalculator = () => {
                 </button>
                 <output
                   aria-live="polite"
-                  className="flex h-9 min-w-10 items-center justify-center border-x border-line-strong px-2 text-body"
+                  className="flex h-11 min-w-11 items-center justify-center border-x border-line-strong px-2 text-body lg:h-9 lg:min-w-10"
                 >
                   {locations}
                 </output>
@@ -229,8 +229,9 @@ const PricingCalculator = () => {
             }
             description={calculatorText.addOns.description}
           >
+            {/* A labelled list (role="group" would strip the list semantics
+                its <li> items need). */}
             <ul
-              role="group"
               aria-labelledby={addOnsTitleId}
               className="mt-5 flex flex-col gap-3"
             >

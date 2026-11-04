@@ -9,8 +9,13 @@ import { cn } from "@/lib/utils"
 // stretches over the card, and the card shows its hover and focus state.
 const linkedCardClass = (post: BlogPost) =>
   post.href
-    ? "group/card relative transition-colors duration-300 ease-standard has-focus-visible:ring-[3px] has-focus-visible:ring-brand/60 motion-reduce:transition-none"
+    ? "relative transition-colors duration-300 ease-standard has-focus-visible:ring-[3px] has-focus-visible:ring-brand/60 motion-reduce:transition-none"
     : undefined
+
+// Every card is a hover group so its image can zoom gently, as the audience
+// and insight images do on the home page.
+const zoomClass =
+  "transition-[scale] duration-700 ease-emphasized group-hover/card:scale-[1.03] motion-reduce:transition-none"
 
 const PostTitle = ({
   post,
@@ -53,7 +58,7 @@ type FeaturedCardProps = {
 export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
   <article
     className={cn(
-      "flex h-full flex-col overflow-hidden rounded-panel border border-line-dark",
+      "group/card flex h-full flex-col overflow-hidden rounded-panel border border-line-dark bg-surface-dark",
       linkedCardClass(post),
       post.href && "hover:border-line-strong"
     )}
@@ -66,7 +71,7 @@ export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
           fill
           preload
           sizes="(min-width: 1728px) 839px, (min-width: 1024px) 48vw, 92vw"
-          className="object-cover"
+          className={cn("object-cover", zoomClass)}
         />
       </div>
     ) : null}
@@ -88,7 +93,7 @@ export const BlogFeaturedCard = ({ post }: FeaturedCardProps) => (
 export const BlogCompactCard = ({ post }: { post: BlogPost }) => (
   <article
     className={cn(
-      "flex h-full flex-col justify-center gap-1 rounded-panel border border-line-dark px-5 py-5 lg:gap-2 lg:px-7.75",
+      "group/card flex h-full flex-col justify-center gap-1 rounded-panel border border-line-dark bg-surface-dark px-5 py-5 lg:gap-2 lg:px-7.75",
       linkedCardClass(post),
       post.href && "hover:border-line-strong"
     )}
@@ -101,7 +106,13 @@ export const BlogCompactCard = ({ post }: { post: BlogPost }) => (
 
 // Image on top, text below (node 1:1328).
 export const BlogGridCard = ({ post }: { post: BlogPost }) => (
-  <article className={cn(linkedCardClass(post), post.href && "rounded-card")}>
+  <article
+    className={cn(
+      "group/card",
+      linkedCardClass(post),
+      post.href && "rounded-card"
+    )}
+  >
     {post.image ? (
       <div className="relative aspect-496/369 w-full overflow-hidden rounded-card border border-line-dark">
         <Image
@@ -109,7 +120,7 @@ export const BlogGridCard = ({ post }: { post: BlogPost }) => (
           alt=""
           fill={!post.image.cropClassName}
           sizes="(min-width: 1728px) 496px, (min-width: 768px) 33vw, 92vw"
-          className={cn(post.image.cropClassName ?? "object-cover")}
+          className={cn(post.image.cropClassName ?? "object-cover", zoomClass)}
         />
       </div>
     ) : null}

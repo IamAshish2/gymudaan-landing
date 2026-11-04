@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Standalone video tooling with its own package.json and tsconfig.
+    "video-studio/**",
   ]),
 ])
 

@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import Section from "@/components/landing/primitives/Section"
 import SnapCarousel from "@/components/landing/primitives/SnapCarousel"
+import ServiceVideo from "@/components/landing/sections/ServiceVideo"
 import Typography from "@/components/ui/Typography"
 import { services } from "@/lib/landing/content"
 import type { Service } from "@/lib/landing/types"
@@ -14,7 +15,13 @@ const ServiceCard = ({ service }: { service: Service }) => (
   // grow back as they snap into place.
   <article className="flex h-full origin-left flex-col rounded-tile border border-line-dark p-3 transition-transform duration-500 ease-emphasized group-data-[active=false]/slide:scale-[0.883] motion-reduce:transition-none sm:p-4 lg:p-6">
     <div className="relative aspect-[1188/706] overflow-hidden rounded-panel bg-surface-raised">
-      {service.image ? (
+      {service.video ? (
+        <ServiceVideo
+          sources={service.video.sources}
+          poster={service.video.poster}
+          label={service.video.label}
+        />
+      ) : service.image ? (
         <Image
           src={service.image.src}
           alt={service.image.alt}
@@ -63,6 +70,7 @@ const Services = () => (
       arrows="dark"
       trackClassName="-mr-gutter gap-4 pr-gutter sm:gap-8 lg:gap-15"
       slideClassName="basis-[90%] md:basis-[81%]"
+      autoAdvance
     >
       {services.items.map((service) => (
         <ServiceCard key={service.title} service={service} />

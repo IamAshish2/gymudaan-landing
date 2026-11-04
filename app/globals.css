@@ -134,6 +134,7 @@
   --spacing-band: clamp(5rem, 2rem + 7.4vw, 10rem);
   --spacing-page-top: clamp(8rem, 6.4rem + 9.4vw, 16.5rem);
   --spacing-header: 6.125rem; /* fixed header height once scrolled, from lg */
+  --spacing-header-sm: 3.875rem; /* bottom of the header bar once scrolled, below lg */
 
   /* Onboarding — 1728 frame: 1288px option row, 992px plans, 893px review, 638px form */
   --container-onboarding-options: 80.5rem;
@@ -145,6 +146,9 @@
   --spacing-onboarding-grid: clamp(1rem, 0.5rem + 1.85vw, 2.5rem);
   --spacing-onboarding-tight: 1.875rem;
   --spacing-onboarding-tab: 1.8125rem; /* how far the "Popular" tab sits above its card */
+
+  /* Auth — sign-in panel (26.5rem form + 2.5rem padding each side) */
+  --container-auth-form: 31.5rem;
 
   /* Radius */
   --radius-chip: 4px;
@@ -456,6 +460,117 @@
   @keyframes band-arrive {
     from {
       scale: 0.96;
+    }
+  }
+
+  /* Built for Nepal route (components/landing/sections/BuiltForNepal.tsx).
+     Reveal marks `.nepal-route` with data-revealed; the orange fill then
+     draws down (phones) or across (desktop) while each city stop lands in
+     turn, keyed by its --i index. */
+  @media (prefers-reduced-motion: no-preference) {
+    .nepal-route[data-revealed] .nepal-route-fill {
+      transform-origin: 50% 0;
+      animation: route-draw-y 1400ms var(--ease-emphasized) 200ms backwards;
+    }
+
+    .nepal-route[data-revealed] .nepal-route-stop {
+      animation: route-stop 600ms var(--ease-emphasized) backwards;
+      animation-delay: calc(250ms + var(--i, 0) * 170ms);
+    }
+
+    .nepal-route[data-revealed] .nepal-route-dot {
+      animation: route-dot 500ms var(--ease-spring) backwards;
+      animation-delay: calc(250ms + var(--i, 0) * 170ms);
+    }
+
+    @media (min-width: 64rem) {
+      .nepal-route[data-revealed] .nepal-route-fill {
+        transform-origin: 0 50%;
+        animation-name: route-draw-x;
+      }
+    }
+  }
+
+  @keyframes route-draw-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes route-draw-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes route-stop {
+    from {
+      opacity: 0;
+      translate: 0 0.5rem;
+    }
+  }
+
+  @keyframes route-dot {
+    from {
+      scale: 0;
+    }
+  }
+
+  /* Barbell loader (components/landing/primitives/BarbellLoader.tsx): the
+     plates load on once, heaviest first, then the bar does reps forever. */
+  @media (prefers-reduced-motion: no-preference) {
+    .barbell-plate {
+      animation: plate-on 420ms var(--ease-emphasized) backwards;
+      animation-delay: calc(var(--plate, 0) * 160ms);
+    }
+
+    .barbell-plate-left {
+      --plate-from: -1.5rem;
+    }
+
+    .barbell-plate-right {
+      --plate-from: 1.5rem;
+    }
+
+    .barbell-lift {
+      animation: barbell-rep 1.6s var(--ease-standard) 650ms infinite;
+    }
+
+    .barbell-shadow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: barbell-shadow 1.6s var(--ease-standard) 650ms infinite;
+    }
+  }
+
+  @keyframes plate-on {
+    from {
+      opacity: 0;
+      translate: var(--plate-from, 0) 0;
+    }
+  }
+
+  @keyframes barbell-rep {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    45%,
+    55% {
+      translate: 0 -0.875rem;
+    }
+  }
+
+  @keyframes barbell-shadow {
+    0%,
+    100% {
+      scale: 1;
+      opacity: 1;
+    }
+    45%,
+    55% {
+      scale: 0.7 1;
+      opacity: 0.5;
     }
   }
 }

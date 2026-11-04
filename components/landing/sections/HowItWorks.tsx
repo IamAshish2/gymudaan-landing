@@ -36,7 +36,7 @@ const HowItWorks = () => (
                 <Typography variant="titleLg">{step.title}</Typography>
                 <Typography
                   variant="bodyLg"
-                  className="max-w-[26.65em] opacity-80"
+                  className="max-w-[26.65em] tracking-normal opacity-80"
                 >
                   {step.description}
                 </Typography>

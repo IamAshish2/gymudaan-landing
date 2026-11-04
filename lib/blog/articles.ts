@@ -5,6 +5,8 @@
 // final article before launch.
 
 import { featuredPost, gridPosts, sidePosts } from "@/lib/blog/content"
+import { guides } from "@/lib/blog/guides"
+import { articleSlugs, isPublishedArticle } from "@/lib/blog/registry"
 import type { BlogArticle, BlogPost } from "@/lib/blog/types"
 import type { SectionIntro } from "@/lib/landing/types"
 
@@ -23,6 +25,7 @@ const WORDS_PER_MINUTE = 220
 
 const articles: BlogArticle[] = [
   {
+    // Publication status lives in lib/blog/registry.ts.
     post: featuredPost,
     related: [
       "modern-gym-software",
@@ -168,14 +171,52 @@ const articles: BlogArticle[] = [
       },
     ],
   },
+  // Nepal guides (drafts until published in lib/blog/registry.ts).
+  ...guides,
 ]
 
-export const articleSlugs = articles.map((article) => article.post.id)
+// Every article here needs an entry in lib/blog/registry.ts and vice versa;
+// otherwise proxy.ts would 404 a real article or route to a missing one.
+const contentSlugs = articles.map((article) => article.post.id)
+const unregistered = contentSlugs.filter((slug) => !articleSlugs.includes(slug))
+const withoutContent = articleSlugs.filter(
+  (slug) => !contentSlugs.includes(slug)
+)
+if (unregistered.length > 0 || withoutContent.length > 0) {
+  throw new Error(
+    `lib/blog/registry.ts and lib/blog/articles.ts disagree. Not in the registry: ${unregistered.join(", ") || "none"}. No article content: ${withoutContent.join(", ") || "none"}.`
+  )
+}
+
+// A published article must carry its real publication date, never a draft
+// placeholder ("Draft (unpublished)").
+const undated = articles.filter(
+  (article) =>
+    isPublishedArticle(article.post.id) &&
+    Number.isNaN(Date.parse(article.post.date))
+)
+if (undated.length > 0) {
+  throw new Error(
+    `Published articles need a real date: ${undated.map((a) => a.post.id).join(", ")}.`
+  )
+}
+
+export {
+  articleSlugs,
+  hasPublishedArticles,
+  isPublishedArticle,
+  publishedArticleSlugs,
+} from "@/lib/blog/registry"
 
 export const getArticle = (slug: string): BlogArticle | undefined =>
   articles.find((article) => article.post.id === slug)
 
-const allPosts: BlogPost[] = [featuredPost, ...sidePosts, ...gridPosts]
+const allPosts: BlogPost[] = [
+  featuredPost,
+  ...sidePosts,
+  ...gridPosts,
+  ...guides.map((guide) => guide.post),
+]
 
 export const getRelatedPosts = (article: BlogArticle): BlogPost[] =>
   article.related.flatMap((id) => {

@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:seo": "node --test tests/seo/seo.test.mjs",
+    "test:seo:unit": "node --test tests/seo/site-env.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

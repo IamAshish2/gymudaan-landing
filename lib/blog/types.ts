@@ -29,6 +29,7 @@ export type ArticleSection = {
   blocks: ArticleBlock[]
 }
 
+// Whether an article is published lives in lib/blog/registry.ts.
 export type BlogArticle = {
   post: BlogPost & { excerpt: string }
   sections: ArticleSection[]

@@ -2,16 +2,20 @@
 
 import { useEffect, useRef, type ReactNode } from "react"
 
+import { cn } from "@/lib/utils"
+
 const STAGGER_MS = 90
 
 type RevealProps = {
   children: ReactNode
+  /** Layout for the wrapper, e.g. to keep a parent's flex column. */
+  className?: string
 }
 
 // Fades each direct child up the first time it scrolls into view, plus the
 // items of any `.reveal-stagger` list inside, one after another. The hidden
 // state and the motion live in globals.css, behind prefers-reduced-motion.
-const Reveal = ({ children }: RevealProps) => {
+const Reveal = ({ children, className }: RevealProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -45,7 +49,7 @@ const Reveal = ({ children }: RevealProps) => {
   }, [])
 
   return (
-    <div ref={ref} className="reveal-group">
+    <div ref={ref} className={cn("reveal-group", className)}>
       {children}
     </div>
   )
