@@ -229,8 +229,9 @@ const PricingCalculator = () => {
             }
             description={calculatorText.addOns.description}
           >
+            {/* A labelled list (role="group" would strip the list semantics
+                its <li> items need). */}
             <ul
-              role="group"
               aria-labelledby={addOnsTitleId}
               className="mt-5 flex flex-col gap-3"
             >

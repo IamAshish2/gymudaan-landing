@@ -48,15 +48,15 @@ import {
 import { ROUTES } from "@/lib/routes"
 import { cn } from "@/lib/utils"
 
-const STEP = { plan: 5, business: 6, payment: 7 } as const
+const STEP = { business: 5, plan: 6, payment: 7 } as const
 
 const COPY_BY_STEP = [
   stepCopy.businessType,
   stepCopy.members,
   stepCopy.goals,
   stepCopy.tools,
-  stepCopy.plan,
   stepCopy.business,
+  stepCopy.plan,
   stepCopy.payment,
   stepCopy.review,
 ]

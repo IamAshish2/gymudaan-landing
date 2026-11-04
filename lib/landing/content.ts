@@ -69,6 +69,10 @@ import avatarAbhishek from "@/public/landing/testimonials/avatar-abhishek.webp"
 import avatarAmick from "@/public/landing/testimonials/avatar-amick.webp"
 import avatarAshish from "@/public/landing/testimonials/avatar-ashish.webp"
 import testimonialVideoPoster from "@/public/landing/testimonials/video-1-poster.webp"
+import attendanceManagementPoster from "@/public/video/features/attendance-management-v2-poster.webp"
+import memberManagementPoster from "@/public/video/features/member-management-v2-poster.webp"
+import paymentsBillingPoster from "@/public/video/features/payments-billing-v2-poster.webp"
+import reportsInsightsPoster from "@/public/video/features/reports-insights-poster.webp"
 import type {
   Audience,
   ClientLogo,
@@ -80,19 +84,31 @@ import type {
   FooterColumn,
   Insight,
   LinkAction,
+  LocalHighlight,
   RichText,
   SectionIntro,
+  ServedCity,
   Service,
   Stat,
   Step,
   TestimonialTile,
 } from "@/lib/landing/types"
+import { isBlogPublic } from "@/lib/blog/registry"
+import {
+  ICalendar,
+  IFingerprint,
+  IMessageSquareText,
+  IWalletCards,
+} from "@/lib/icons"
+import { isPublishable, publishable } from "@/lib/content-approval"
 import { ROUTES } from "@/lib/routes"
 import { SITE } from "@/lib/site"
 
 // ── Navigation ─────────────────────────────────────────────────────────────
 
-export const navLinks = [
+// Filtered into `navLinks` at the end of this file: links to sections that a
+// production build hides (unapproved testimonials, an unpublished blog) drop out.
+const allNavLinks = [
   { label: "Home", href: ROUTES.home },
   { label: "Testimonial", href: ROUTES.landing.testimonials },
   { label: "Pricing", href: ROUTES.pricing },
@@ -107,11 +123,13 @@ export const navActions = {
 // ── Hero ───────────────────────────────────────────────────────────────────
 
 export const hero = {
-  eyebrow: "GymUdaan Nepal's #1 Gym Software",
-  title: "The gym management platform for modern fitness businesses",
-  // Below sm the full title runs to three lines at the display size; this
-  // one fits on two.
-  titleShort: "The all-in-one gym management platform",
+  eyebrow: "Built for gyms and fitness centers in Nepal",
+  title: "The gym management software for modern fitness businesses",
+  // Below sm the full title runs to three lines at the display size, so
+  // phones show only this opening part of it. It must be a prefix of `title`:
+  // the H1 holds a single sentence and CSS hides the remaining words on phones
+  // (Hero.tsx), so crawlers and screen readers get one heading, not two.
+  titleShort: "The gym management software",
   description: "Run memberships, attendance and payments from one platform.",
   actions: [
     { label: "Get Started", href: ROUTES.onboarding, variant: "brand" },
@@ -123,9 +141,21 @@ export const hero = {
     },
   ] satisfies LinkAction[],
   video: {
-    src: "/video/gym-udaan-final.mp4",
-    // TODO(content): describe what the video shows once it is final.
-    label: "Gym Udaan product video",
+    // Rendered by video-studio/ (scene "hero-film"): a 40 s, 1600×900 loop
+    // with motion blur and a generated soundtrack (AAC, starts muted; the
+    // hero shows a sound toggle).
+    sources: [
+      {
+        src: "/video/hero/hero-film.av1.mp4",
+        type: 'video/mp4; codecs="av01.0.08M.08, mp4a.40.2"',
+      },
+      {
+        src: "/video/hero/hero-film.h264.mp4",
+        type: 'video/mp4; codecs="avc1.640028, mp4a.40.2"',
+      },
+    ],
+    label:
+      "Gym Udaan film: running a gym takes more than passion, with members, renewals, dues and check-ins to juggle. Gym Udaan follows one day at a gym: a member checks in at 6:42 am, a new member's card is created at 10:30 am, a payment is recorded and stamped paid at 2:15 pm, and at 9 pm the day's takings and six-month trend appear. It ends with its other features, including inventory, trainers and classes, multi-branch, access control and the member app",
   },
 }
 
@@ -182,12 +212,46 @@ export const services: SectionIntro & { items: Service[] } = {
       description:
         "Register members, manage memberships and renewals, and keep every member profile organised in one place.",
       cta: contactCta,
+      // Rendered by video-studio/ (scene "member-management-v2"), 10 s loop with motion
+      // blur.
+      video: {
+        sources: [
+          {
+            src: "/video/features/member-management-v2.av1.mp4",
+            type: 'video/mp4; codecs="av01.0.05M.08"',
+          },
+          {
+            src: "/video/features/member-management-v2.h264.mp4",
+            type: 'video/mp4; codecs="avc1.640028"',
+          },
+        ],
+        poster: memberManagementPoster,
+        label:
+          "Gym Udaan demo: a new member, Priya Gurung, is typed in with her phone, join date and Premium Plan, assembled into a row and dropped into the members list as Active",
+      },
     },
     {
       title: "Attendance Management",
       description:
         "Simplify daily attendance with organized check-in records and a clear view of member activity, so you always know what's happening",
       cta: contactCta,
+      // Rendered by video-studio/ (scene "attendance-management-v2"), 10 s loop with motion
+      // blur.
+      video: {
+        sources: [
+          {
+            src: "/video/features/attendance-management-v2.av1.mp4",
+            type: 'video/mp4; codecs="av01.0.05M.08"',
+          },
+          {
+            src: "/video/features/attendance-management-v2.h264.mp4",
+            type: 'video/mp4; codecs="avc1.640028"',
+          },
+        ],
+        poster: attendanceManagementPoster,
+        label:
+          "Gym Udaan demo: a morning timeline of check-ins from the check-in screen and manual entries, Priya Gurung checking in manually at 6:42 AM, then today's check-in log in Gym Udaan",
+      },
     },
     {
       // TODO(content): Figma shows two cards; these two are proposed.
@@ -195,12 +259,46 @@ export const services: SectionIntro & { items: Service[] } = {
       description:
         "Record payments, track dues and send reminders so every membership stays paid up and accounted for.",
       cta: contactCta,
+      // Rendered by video-studio/ (scene "payments-billing-v2"), 10 s loop with motion
+      // blur.
+      video: {
+        sources: [
+          {
+            src: "/video/features/payments-billing-v2.av1.mp4",
+            type: 'video/mp4; codecs="av01.0.05M.08"',
+          },
+          {
+            src: "/video/features/payments-billing-v2.h264.mp4",
+            type: 'video/mp4; codecs="avc1.640028"',
+          },
+        ],
+        poster: paymentsBillingPoster,
+        label:
+          "Gym Udaan demo: Kiran Shrestha's Rs. 1,500 invoice is paid in cash and moves from Pending to Received, then appears as Paid in Gym Udaan's Recent Payments",
+      },
     },
     {
       title: "Reports & Insights",
       description:
         "See revenue, renewals and attendance trends at a glance and make decisions with real numbers.",
       cta: contactCta,
+      // Rendered by video-studio/ (scene "reports-insights"), 10 s loop with
+      // sub-frame motion blur.
+      video: {
+        sources: [
+          {
+            src: "/video/features/reports-insights.av1.mp4",
+            type: 'video/mp4; codecs="av01.0.05M.08"',
+          },
+          {
+            src: "/video/features/reports-insights.h264.mp4",
+            type: 'video/mp4; codecs="avc1.640028"',
+          },
+        ],
+        poster: reportsInsightsPoster,
+        label:
+          "Gym Udaan demo: the dashboard's Financial Overview, switching from the last 7 days to the last 6 months, with October highlighted as the best month for revenue",
+      },
     },
   ],
 }
@@ -402,6 +500,59 @@ export const comparison: SectionIntro & {
   ],
 }
 
+// ── Built for Nepal ────────────────────────────────────────────────────────
+
+// Owner-supplied copy (2026-11-04). The owner confirmed that BS dates,
+// eSewa & Khalti, SMS reminders and biometric attendance are live features.
+// "Leading" was dropped from the first paragraph because nothing on the site
+// backs that claim.
+// Trimmed for a calm layout: the city list lives in the route line rather
+// than repeated in the copy.
+export const builtForNepal: SectionIntro & {
+  description: string
+  highlights: LocalHighlight[]
+  citiesLabel: string
+  cities: ServedCity[]
+} = {
+  badge: "Built for Nepal",
+  title: ["Powerful gym software built for ", { em: "Nepal" }],
+  description:
+    "Gym Udaan is gym management software built for Nepal. Automate daily operations, manage memberships, track attendance and take payments, whether you run a studio in Kathmandu or a gym chain in Pokhara.",
+  highlights: [
+    {
+      title: "Nepali (BS) Dates",
+      description: "Native Bikram Sambat support",
+      icon: ICalendar,
+    },
+    {
+      title: "eSewa & Khalti",
+      description: "Local payment gateways",
+      icon: IWalletCards,
+    },
+    {
+      title: "SMS Reminders",
+      description: "Automated renewals",
+      icon: IMessageSquareText,
+    },
+    {
+      title: "Biometric Attendance",
+      description: "Live check-ins",
+      icon: IFingerprint,
+    },
+  ],
+  citiesLabel: "Trusted by gyms across Nepal",
+  // Ordered west to east so the route line reads like the map.
+  cities: [
+    { name: "Butwal" },
+    { name: "Pokhara" },
+    { name: "Chitwan" },
+    { name: "Kathmandu" },
+    { name: "Biratnagar" },
+    { name: "Itahari" },
+    { name: "Dharan" },
+  ],
+}
+
 // ── Who we serve ───────────────────────────────────────────────────────────
 
 export const audiences: SectionIntro & { items: Audience[] } = {
@@ -520,8 +671,11 @@ export const control: SectionIntro & { tabs: ControlTab[] } = {
 
 // ── Stats ──────────────────────────────────────────────────────────────────
 
-// TODO(content): confirm these are approved marketing figures.
-export const stats: { title: RichText; items: Stat[] } = {
+// TODO(content): unverified figures (the "+40%" revenue claim in particular).
+// Not published by production builds until the business approves real figures;
+// set `approved: true` only then. Never substitute invented numbers.
+export const stats: { title: RichText; items: Stat[]; approved: boolean } = {
+  approved: false,
   title: ["The backbone for the ", { em: "Nepali Gym" }],
   items: [
     { value: "100+", label: "Fitness businesses growing together" },
@@ -588,53 +742,55 @@ export const everywhere: SectionIntro & {
 // ── Testimonials ───────────────────────────────────────────────────────────
 
 // Spelling fixed from Figma: "every thing", "stay organize", "Udaan Fintess".
+// TODO(content): none of these is confirmed as a real, consenting customer
+// yet (two names also appear as placeholder blog authors, and "Udaan Fitness"
+// resembles the company's own name). Production builds publish only tiles with
+// `approved: true`; the section disappears there while none is approved. The
+// "Customer Name / Gym Name" placeholder card was removed.
+const testimonialTiles: TestimonialTile[] = [
+  {
+    approved: false,
+    kind: "quote",
+    quote:
+      "Managing the members, tracking attendance, and keeping up with payment used to take so much of our time. Gym Udaan brings everything together and makes our daily operations much easier.",
+    name: "Amick Khadka",
+    role: "Khadka Fitness CEO",
+    avatar: avatarAmick,
+  },
+  {
+    approved: false,
+    kind: "video",
+    src: "/video/testimonial-1.mp4",
+    poster: testimonialVideoPoster,
+    // TODO(content): name the customer once the testimonial is final.
+    label: "Video testimonial from a Gym Udaan customer",
+  },
+  {
+    approved: false,
+    kind: "quote",
+    quote:
+      "What we appreciate most is how simple everything feels. From managing memberships to checking daily activity, we can stay organized without unnecessary complication.",
+    name: "Ashish Karki",
+    role: "Karki Fitness",
+    avatar: avatarAshish,
+  },
+  {
+    approved: false,
+    kind: "quote",
+    quote:
+      "Gym Udaan gives us a clearer picture of what's happening in our gym. Having member information, attendance, and payments in one place makes a real difference.",
+    name: "Abhishek Koirala",
+    role: "Udaan Fitness",
+    avatar: avatarAbhishek,
+  },
+]
+
 export const testimonials: SectionIntro & { tiles: TestimonialTile[] } = {
   badge: "Testimonial",
   title: ["Real ", { em: "gyms" }, ". Real ", { em: "experiences." }],
   description:
     "Discover how Gym Udaan helps fitness businesses simplify operations and focus on what matters most.",
-  tiles: [
-    {
-      kind: "quote",
-      quote:
-        "Managing the members, tracking attendance, and keeping up with payment used to take so much of our time. Gym Udaan brings everything together and makes our daily operations much easier.",
-      name: "Amick Khadka",
-      role: "Khadka Fitness CEO",
-      avatar: avatarAmick,
-    },
-    {
-      kind: "video",
-      src: "/video/testimonial-1.mp4",
-      poster: testimonialVideoPoster,
-      // TODO(content): name the customer once the testimonial is final.
-      label: "Video testimonial from a Gym Udaan customer",
-    },
-    {
-      kind: "quote",
-      quote:
-        "What we appreciate most is how simple everything feels. From managing memberships to checking daily activity, we can stay organized without unnecessary complication.",
-      name: "Ashish Karki",
-      role: "Karki Fitness",
-      avatar: avatarAshish,
-    },
-    {
-      kind: "quote",
-      quote:
-        "Gym Udaan gives us a clearer picture of what's happening in our gym. Having member information, attendance, and payments in one place makes a real difference.",
-      name: "Abhishek Koirala",
-      role: "Udaan Fitness",
-      avatar: avatarAbhishek,
-    },
-    // TODO(content): PLACEHOLDER. Replace with a real customer's quote, name,
-    // gym and photo before launch; do not publish an invented testimonial.
-    {
-      kind: "quote",
-      quote:
-        "Renewal reminders go out on their own now, so far fewer memberships slip through the cracks. Our front desk spends its time with members instead of paperwork.",
-      name: "Customer Name",
-      role: "Gym Name",
-    },
-  ],
+  tiles: publishable(testimonialTiles),
 }
 
 // ── Insights ───────────────────────────────────────────────────────────────
@@ -731,46 +887,41 @@ export const faq: SectionIntro & { items: Faq[]; defaultOpen: number } = {
 
 // ── Footer ─────────────────────────────────────────────────────────────────
 
-// TODO(content): the Figma footer reads like a template (Changelog, Migrate,
-// Broadcasts…). Hrefs point at the nearest landing section until real pages
-// exist.
+// Every label names what its link opens: real pages, or the homepage section
+// it jumps to. The Figma template links (Changelog, Careers, Status, Migrate…)
+// were removed because nothing behind them exists. Add About/Features pages
+// here when they are built.
 export const footerColumns: FooterColumn[] = [
   {
-    title: "Features",
+    title: "Product",
     links: [
-      { label: "Automations", href: ROUTES.landing.features },
-      { label: "Audiences", href: ROUTES.landing.audiences },
-      { label: "Broadcasts", href: ROUTES.landing.features },
-      { label: "Inbound", href: ROUTES.landing.services },
+      { label: "Core features", href: ROUTES.landing.services },
+      { label: "More features", href: ROUTES.landing.features },
+      { label: "Who it's for", href: ROUTES.landing.audiences },
+      { label: "How it works", href: ROUTES.landing.howItWorks },
       { label: "Pricing", href: ROUTES.pricing },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Changelog", href: ROUTES.landing.insights },
-      { label: "Enterprise", href: ROUTES.landing.audiences },
-      { label: "Security", href: ROUTES.landing.faq },
+      { label: "About us", href: ROUTES.about },
+      { label: "FAQ", href: ROUTES.landing.faq },
+      ...(isBlogPublic ? [{ label: "Blog", href: ROUTES.blogs }] : []),
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About", href: ROUTES.landing.howItWorks },
-      { label: "Blog", href: ROUTES.blogs },
-      { label: "Careers", href: ROUTES.landing.contact },
-      { label: "Customers", href: ROUTES.landing.testimonials },
-      { label: "Philosophy", href: ROUTES.landing.howItWorks },
+      { label: "Contact us on WhatsApp", href: SITE.contact.whatsappUrl },
+      { label: "Get started", href: ROUTES.onboarding },
     ],
   },
   {
-    title: "Help",
+    title: "Legal",
     links: [
-      { label: "Support", href: SITE.contact.whatsappUrl },
-      { label: "Status", href: ROUTES.landing.contact },
-      { label: "Migrate", href: ROUTES.landing.getStarted },
-      { label: "Knowledge base", href: ROUTES.landing.faq },
-      { label: "Legal policies", href: ROUTES.legal.terms },
+      { label: "Terms of Service", href: ROUTES.legal.terms },
+      { label: "Privacy Policy", href: ROUTES.legal.privacy },
     ],
   },
 ]
@@ -778,7 +929,6 @@ export const footerColumns: FooterColumn[] = [
 export const footer = {
   description:
     "Revolutionizing the fitness industry in Nepal with powerful, all-in-one management software tailored specifically for your gym's growth.",
-  status: "All systems operational",
   closing: "Made for the fitness businesses of tomorrow.",
   watermark: "Gym Udaan",
 }
@@ -792,7 +942,9 @@ export const notFoundPage = {
     "We couldn't find the page you were looking for. It may have been moved or renamed.",
   actions: [
     { label: "Back to home", href: ROUTES.home, variant: "brand" },
-    { label: "Read the blog", href: ROUTES.blogs, variant: "dark" },
+    isBlogPublic
+      ? { label: "Read the blog", href: ROUTES.blogs, variant: "dark" }
+      : { label: "See pricing", href: ROUTES.pricing, variant: "dark" },
   ] satisfies LinkAction[],
 }
 
@@ -806,3 +958,18 @@ export const errorPage = {
   home: { label: "Back to home", href: ROUTES.home },
   reference: "Error reference:",
 }
+
+// ── Navigation (filtered) ──────────────────────────────────────────────────
+
+// Header and mobile-nav links, minus sections a production build hides:
+// testimonials until one is approved, the blog until an article is published.
+export const navLinks = allNavLinks.filter((link) => {
+  if (link.href === ROUTES.landing.testimonials) {
+    return testimonials.tiles.length > 0
+  }
+  if (link.href === ROUTES.blogs) return isBlogPublic
+  return true
+})
+
+/** Whether the stats band may be shown (see `stats.approved`). */
+export const showStats = isPublishable(stats.approved)

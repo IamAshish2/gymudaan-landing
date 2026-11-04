@@ -3,8 +3,12 @@
 // Prices are read from the plan cards (`plans` in content.ts), so the two
 // always agree. Plan names here must match those cards.
 //
-// TODO(content): the rules in `recommendPlan` and the plan descriptions are
-// placeholders agreed for the layout. Replace them before launch.
+// The recommendation follows the live plan limits (lib/pricing/content.ts):
+// Standard covers up to 800 members at one location, Gold has unlimited
+// members, and only Platinum includes multi-branch. Access control is in
+// every plan, so add-ons don't change the recommendation.
+// TODO(content): confirm the "Membership Card" add-on is sold (it isn't on
+// the live /plans page) and whether add-ons carry their own price.
 
 import type { SectionIntro } from "@/lib/landing/types"
 import { plans } from "@/lib/pricing/content"
@@ -59,14 +63,18 @@ export const MAX_LOCATIONS = 20
 
 /**
  * The slider runs 0–100 but members do not: the first half covers 10–150,
- * where most gyms sit, and the second half 150–500+. Each half is linear.
+ * where most gyms sit, and the second half 150–1,000+. Each half is linear.
+ * The top reaches past Standard's 800-member limit, so Gold can be suggested.
  */
 export const memberScale = {
   min: 10,
   mid: 150,
-  max: 500,
-  ticks: ["10", "150", "500+"],
+  max: 1000,
+  ticks: ["10", "150", "1,000+"],
 }
+
+/** Standard plan's member limit ("Members: Up to 800"). */
+export const STANDARD_MEMBER_LIMIT = 800
 
 export const sliderToMembers = (position: number): number => {
   const { min, mid, max } = memberScale
@@ -87,7 +95,9 @@ export const membersToSlider = (members: number): number => {
 }
 
 export const formatMembers = (members: number): string =>
-  members >= memberScale.max ? `${memberScale.max}+` : String(members)
+  members >= memberScale.max
+    ? `${memberScale.max.toLocaleString("en-US")}+`
+    : String(members)
 
 export const addOns: CalculatorAddOn[] = [
   {
@@ -108,22 +118,23 @@ export const initialSelection: CalculatorSelection = {
   addOns: ["door-access"],
 }
 
+// Names and descriptions match the plan cards (the live plans' taglines).
 const calculatorPlans = {
-  starter: {
-    name: "Starter",
-    description: "Everything a single, growing gym needs to run smoothly.",
+  standard: {
+    name: "Standard",
+    description: "For small gyms getting started",
   },
   gold: {
     name: "Gold",
-    description: "A complete solution for growing fitness businesses.",
+    description: "Ideal for growing gym branches",
   },
   platinum: {
     name: "Platinum",
-    description: "Built for multi-location gyms that need it all.",
+    description: "Full-scale multi-branch management",
   },
 } satisfies Record<string, CalculatorPlan>
 
-// "Rs 14,999" -> currency "Rs", amount "14,999", so the amount can take the
+// "NPR 14,999" -> currency "NPR", amount "14,999", so the amount can take the
 // brand colour as in the draft.
 const withCardPrice = (plan: CalculatorPlan): RecommendedPlan => {
   const card = plans.find(({ name }) => name === plan.name)
@@ -141,19 +152,18 @@ const withCardPrice = (plan: CalculatorPlan): RecommendedPlan => {
 }
 
 const recommendations = {
-  starter: withCardPrice(calculatorPlans.starter),
+  standard: withCardPrice(calculatorPlans.standard),
   gold: withCardPrice(calculatorPlans.gold),
   platinum: withCardPrice(calculatorPlans.platinum),
 }
 
+// Multi-branch is Platinum-only; more members than Standard allows needs
+// Gold; otherwise Standard covers it. Add-ons are available on every plan.
 export const recommendPlan = ({
   members,
   locations,
-  addOns: selectedAddOns,
 }: CalculatorSelection): RecommendedPlan => {
   if (locations > 1) return recommendations.platinum
-  if (members > memberScale.mid || selectedAddOns.length > 0) {
-    return recommendations.gold
-  }
-  return recommendations.starter
+  if (members > STANDARD_MEMBER_LIMIT) return recommendations.gold
+  return recommendations.standard
 }

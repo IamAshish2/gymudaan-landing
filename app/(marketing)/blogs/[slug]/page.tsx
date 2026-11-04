@@ -2,7 +2,11 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import BlogArticlePage from "@/components/blog/BlogArticlePage"
-import { articleSlugs, getArticle } from "@/lib/blog/articles"
+import {
+  articleSlugs,
+  getArticle,
+  isPublishedArticle,
+} from "@/lib/blog/articles"
 import { ROUTES } from "@/lib/routes"
 import { pageMetadata } from "@/lib/seo/metadata"
 
@@ -11,6 +15,8 @@ type BlogPostPageProps = {
 }
 
 // Articles are static content, so every one is prerendered at build time.
+// Which URLs are actually served (200 vs 404) is decided in proxy.ts from
+// lib/blog/registry.ts, before streaming starts.
 export const generateStaticParams = () => articleSlugs.map((slug) => ({ slug }))
 
 export const generateMetadata = async ({
@@ -25,9 +31,9 @@ export const generateMetadata = async ({
     title: article.post.title,
     description: article.post.excerpt,
     type: "article",
-    // Drafts stay reachable for design review but out of search results.
-    // TODO(pre-launch): drafts must 404 in production (docs/seo/03 §11).
-    noindex: !article.published,
+    // Drafts only render in non-production builds (proxy.ts 404s them in
+    // production), and stay out of search results there too.
+    noindex: !isPublishedArticle(slug),
     images: article.post.image
       ? [
           {

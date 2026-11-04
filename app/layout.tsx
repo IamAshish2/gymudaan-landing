@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader"
 import "./globals.css"
 import ThemeProvider from "@/components/shared/ThemeProvider"
 import { Toaster } from "@/components/ui/sonner"
+import { IS_INDEXABLE } from "@/lib/seo/indexing"
 import { SITE_URL } from "@/lib/seo/site-url"
 import { SITE } from "@/lib/site"
 import { cn } from "@/lib/utils"
@@ -24,6 +25,9 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   applicationName: SITE.name,
+  // Staging, preview and development builds (lib/seo/indexing.ts); production
+  // pages keep deciding their own robots, as before.
+  ...(IS_INDEXABLE ? {} : { robots: { index: false, follow: false } }),
   openGraph: {
     type: "website",
     siteName: SITE.name,

@@ -2,7 +2,9 @@
 
 import Link from "next/link"
 
-import LandingLogo from "@/components/landing/layout/LandingLogo"
+import LandingLogo, {
+  LOGO_HOME_LABEL,
+} from "@/components/landing/layout/LandingLogo"
 import Container from "@/components/landing/primitives/Container"
 import LandingButton from "@/components/landing/primitives/LandingButton"
 import PageIntro from "@/components/landing/primitives/PageIntro"
@@ -25,7 +27,7 @@ const RootError = ({ error, reset }: RootErrorProps) => (
     <Container className="pt-6 lg:pt-8">
       <Link
         href={errorPage.home.href}
-        aria-label={`${SITE.name} home`}
+        aria-label={LOGO_HOME_LABEL}
         className="inline-flex rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60"
       >
         <LandingLogo />

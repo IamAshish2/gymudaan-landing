@@ -16,6 +16,7 @@ export {
   Eye as IEye,
   EyeOff as IEyeOff,
   FileText as IFileText,
+  Fingerprint as IFingerprint,
   Heading1 as IHeading1,
   Heading2 as IHeading2,
   Heading3 as IHeading3,
@@ -28,6 +29,7 @@ export {
   Mail as IMail,
   MapPin as IMapPin,
   Menu as IMenu,
+  MessageSquareText as IMessageSquareText,
   Minus as IMinus,
   Monitor as IMonitor,
   Moon as IMoon,
@@ -50,6 +52,7 @@ export {
   Users as IUsers,
   Volume2 as IVolume2,
   VolumeX as IVolumeX,
+  WalletCards as IWalletCards,
   X as IX,
   Zap as IZap,
 } from "lucide-react"

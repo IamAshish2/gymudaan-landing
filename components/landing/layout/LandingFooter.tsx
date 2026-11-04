@@ -1,7 +1,9 @@
 import Link from "next/link"
 
 import CopyrightYear from "@/components/landing/layout/CopyrightYear"
-import LandingLogo from "@/components/landing/layout/LandingLogo"
+import LandingLogo, {
+  LOGO_HOME_LABEL,
+} from "@/components/landing/layout/LandingLogo"
 import SocialIcon, {
   type SocialNetwork,
 } from "@/components/landing/layout/SocialIcon"
@@ -12,10 +14,9 @@ import { ROUTES } from "@/lib/routes"
 import { linkTarget, SITE } from "@/lib/site"
 
 const SOCIAL_LABELS: Record<SocialNetwork, string> = {
-  x: "X",
-  github: "GitHub",
-  linkedin: "LinkedIn",
-  youtube: "YouTube",
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  facebook: "Facebook",
 }
 
 const linkClass =
@@ -41,7 +42,7 @@ const LandingFooter = () => (
           <div className="col-span-2 flex flex-col gap-6 md:col-span-4 lg:col-span-1">
             <Link
               href={ROUTES.home}
-              aria-label={`${SITE.name} home`}
+              aria-label={LOGO_HOME_LABEL}
               className="w-fit rounded-badge outline-none focus-visible:ring-[3px] focus-visible:ring-brand/60"
             >
               <LandingLogo />
@@ -78,14 +79,6 @@ const LandingFooter = () => (
                 </li>
               ))}
             </ul>
-
-            <p className="flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-badge">
-              <span
-                aria-hidden
-                className="size-2.5 rounded-full bg-status-ok"
-              />
-              {footer.status}
-            </p>
           </div>
 
           {footerColumns.map((column) => (

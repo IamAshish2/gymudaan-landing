@@ -1,5 +1,8 @@
 import type { StaticImageData } from "next/image"
 
+import type { Approval } from "@/lib/content-approval"
+import type { LucideIcon } from "@/lib/icons"
+
 /**
  * Heading copy with highlighted runs. Plain strings render as-is; `{ em }`
  * renders in the brand colour and `{ muted }` at reduced opacity, matching the
@@ -34,6 +37,12 @@ export type Service = {
   cta: { label: string; href: string }
   /** Panel visual. The Figma panels are empty placeholders for now. */
   image?: { src: StaticImageData; alt: string }
+  /** Feature demo for the panel; takes the place of `image`. */
+  video?: {
+    sources: readonly { src: string; type: string }[]
+    poster: StaticImageData
+    label: string
+  }
 }
 
 export type Feature = {
@@ -53,6 +62,16 @@ export type ComparisonRow = {
   manual: ComparisonStatus
   generic: ComparisonStatus
   udaan: ComparisonStatus
+}
+
+export type LocalHighlight = {
+  title: string
+  description: string
+  icon: LucideIcon
+}
+
+export type ServedCity = {
+  name: string
 }
 
 export type DeviceTier = {
@@ -84,17 +103,20 @@ export type Step = {
   description: string
 }
 
-export type TestimonialTile =
-  | {
-      kind: "quote"
-      quote: string
-      name: string
-      role: string
-      /** Without a photo the card shows the name's initials. */
-      avatar?: StaticImageData
-    }
-  | { kind: "photo"; image: StaticImageData; alt: string }
-  | { kind: "video"; src: string; poster: StaticImageData; label: string }
+// Every testimonial needs an explicit sign-off (lib/content-approval.ts).
+export type TestimonialTile = Approval &
+  (
+    | {
+        kind: "quote"
+        quote: string
+        name: string
+        role: string
+        /** Without a photo the card shows the name's initials. */
+        avatar?: StaticImageData
+      }
+    | { kind: "photo"; image: StaticImageData; alt: string }
+    | { kind: "video"; src: string; poster: StaticImageData; label: string }
+  )
 
 export type Insight = {
   title: string

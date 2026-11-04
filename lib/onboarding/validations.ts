@@ -86,8 +86,8 @@ export const STEP_FIELDS: (keyof OnboardingValues)[][] = [
   ["members"],
   ["goals"],
   ["tools"],
-  ["plan"],
   ["businessName", "address", "phone", "pan"],
+  ["plan"],
   ["discountCode", "paymentMethod", "transactionReference"],
   ["acceptedTerms"],
 ]

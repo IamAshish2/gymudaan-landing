@@ -29,12 +29,8 @@ export type ArticleSection = {
   blocks: ArticleBlock[]
 }
 
+// Whether an article is published lives in lib/blog/registry.ts.
 export type BlogArticle = {
-  /**
-   * Final, approved copy. Unpublished articles stay out of the sitemap and are
-   * `noindex`; /blogs is `noindex` until at least one article is published.
-   */
-  published: boolean
   post: BlogPost & { excerpt: string }
   sections: ArticleSection[]
   /** Ids of the posts offered after the article. */

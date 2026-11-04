@@ -8,7 +8,12 @@ import { cn } from "@/lib/utils"
 const VISIBLE_MS = 3000
 const FADE_MS = 1000
 
-type Phase = "on" | "fading" | "gone"
+type Phase = "waiting" | "on" | "fading" | "gone"
+
+// The WebGL setup is a long main-thread task, so the weave only starts once
+// the page has loaded and the browser is idle: the page's own content (its
+// LCP heading) paints first.
+const IDLE_TIMEOUT_MS = 1500
 
 // TRIAL: the React Bits WebThreads weave greets each visit to an inner page
 // (pricing, blogs, articles, legal) for three seconds, fades out, then
@@ -16,9 +21,35 @@ type Phase = "on" | "fading" | "gone"
 // one screen tall and tilted, so the weave crosses the middle of the
 // viewport; content after the intro must be positioned to paint above it.
 const ThreadsGreeting = () => {
-  const [phase, setPhase] = useState<Phase>("on")
+  const [phase, setPhase] = useState<Phase>("waiting")
 
   useEffect(() => {
+    // Safari has no requestIdleCallback; a short timeout stands in for it.
+    const hasIdle = typeof window.requestIdleCallback === "function"
+    let handle: number | undefined
+    const begin = () => {
+      handle = hasIdle
+        ? window.requestIdleCallback(() => setPhase("on"), {
+            timeout: IDLE_TIMEOUT_MS,
+          })
+        : window.setTimeout(() => setPhase("on"), 200)
+    }
+
+    if (document.readyState === "complete") begin()
+    else window.addEventListener("load", begin, { once: true })
+
+    return () => {
+      window.removeEventListener("load", begin)
+      if (handle === undefined) return
+      if (hasIdle) window.cancelIdleCallback(handle)
+      else window.clearTimeout(handle)
+    }
+  }, [])
+
+  // One-way flag, so moving on to "fading" doesn't cancel the "gone" timer.
+  const started = phase !== "waiting"
+  useEffect(() => {
+    if (!started) return undefined
     const fade = window.setTimeout(() => setPhase("fading"), VISIBLE_MS)
     const gone = window.setTimeout(() => setPhase("gone"), VISIBLE_MS + FADE_MS)
 
@@ -26,9 +57,9 @@ const ThreadsGreeting = () => {
       window.clearTimeout(fade)
       window.clearTimeout(gone)
     }
-  }, [])
+  }, [started])
 
-  if (phase === "gone") return null
+  if (phase === "waiting" || phase === "gone") return null
 
   return (
     <div

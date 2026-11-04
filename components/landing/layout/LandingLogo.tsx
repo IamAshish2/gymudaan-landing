@@ -18,6 +18,15 @@ const emblemClass = "h-7 w-auto lg:h-13"
 const fadeClass =
   "transition-opacity duration-300 ease-standard motion-reduce:transition-none"
 
+/** The wordmark as drawn in the Figma logo (one word, unlike SITE.name). */
+export const LOGO_WORDMARK = "GymUdaan"
+
+/**
+ * Accessible name for a link wrapping the logo. It contains the visible
+ * wordmark, so voice-control users can say what they see (WCAG 2.5.3).
+ */
+export const LOGO_HOME_LABEL = `${LOGO_WORDMARK} home`
+
 // Dove emblem + "GymUdaan" wordmark from the Figma navbar (node 1:31). Both
 // emblems share one canvas size and padding, so the swap never shifts layout.
 const LandingLogo = ({
@@ -52,7 +61,7 @@ const LandingLogo = ({
       <Image src={emblem} alt="" className={emblemClass} sizes="80px" />
     )}
     <Typography as="span" variant="titleSm" className="font-semibold">
-      GymUdaan
+      {LOGO_WORDMARK}
     </Typography>
   </span>
 )

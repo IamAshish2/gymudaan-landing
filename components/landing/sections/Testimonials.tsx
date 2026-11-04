@@ -37,6 +37,8 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
           poster={tile.poster}
           label={tile.label}
           sound
+          // Below the fold: downloads only when scrolled near (3.3 MB clip).
+          deferred
           className="absolute inset-0 size-full object-cover"
         />
       </div>
@@ -103,23 +105,25 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
 // stays inside the container; four cards show at a time from xl, three on
 // small laptops (lg), two on
 // tablets, one and a peek on phones. Even slides drop 40px from lg (the
-// Figma stagger), so the track keeps room below for them.
-const Testimonials = () => (
-  <Section id="testimonials" labelledBy="testimonials-title">
-    <SnapCarousel
-      intro={testimonials}
-      titleId="testimonials-title"
-      id="testimonials-track"
-      label="testimonials"
-      arrows="dark"
-      trackClassName="gap-5 lg:pb-10"
-      slideClassName="@container basis-[82%] sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-2.5rem)/3)] lg:even:translate-y-10 xl:basis-[calc((100%-3.75rem)/4)]"
-    >
-      {testimonials.tiles.map((tile, index) => (
-        <Tile key={index} tile={tile} />
-      ))}
-    </SnapCarousel>
-  </Section>
-)
+// Figma stagger), so the track keeps room below for them. Renders nothing
+// while no testimonial is approved for this build (lib/content-approval.ts).
+const Testimonials = () =>
+  testimonials.tiles.length === 0 ? null : (
+    <Section id="testimonials" labelledBy="testimonials-title">
+      <SnapCarousel
+        intro={testimonials}
+        titleId="testimonials-title"
+        id="testimonials-track"
+        label="testimonials"
+        arrows="dark"
+        trackClassName="gap-5 lg:pb-10"
+        slideClassName="@container basis-[82%] sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-2.5rem)/3)] lg:even:translate-y-10 xl:basis-[calc((100%-3.75rem)/4)]"
+      >
+        {testimonials.tiles.map((tile, index) => (
+          <Tile key={index} tile={tile} />
+        ))}
+      </SnapCarousel>
+    </Section>
+  )
 
 export default Testimonials

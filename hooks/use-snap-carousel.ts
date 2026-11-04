@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
+/**
+ * Bubbling, cancelable DOM event a slide fires to ask its carousel for the
+ * next slide (e.g. a demo video that just ended). A carousel that handles it
+ * calls preventDefault(), so the sender knows to wait rather than replay.
+ */
+export const CAROUSEL_ADVANCE_EVENT = "carousel:advance"
+
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches

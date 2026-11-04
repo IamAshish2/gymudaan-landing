@@ -38,7 +38,7 @@ Sources: live sitemap, live route table (bundle), rendered internal links. No GS
 | # | Old URL (live, 200) | In live sitemap | New destination | Action | Status code |
 |---|---|---|---|---|---|
 | 1 | `/` | ✔ | `/` | Keep | 200 |
-| 2 | `/plans` | ✔ | **Decision Q2.** Recommended: keep `/plans` as the canonical pricing URL (this follows "keep the exact URL when purpose is unchanged"), with `/pricing` 308 → `/plans`. Alternative: keep `/pricing` and 308 `/plans` → `/pricing` | Keep or redirect | 200 / 308 |
+| 2 | `/plans` | ✔ | **`/plans` (implemented).** The pricing page lives at `/plans` (canonical, sitemap, all links via `ROUTES.pricing`); `/pricing` 308 → `/plans` in one hop. Verified no conflict with any live app route (docs/seo/09) | Keep | 200 (`/pricing` 308) |
 | 3 | `/privacy-policy` | ✔ | `/privacy-policy` | Keep (URL is likely registered with Meta/TikTok/app stores) | 200 |
 | 4 | `/terms` | ✔ | `/terms` | Keep | 200 |
 | 5 | — | — | `/blogs` | New | 200 |
@@ -151,9 +151,39 @@ These are open. Each one blocks a production launch until it is resolved.
 
 | # | Requirement | Current state (repo) | Resolves in |
 |---|---|---|---|
-| L1 | **Unpublished blog articles return a real HTTP 404 in production**, ideally with drafts served only from a protected preview route | Drafts return **200** with `noindex, follow` so the design can be reviewed. They are excluded from the sitemap and absent from all JSON-LD. A real 404 also needs the PPR soft-404 fix | Phase 6 (blog 404) |
-| L2 | **Unpublished articles must not appear in public blog listings** | The `/blogs` listing (itself `noindex` and out of the sitemap) still shows the placeholder featured post linking to the draft. Its related section links to it too. Removing it changes the visible listing, so it belongs with the placeholder-content removal | Phase 8 (placeholder content) |
-| L3 | **The pricing URL follows the final migration plan.** If `/plans` is kept, `/pricing` must not ship as the production canonical or the sitemap URL | Canonical and sitemap currently use `/pricing` (`ROUTES.pricing`) | Routing matrix → pricing-URL phase |
+| L1 | ~~Unpublished blog articles return a real HTTP 404 in production~~ **Resolved in repo (Phase 5).** | `proxy.ts` decides before rendering, from `lib/blog/registry.ts`. Production: published 200, drafts and unknown slugs **404**. Staging/preview/development: drafts 200 with `noindex, nofollow` (protected preview), unknown slugs 404. Verified with real status codes, including mixed case, encoded, malformed (previously **500**), nested and trailing-slash variants | Done; protected preview depends on L7 |
+| L2 | ~~Unpublished articles must not appear in public blog listings~~ **Resolved for launch.** | Production builds hide the whole blog while nothing is published: `/blogs` 404s (proxy), nav/footer blog links and the homepage Insights cards are removed (`isBlogPublic`, `lib/blog/registry.ts`). **When the first article is published**, the listing's placeholder posts (`lib/blog/content.ts`) must be replaced with real ones before flipping the flag | Content, at first publication |
+| L3 | ~~The pricing URL follows the final migration plan~~ **Resolved in repo.** | `/plans` canonical + sitemap; `/pricing` 308 → `/plans` | Done |
 | L4 | `/blogs` becomes indexable automatically once an article has `published: true`. Confirm the article is real and approved first | `/blogs` is `noindex`; `hasPublishedArticles` is false | Content sign-off |
 | L5 | App routes get `X-Robots-Tag: noindex` / real 404s on the app side (see §3b) | Not in this repo | App team |
 | L6 | Search Console access and the pre-launch baseline (GSC + GA4 exports, crawl) | Not available | Business |
+| L7 | **Hosting-side access protection on every non-production deployment** (staging, every preview URL). This is the primary control; `noindex` is the backstop | Not configured (hosting not chosen). The repo side is done: see §12 | Platform owner |
+| L8 | Every build pipeline sets `SITE_ENV` (and `NEXT_PUBLIC_SITE_URL`) per environment, per §12. A missing value fails the build | Not configured | Platform owner |
+| L9 | **Content approvals:** testimonials (`approved` per tile) and stats (`stats.approved`) are hidden in production until approved; logos need permission; pricing cards are placeholders | Gated in code (`lib/content-approval.ts`) | Business |
+| L10 | **Hero entrance animation**: its opacity fade keeps the hero frame out of Chrome's LCP (≈3.7 s throttled vs ≈1.9 s without it) | Measured, not changed (design decision) | Business / design (docs/seo/05 §3) |
+| L11 | GA4 property confirmation; set `NEXT_PUBLIC_GA_MEASUREMENT_ID` for production | Code ready, ID not set | Business / platform |
+| L12 | Brand-orange button contrast 2.87:1 (WCAG AA needs 4.5:1 for normal text) | Measured, not changed (design decision) | Design (docs/seo/06 §4) |
+| L13 | Routing architecture + cookie-name check before cutover | docs/seo/09 | Platform / app team |
+
+## 12. Build environments and hosting configuration
+
+The repo side is implemented in `lib/seo/site-env.ts`, `lib/seo/indexing.ts` and `next.config.ts`. Validation runs once at `next build`. The result is inlined into the build, so `next start` and request-time rendering cannot change it. Verified: a production build served with a staging runtime env stays indexable, and a staging build served with a production runtime env stays `noindex`.
+
+| `SITE_ENV` | `NEXT_PUBLIC_SITE_URL` | Indexing | Responses |
+|---|---|---|---|
+| `production` | must be exactly `https://www.gymudaan.com` | as designed per page (Phase 3) | no `X-Robots-Tag`; Phase 3 robots.txt and sitemap |
+| `staging` / `preview` / `development` | its own origin; **must not** be `https://www.gymudaan.com` | none | `X-Robots-Tag: noindex, nofollow` on every response except Next's built-in trailing-slash 308 redirects (see note); `noindex, nofollow` meta; robots.txt `Allow: /` with no sitemap; empty sitemap |
+| missing / other | — | **build fails** | — |
+
+**Note (corrects the Phase 4 report):** Next.js issues its trailing-slash redirects (e.g. `/pricing/` → 308 `/pricing`) before custom `headers()` apply, so those redirect responses carry no `X-Robots-Tag`. This doesn't affect indexing: a redirect has no indexable content, and its destination carries `noindex, nofollow`. Hosting-side protection (L7) covers them anyway.
+
+**Hosting cross-checks** run only on their own platform. Where a platform says a build is not its production deployment, `SITE_ENV=production` fails the build.
+
+| Host | Signal checked | What to configure |
+|---|---|---|
+| Vercel | `VERCEL_ENV` must be `production` | Production env: `SITE_ENV=production`, `NEXT_PUBLIC_SITE_URL=https://www.gymudaan.com`. Preview env: `SITE_ENV=preview`, `NEXT_PUBLIC_SITE_URL` = a stable non-production origin (e.g. a staging domain). Turn on **Deployment Protection** (Vercel Authentication or password) for preview deployments |
+| Netlify | `CONTEXT` must be `production` | Per-context env vars as above; turn on site/password protection for deploy previews and branch deploys |
+| Cloudflare Pages | `CF_PAGES_BRANCH` must equal `SITE_PRODUCTION_BRANCH` | Set `SITE_PRODUCTION_BRANCH`; protect preview deployments with **Cloudflare Access** |
+| VPS / other CI | none available | Set both variables explicitly per environment; put staging behind the reverse proxy's authentication or an IP allow-list |
+
+The rule that non-production builds may not use the production origin also catches a production deploy mislabelled as staging, which would otherwise noindex the live site.

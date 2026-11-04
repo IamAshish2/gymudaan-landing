@@ -38,3 +38,6 @@ next-env.d.ts
 
 # local agent settings
 .claude/settings.local.json
+
+# video studio: local-only tooling that renders public/video/features
+/video-studio/

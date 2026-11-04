@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import { IS_INDEXABLE } from "@/lib/seo/indexing"
 import { SITE } from "@/lib/site"
 
 type PageMetadataInput = {
@@ -56,7 +57,13 @@ export const pageMetadata = ({
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    ...(noindex ? { robots: { index: false, follow: true } } : {}),
+    // A page's own robots replaces the root layout's, so non-production builds
+    // repeat the root's `noindex, nofollow` here (lib/seo/indexing.ts).
+    ...(!IS_INDEXABLE
+      ? { robots: { index: false, follow: false } }
+      : noindex
+        ? { robots: { index: false, follow: true } }
+        : {}),
     alternates: { canonical: path },
     openGraph: {
       type,

@@ -11,9 +11,11 @@ import CustomPlanBanner from "@/components/pricing/CustomPlanBanner"
 import PlanCard from "@/components/pricing/PlanCard"
 import PlanMatrix from "@/components/pricing/PlanMatrix"
 import PricingCalculator from "@/components/pricing/PricingCalculator"
+import JsonLd from "@/components/shared/JsonLd"
 import Typography from "@/components/ui/Typography"
 import { plans, pricingIntro, trustedTitle } from "@/lib/pricing/content"
 import { ROUTES } from "@/lib/routes"
+import { breadcrumbJsonLd, pricingOffersJsonLd } from "@/lib/seo/json-ld"
 import { pageMetadata } from "@/lib/seo/metadata"
 import { PAGE_SEO } from "@/lib/seo/pages"
 
@@ -25,6 +27,11 @@ export const metadata: Metadata = pageMetadata({
 // Section order follows Figma frame 1:721.
 const PricingPage = () => (
   <>
+    <JsonLd
+      data={breadcrumbJsonLd([{ name: "Pricing", path: ROUTES.pricing }])}
+    />
+    {/* The visible plans as Offers (NPR, annual). */}
+    <JsonLd data={pricingOffersJsonLd(plans)} />
     {/* TRIAL: ThreadsGreeting is the five-second WebThreads weave. */}
     <PageIntro
       backdrop={<ThreadsGreeting />}
@@ -70,7 +77,8 @@ const PricingPage = () => (
     </section>
 
     <PlanMatrix />
-    <FaqSection />
+    {/* Same FAQ as the homepage, which carries the FAQPage markup. */}
+    <FaqSection structuredData={false} />
   </>
 )
 
