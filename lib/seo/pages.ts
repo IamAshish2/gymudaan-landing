@@ -27,7 +27,7 @@ export const PAGE_SEO = {
       "Gym Udaan plans for gyms in Nepal from NPR 14,999 a year. Compare Standard, Gold and Platinum: members, attendance, finance, access control and more.",
   },
   about: {
-    title: "About Gym Udaan: Gym Management Software Made in Nepal",
+    title: "About Us: Gym Management Software Made in Nepal",
     description:
       "Gym Udaan is gym management software built in Itahari, Nepal by Udaan Tech Solution Pvt. Ltd. Members, memberships, attendance, payments and reports in one place.",
   },

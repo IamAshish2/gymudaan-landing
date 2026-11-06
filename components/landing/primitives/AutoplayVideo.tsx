@@ -4,11 +4,22 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useState,
   useSyncExternalStore,
   type CSSProperties,
 } from "react"
 import type { StaticImageData } from "next/image"
 
+import {
+  claimPlayback,
+  getActivated,
+  getSound,
+  markActivated,
+  releasePlayback,
+  setSound,
+  subscribeSound,
+  VIDEO_CONTROL_ATTR,
+} from "@/components/landing/primitives/video-sound"
 import { IPause, IPlay, IVolume2, IVolumeX } from "@/lib/icons"
 import { cn } from "@/lib/utils"
 
@@ -18,6 +29,16 @@ const VIDEO_EVENTS = ["play", "pause", "volumechange"] as const
 export type VideoSource = { src: string; type: string }
 
 type NetworkInformation = { saveData?: boolean }
+
+const subscribeVisibility = (onChange: () => void) => {
+  document.addEventListener("visibilitychange", onChange)
+  return () => document.removeEventListener("visibilitychange", onChange)
+}
+
+const subscribeLoad = (onChange: () => void) => {
+  window.addEventListener("load", onChange)
+  return () => window.removeEventListener("load", onChange)
+}
 
 type AutoplayVideoProps = {
   /** A single file, or encodings in order of preference. */
@@ -36,6 +57,16 @@ type AutoplayVideoProps = {
    * native autoplay start is measurably cheaper (docs/seo/05).
    */
   deferred?: boolean
+  /**
+   * Play only while the video is on screen (at least half of it) and the
+   * tab is visible; pause once it is mostly scrolled away, carrying on from
+   * the same point on return. Sound is on by default and follows the
+   * page-wide choice (video-sound.ts): muted only until the visitor's first
+   * click, tap or key press (browser autoplay rules), or after they mute.
+   * Only one such video plays at a time. Pressing pause keeps it paused
+   * until pressed again.
+   */
+  playInView?: boolean
 }
 
 const controlClass =
@@ -50,6 +81,8 @@ const controlClass =
 // only once the page has loaded and the video is near the viewport; visitors
 // who ask for reduced motion or less data (Save-Data) then get the poster and
 // the play button, and nothing is downloaded until they press it.
+// With `playInView`, it also plays only while on screen and pauses when
+// scrolled away (see the prop).
 const AutoplayVideo = ({
   src,
   poster,
@@ -58,12 +91,36 @@ const AutoplayVideo = ({
   className,
   style,
   deferred = false,
+  playInView = false,
 }: AutoplayVideoProps) => {
   const ref = useRef<HTMLVideoElement>(null)
+  // playInView: null until the first intersection report.
+  const [inView, setInView] = useState<boolean | null>(null)
+  // The visitor's own play/pause press, which wins over everything else.
+  const [choice, setChoice] = useState<"play" | "pause" | null>(null)
+  // Set when the browser refused sound, so it isn't retried (each retry
+  // would stall the video) until the visitor interacts with the page.
+  const soundBlocked = useRef(false)
+  const soundOn = useSyncExternalStore(subscribeSound, getSound, () => false)
+  const activated = useSyncExternalStore(
+    subscribeSound,
+    getActivated,
+    () => false
+  )
+  const tabVisible = useSyncExternalStore(
+    subscribeVisibility,
+    () => !document.hidden,
+    () => true
+  )
+  const pageLoaded = useSyncExternalStore(
+    subscribeLoad,
+    () => document.readyState === "complete",
+    () => false
+  )
 
   useEffect(() => {
     const video = ref.current
-    if (!video) return undefined
+    if (!video || playInView) return undefined
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -104,7 +161,81 @@ const AutoplayVideo = ({
       window.removeEventListener("load", start)
       observer?.disconnect()
     }
-  }, [deferred])
+  }, [deferred, playInView])
+
+  // playInView: on screen = at least half visible; off = under a quarter.
+  // In between it keeps its last state, so it doesn't flicker at the edge.
+  useEffect(() => {
+    const video = ref.current
+    if (!video || !playInView) return undefined
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const ratio = entry.isIntersecting ? entry.intersectionRatio : 0
+        // The first reading has no previous state: a quarter visible
+        // counts (e.g. a hero partly below the fold on load).
+        setInView((prev) =>
+          ratio >= 0.5 || (prev === null && ratio >= 0.25)
+            ? true
+            : ratio < 0.25
+              ? false
+              : prev
+        )
+      },
+      { threshold: [0, 0.25, 0.5] }
+    )
+    observer.observe(video)
+    return () => {
+      observer.disconnect()
+      releasePlayback(video)
+    }
+  }, [playInView])
+
+  useEffect(() => {
+    const video = ref.current
+    if (!video || !playInView || inView === null) return
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+    const saveData = (
+      navigator as Navigator & { connection?: NetworkInformation }
+    ).connection?.saveData
+    // Reduced motion / Save-Data: the poster until the visitor presses play.
+    const still = reducedMotion || (deferred && Boolean(saveData))
+    const shouldPlay =
+      inView &&
+      tabVisible &&
+      choice !== "pause" &&
+      (choice === "play" || (!still && (!deferred || pageLoaded)))
+
+    if (!shouldPlay) {
+      if (!video.paused) video.pause()
+      return
+    }
+    claimPlayback(video)
+    // Never muted by choice: it always tries to play with sound. Browsers
+    // refuse that until the visitor has clicked, tapped or pressed a key
+    // (unless they allow sound for this site); then it carries on muted,
+    // the sound button shows that truthfully, and the first interaction
+    // anywhere turns the sound on (video-sound.ts).
+    if (activated) soundBlocked.current = false
+    video.muted = !soundOn || soundBlocked.current
+    video.play().catch(() => {
+      if (video.muted) return
+      soundBlocked.current = true
+      video.muted = true
+      video.play().catch(() => {})
+    })
+  }, [
+    playInView,
+    inView,
+    tabVisible,
+    choice,
+    soundOn,
+    activated,
+    deferred,
+    pageLoaded,
+  ])
 
   // Read straight from the element: autoplay can start before React hydrates
   // (so onPlay props would miss it) or be blocked (iOS Low Power Mode).
@@ -130,17 +261,28 @@ const AutoplayVideo = ({
   const togglePlay = () => {
     const video = ref.current
     if (!video) return
-    if (video.paused) void video.play()
-    else video.pause()
+    if (playInView) {
+      markActivated()
+      setChoice(video.paused ? "play" : "pause")
+    }
+    if (video.paused) {
+      if (playInView) claimPlayback(video)
+      void video.play()
+    } else video.pause()
   }
 
   const toggleSound = () => {
     const video = ref.current
     if (!video) return
+    if (playInView) {
+      markActivated()
+      setSound(video.muted)
+    }
     if (!video.muted) {
       video.muted = true
       return
     }
+    if (playInView) claimPlayback(video)
 
     // Unmuting is a request to hear it, so keep it playing. Some browsers
     // pause a muted autoplay video once it gains sound; play() resumes it
@@ -164,7 +306,8 @@ const AutoplayVideo = ({
         width={poster.width}
         height={poster.height}
         autoPlay={!deferred}
-        muted
+        // playInView videos start with sound where the browser allows it.
+        muted={!playInView}
         loop
         playsInline
         preload={deferred ? "none" : "metadata"}
@@ -182,6 +325,7 @@ const AutoplayVideo = ({
         {sound ? (
           <button
             type="button"
+            {...{ [VIDEO_CONTROL_ATTR]: "" }}
             onClick={toggleSound}
             aria-label={muted ? "Unmute video" : "Mute video"}
             className={controlClass}
@@ -191,6 +335,7 @@ const AutoplayVideo = ({
         ) : null}
         <button
           type="button"
+          {...{ [VIDEO_CONTROL_ATTR]: "" }}
           onClick={togglePlay}
           aria-label={playing ? "Pause video" : "Play video"}
           className={controlClass}

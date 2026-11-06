@@ -141,21 +141,23 @@ export const hero = {
     },
   ] satisfies LinkAction[],
   video: {
-    // Rendered by video-studio/ (scene "hero-film"): a 40 s, 1600×900 loop
-    // with motion blur and a generated soundtrack (AAC, starts muted; the
-    // hero shows a sound toggle).
+    // Rendered by video-studio/ (scene "hero-story"): a 45 s, 1600×900 loop
+    // with motion blur, a generated English voiceover and sound effects (AAC,
+    // starts muted; the hero shows a sound toggle). The live action is free
+    // Pexels footage until the gym's own shoot replaces it; the access devices
+    // are redrawn from public/video/hero/{facialaccess,biometric,cardreader}.png.
     sources: [
       {
-        src: "/video/hero/hero-film.av1.mp4",
+        src: "/video/hero/hero-story.av1.mp4",
         type: 'video/mp4; codecs="av01.0.08M.08, mp4a.40.2"',
       },
       {
-        src: "/video/hero/hero-film.h264.mp4",
+        src: "/video/hero/hero-story.h264.mp4",
         type: 'video/mp4; codecs="avc1.640028, mp4a.40.2"',
       },
     ],
     label:
-      "Gym Udaan film: running a gym takes more than passion, with members, renewals, dues and check-ins to juggle. Gym Udaan follows one day at a gym: a member checks in at 6:42 am, a new member's card is created at 10:30 am, a payment is recorded and stamped paid at 2:15 pm, and at 9 pm the day's takings and six-month trend appear. It ends with its other features, including inventory, trainers and classes, multi-branch, access control and the member app",
+      "Gym Udaan film: at 10 pm a gym owner is still at his desk adding up fees and bills on a calculator, unsure who has paid, whose plan has run out and whether the gym made money. Gym Udaan does the math. In the morning members check in at the door with a face terminal, a fingerprint terminal or a card reader, and a member whose plan has expired is not let in. Her plan is renewed in one click with a paid receipt, and the face terminal welcomes her back. The Daybook adds up the month's income and expenses to a net profit of Rs. 1,86,400, and the owner is done by seven. It ends on the Gym Udaan logo: run your gym, not your calculator",
   },
 }
 
@@ -316,9 +318,8 @@ export const features: SectionIntro & {
     { em: "gym" },
     " further.",
   ],
-  // TODO(content): identical to the services description in Figma.
   description:
-    "Things that will make your work easy as well as your customers daily life easy with us",
+    "Beyond daily management: a member app, social media publishing, a daily daybook and tools to keep members coming back.",
   items: [
     {
       title: "Gym Udaan App",
@@ -382,9 +383,8 @@ export const comparison: SectionIntro & {
 } = {
   badge: "Comparison",
   title: ["Why modern gyms choose Gym Udaan"],
-  // TODO(content): identical to the services description in Figma.
   description:
-    "Things that will make your work easy as well as your customers daily life easy with us",
+    "See what changes when you move from registers and generic tools to software built for gyms in Nepal.",
   featureLabel: "Features",
   columns: [
     { key: "manual", label: "Manual Management", shortLabel: "Manual" },

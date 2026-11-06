@@ -37,7 +37,12 @@ const nextConfig = (phase: string): NextConfig => {
   return {
     cacheComponents: true,
     // Allow testing the dev server from other devices on the LAN (phone, tablet).
-    allowedDevOrigins: ["192.168.1.9", "192.168.100.7", "192.168.1.2"],
+    allowedDevOrigins: [
+      "192.168.1.9",
+      "192.168.100.7",
+      "192.168.1.2",
+      "192.168.1.71",
+    ],
     // Inlined into the bundle at build time; read via lib/seo/indexing.ts.
     env: siteEnv ? { SEO_SITE_ENV: siteEnv } : {},
     // Non-production builds: keep every response (pages, images, video,
