@@ -19,8 +19,10 @@ const SOCIAL_LABELS: Record<SocialNetwork, string> = {
   facebook: "Facebook",
 }
 
+// py-1 lifts every link to a 24px+ tap target (WCAG 2.5.8); the list gaps
+// and top margins below are 4px tighter per side, so the spacing looks the same.
 const linkClass =
-  "rounded-badge text-body text-white/70 transition-colors duration-300 ease-standard outline-none hover:text-white focus-visible:ring-[3px] focus-visible:ring-brand/60"
+  "inline-block rounded-badge py-1 text-body text-white/70 transition-colors duration-300 ease-standard outline-none hover:text-white focus-visible:ring-[3px] focus-visible:ring-brand/60"
 
 // Rebuilt from the flat Figma footer image. `id="contact"` is the target for
 // footer links without a page of their own.
@@ -56,7 +58,7 @@ const LandingFooter = () => (
             <Typography
               as="address"
               variant="body"
-              className="flex flex-col items-start gap-1 text-white/80 not-italic"
+              className="flex flex-col items-start text-white/80 not-italic"
             >
               <span>{SITE.contact.location}</span>
               <a href={`mailto:${SITE.contact.email}`} className={linkClass}>
@@ -86,7 +88,7 @@ const LandingFooter = () => (
               <Typography as="h2" variant="body" className="font-medium">
                 {column.title}
               </Typography>
-              <ul className="mt-6 flex flex-col gap-4 lg:mt-8">
+              <ul className="mt-5 flex flex-col gap-2 lg:mt-7">
                 {column.links.map((link) => (
                   <li key={link.label}>
                     <Link

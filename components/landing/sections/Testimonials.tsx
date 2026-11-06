@@ -37,8 +37,11 @@ const Tile = ({ tile }: { tile: TestimonialTile }) => {
           poster={tile.poster}
           label={tile.label}
           sound
-          // Below the fold: downloads only when scrolled near (3.3 MB clip).
+          // Below the fold: downloads only when scrolled to (3.3 MB clip).
           deferred
+          // Plays while on screen (also when swiped out of the carousel it
+          // pauses), with the page's sound choice.
+          playInView
           className="absolute inset-0 size-full object-cover"
         />
       </div>
